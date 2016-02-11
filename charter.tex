@@ -29,109 +29,30 @@
 \begin{tabular*}{6.44in}{l @{\extracolsep{\fill}}c r}
 \hline
 \hline
-\bfseries CS 280 & & \bfseries  Homework ?, Problem ?\\ %%% UPDATE FOR EACH ASSIGNMENT/PROBLEM
-\bfseries Spring 2016  &   &  \bfseries Andrew Amis\\ %%% YOUR NAME HERE
+\bfseries CS 361 & & \bfseries Charter \\ %%% UPDATE FOR EACH ASSIGNMENT/PROBLEM
+\bfseries Spring 2016  &   &  \bfseries Andrew Amis, Nick Care, Robert Tomcik, Kirk Pearson\\ %%% YOUR NAME HERE
 \hline
 \hline
 \end{tabular*}
-\end{center} 
-
-
+\end{center}
 
 
 
 %%% PLEASE PLACE THE HONOR CODE AND YOUR NAME/SIGNATURE HERE
 \noindent Honor Code: I have adhered to the honor code on this assignment\\
 
-\noindent Worked With: nobody.\\
+\section{Charter}
 
+\textbf{Group Name:}
+\textbf{Contact Info:}
+\textbf{Weekly Meeting Time:} Wednesdays at 8:00pm.
 
+\section{Pitches}
 
-Each problem should be typeset in its own file.  Be sure to update the assignment and problem number correctly.  Mislabeled assignments will typically be graded late or not at all. You are required to fill in and sign the honor code, and list your collaborators.  Explicitly indicate that you worked alone if that is the case.\\
+\subsection{Time Paradox}
 
-Here are a few tips for getting started.
+\subsection{Magic Area Conquest}
 
-Double backslash ($\backslash\backslash$) forces a new line.\\
-
-{\tt$\backslash$vspace*\{50pt\}} creates 50 points of vertical space, as shown below.  Useful if you're going to draw in a figure by hand.
-
-\vspace*{50pt}
-
-{\tt$\backslash$bigskip}, \bigskip 
-
-{\tt$\backslash$medskip}, and \medskip
-
-{\tt$\backslash$smallskip} \smallskip
-
-are convenient for small breaks.\\
-
-\noindent {\tt$\backslash$noindent} removes the default indentation on new blocks of text.\\
-
-\begin{enumerate}
-\item Use the {\tt enumerate} environment
-\item to create numbered lists
-\item of things.
-\item [(a)] You can also manually choose a label for an item.
-\end{enumerate}
-
-
-\begin{itemize}
-\item Use the {\tt itemize} environment
-\item for unnumbered lists.
-\end{itemize}
- 
- 
- Use {\tt$\backslash$textbf} for \textbf{bold-faced font}, {\tt$\backslash$textit} for \textit{italicized font} and {\tt$\backslash$texttt} for \texttt{true-type font}.\\
-
-
-Now for a lemma.
-
-\begin{lemma}
-For all $n \geq 0$, something happens $\iff$ something else happens.
-\end{lemma}
-
-\begin{proof}We'll start with the forward direction, and then the backwards.\medskip
-
-\noindent $(\Rightarrow)$ Forward direction proven here.\medskip
-
-\noindent $(\Leftarrow)$ Backwards direction proven here.\end{proof}
-
-Similarly for a theorem.
-
-\begin{theorem}
-The third Ramsey number is 6.
-\end{theorem}
-
-\begin{proof}
-Consider an arbitrary bi-coloring of the edges of $K_6$, the complete graph on 6 vertices.   Pick any node $v$.  Assume without loss of generality that at least 3 edges incident to $v$ are colored red.  Suppose three of those edges are $(v,x)$, $(v,y)$, and $(v,z)$.  If any edge $e$ amongst $\{x,y,z\}$ are red, we have a red triangle involving $v$ and $e$.  Otherwise all these edges are blue and thus we have a blue triangle.  Either way, this graph contains a monochromatic $K_3$. 
-\end{proof}
-
-Sometimes you'll want to fake an environment (unless you really want to dive into LaTeX and do it the right way).\\
-
-\noindent \textbf{Running Time:} This homework assignment requires $O(2^n)$ time to complete.\\
-
-\noindent \textbf{Algorithm:} Let $G = (V,E)$ be the input graph representing the social network. Let $F \subseteq V$ denote the set of friends, and $R \subseteq V$ denote the set of rivals.  By assumption, $F \cap R = \emptyset$.  Color every node in $F$ green, and every node in $R$ red.  Define $C = \emptyset$.
-
-Loop over every node $v \in V$.  If $v$ has not been colored, has at least one neighbor in $F$, and at least one neighbor in $R$, add $v$ to $C$.
-
-Return $C$ as the set of conflicted people.\\
-
-
-Now I'll put up a system of equations.
-\begin{align}  	% Use & to line up elements.  
-			% \mbox lets displays text, rather than math (try without \mbox to see what I mean).
-			% If you don't want numbered lines, use \begin{align*} and \end{align*}
-LHS &=  1+2+3+\ldots+n &\mbox{For all $n$.}\\
-&=  n(n+1)/2 \\
-&= {{n+1}\choose{2}} &\mbox{By definition of choose.}
-\end{align}
-
-Here is a tabular environment embedded in an align.
-\begin{align*}
-e_{ij} &=  \left\{ \begin{tabular}{ll} $\{v_i, v_j\}$ & if edges are undirected, \\
-						       $(v_i, v_j)$ & otherwise. \end{tabular} \right.
-\end{align*}
-
-And some more math stuff in line would look like this: $y \leq \alpha \sum_{i = 0}^n \frac{x_i^2}{i}$.  Or you can have it centered on it's own line with $$y \leq \alpha \sum_{i = 0}^n \frac{x_i^2}{i}.$$
+\subsection{Vantage Point}
 
 \end{document}
