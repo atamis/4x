@@ -5,13 +5,19 @@ using game.map;
 namespace game {
     public class GameManager : MonoBehaviour {
 
+        PlayerCamera pc;
         private HashSet<HexLoc> hexes;
         private Layout l;
 
         // Use this for initialization
         void Start() {
+
+            pc = new GameObject("Player Camera").AddComponent<PlayerCamera>();
+            pc.init(Camera.main);
+
+
             hexes = new HashSet<HexLoc>();
-            this.l = new Layout(Orientation.Flat, new Vector2(1, 1), new Vector2(0, 0));
+            this.l = new Layout(Orientation.Pointy, new Vector2(1, 1), new Vector2(0, 0));
 
             HexLoc l = new HexLoc(0, 0, 0);
             print(l);
