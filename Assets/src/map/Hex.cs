@@ -48,6 +48,7 @@ namespace game.map {
                 sp = gameObject.AddComponent<SpriteRenderer>();
 
                 sp.sprite = Resources.Load<Sprite>("Textures/Hexagon");
+                sp.transform.localScale = new Vector3(1.9f, 1.9f);
             }
 
             void Update() {
