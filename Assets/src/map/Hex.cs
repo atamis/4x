@@ -5,15 +5,21 @@ using System.Text;
 using UnityEngine;
 
 namespace game.map {
+    enum Biome {
+        Passable, Impassable
+    }
+
     class Hex : MonoBehaviour {
         WorldMap w;
         public HexLoc loc;
+        public Biome b;
 
         HexModel model;
 
         public void init(WorldMap w, HexLoc loc) {
             this.w = w;
             this.loc = loc;
+            this.b = Biome.Impassable;
 
             transform.localPosition = w.l.HexPixel(loc);
 
@@ -42,6 +48,14 @@ namespace game.map {
                 sp = gameObject.AddComponent<SpriteRenderer>();
 
                 sp.sprite = Resources.Load<Sprite>("Textures/Hexagon");
+            }
+
+            void Update() {
+                if (h.b == Biome.Impassable) {
+                    sp.color = new Color(0.2f, 0.2f, 0.2f);
+                } else {
+                    sp.color = new Color(1f, 1f, 1f);
+                }
             }
         }
     }

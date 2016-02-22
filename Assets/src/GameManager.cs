@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using game.map;
+using game.input;
 
 namespace game {
     public class GameManager : MonoBehaviour {
@@ -8,6 +9,7 @@ namespace game {
         PlayerCamera pc;
         private Layout l;
         private WorldMap w;
+        MapClick mc;
 
         // Use this for initialization
         void Start() {
@@ -21,7 +23,8 @@ namespace game {
             pc = new GameObject("Player Camera").AddComponent<PlayerCamera>();
             pc.init(Camera.main);
 
-            
+            mc = new GameObject("Map Click").AddComponent<MapClick>();
+            mc.init(w);
 
             
         }
