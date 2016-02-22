@@ -24,8 +24,11 @@ namespace game.input {
                 float mouseY = worldPos.y;
                 print("you just clicked at " + mouseX + " " + mouseY);
                 Vector2 v = new Vector2(mouseX, mouseY);
-                Hex h = w.map[w.l.PixelHex(v)];
-                handleClick(v, h);
+                HexLoc l = w.l.PixelHex(v);
+                if (w.map.ContainsKey(l)) {
+                    Hex h = w.map[l];
+                    handleClick(v, h);
+                }
             }
         }
 
