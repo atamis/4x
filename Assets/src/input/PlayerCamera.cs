@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace game {
+namespace game.input {
     public class PlayerCamera : MonoBehaviour {
 
 
