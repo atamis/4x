@@ -22,11 +22,11 @@ namespace game.input {
                 Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 float mouseX = worldPos.x;
                 float mouseY = worldPos.y;
-                print("you just clicked at " + mouseX + " " + mouseY);
                 Vector2 v = new Vector2(mouseX, mouseY);
                 HexLoc l = w.l.PixelHex(v);
                 if (w.map.ContainsKey(l)) {
                     Hex h = w.map[l];
+                    print("You selected " + h);
                     handleClick(v, h);
                 }
             }
