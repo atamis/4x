@@ -5,9 +5,19 @@ using System.Text;
 using UnityEngine;
 
 namespace game.map {
-    enum Biome {
+    public enum Biome {
         Passable, Impassable
     }
+
+    public static class BiomeExtensions {
+        public static Biome Toggle(this Biome b) {
+            if (b == Biome.Impassable) {
+                return Biome.Passable;
+            } else {
+                return Biome.Impassable;
+            }
+        }
+     }
 
     class Hex : MonoBehaviour {
         WorldMap w;
@@ -28,6 +38,19 @@ namespace game.map {
             o.transform.localPosition = new Vector2(0, 0);
             model = o.AddComponent<HexModel>();
             model.init(this);
+        }
+
+        public List<Hex> Neighbors() {
+            List<Hex> n = new List<Hex>();
+            
+            for(int i = 0; i < 6; i++) {
+                HexLoc l = loc.Neighbor(i);
+                if (w.map.ContainsKey(l)) {
+                    n.Add(w.map[l]);
+                }
+            }
+
+            return n;
         }
 
         void Start() {
