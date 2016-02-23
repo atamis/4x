@@ -10,6 +10,7 @@ namespace game {
         private Layout l;
         private WorldMap w;
         MapClick mc;
+        CorruptManager cm;
 
         // Use this for initialization
         void Start() {
@@ -25,6 +26,9 @@ namespace game {
 
             mc = new GameObject("Map Click").AddComponent<MapClick>();
             mc.init(w);
+
+            cm = new GameObject("Corruption Manager").AddComponent<CorruptManager>();
+            cm.init(this);
 
             
         }
