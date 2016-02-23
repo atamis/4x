@@ -33,10 +33,9 @@ namespace game.input {
         }
 
         private void handleClick(Vector2 vec, Hex h) {
-            if (h.b == Biome.Impassable) {
-                h.b = Biome.Passable;
-            } else {
-                h.b = Biome.Impassable;
+            h.b = h.b.Toggle();
+            foreach (Hex n in h.Neighbors()) {
+                n.b = n.b.Toggle();
             }
 
         }
