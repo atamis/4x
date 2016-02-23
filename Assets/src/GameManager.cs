@@ -20,6 +20,7 @@ namespace game {
             player = new Player("Player");
             actors = new List<Actor>();
             actors.Add(player);
+            actors.Add(new PassTurnActor("Pass Turn Actor"));
             currentActor = 0;
 
             new GameObject("Player Control").AddComponent<PlayerControl>().init(player);
