@@ -45,7 +45,10 @@ namespace game.map.units {
         }
 
         void Update() {
-            
+            // Looks like changing Unity transform doesn't
+            // update child objects, so we have to always make sure
+            // we're at (0, 0);
+            transform.localPosition = new Vector3(0, 0, 0);
         }
 
         private class UnitModel : MonoBehaviour {

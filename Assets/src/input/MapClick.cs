@@ -4,13 +4,19 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using game.map;
+using game.actor;
+using game.map.units;
 
 namespace game.input {
     class MapClick : MonoBehaviour {
         WorldMap w;
+        Player p;
+        Unit u;
 
-        public void init(WorldMap w) {
+        public void init(WorldMap w, Player p, Unit u) {
             this.w = w;
+            this.p = p;
+            this.u = u;
         }
 
         void Start() {
@@ -33,11 +39,12 @@ namespace game.input {
         }
 
         private void handleClick(Vector2 vec, Hex h) {
-            h.b = h.b.Toggle();
+            /*h.b = h.b.Toggle();
             foreach (Hex n in h.Neighbors()) {
                 n.b = n.b.Toggle();
-            }
+            }*/
 
+            p.AddCommand(new MoveCommand(p, u, h));
         }
     }
 }

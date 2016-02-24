@@ -43,13 +43,12 @@ namespace game {
             pc = new GameObject("Player Camera").AddComponent<PlayerCamera>();
             pc.init(Camera.main);
 
-            mc = new GameObject("Map Click").AddComponent<MapClick>();
-            mc.init(w);
-
             Unit u = new GameObject("Unit").AddComponent<Unit>();
             
             u.init(w, w.map[new HexLoc(1, 0, -1)]);
-            
+
+            mc = new GameObject("Map Click").AddComponent<MapClick>();
+            mc.init(w, player, u);
         }
             
 
@@ -64,6 +63,7 @@ namespace game {
             if (c == null)
                 return;
 
+            print("Executing " + c.ToString());
             c.Apply(w);
 
             if (c.GetType() == typeof(EndTurnCommand)) {
