@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using game.map;
 using game.input;
 using game.actor;
+using game.map.units;
+
+/*
+ * Current z-level layout:
+ * z = 0  : game board
+ * z = -1 : units
+ */
 
 namespace game {
     public class GameManager : MonoBehaviour {
@@ -39,6 +46,9 @@ namespace game {
             mc = new GameObject("Map Click").AddComponent<MapClick>();
             mc.init(w);
 
+            Unit u = new GameObject("Unit").AddComponent<Unit>();
+            
+            u.init(w, w.map[new HexLoc(1, 0, -1)]);
             
         }
             

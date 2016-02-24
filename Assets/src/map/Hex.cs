@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using game.map.units;
 
 namespace game.map {
     public enum Biome {
@@ -24,12 +25,16 @@ namespace game.map {
         public HexLoc loc;
         public Biome b;
 
+        public HashSet<Unit> units;
+
         HexModel model;
 
         public void init(WorldMap w, HexLoc loc) {
             this.w = w;
             this.loc = loc;
             this.b = Biome.Impassable;
+
+            units = new HashSet<Unit>();
 
             transform.localPosition = w.l.HexPixel(loc);
 
@@ -58,7 +63,6 @@ namespace game.map {
         }
 
         void Update() {
-
         }
 
         private class HexModel : MonoBehaviour {
