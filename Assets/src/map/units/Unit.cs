@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using game.actor;
 using UnityEngine;
 
 namespace game.map.units {
     class Unit : MonoBehaviour {
+        private const int maxMovement = 4;
+
         Hex _h;
 
         // Uses Unity transform parenting to move itself around.
@@ -23,9 +26,12 @@ namespace game.map.units {
             }
         }
         WorldMap w;
+        public int movement;
+
         UnitModel model;
 
         public void init(WorldMap w, Hex h) {
+            movement = maxMovement;
             this.w = w;
 
             this.h = h;
@@ -49,6 +55,11 @@ namespace game.map.units {
             // update child objects, so we have to always make sure
             // we're at (0, 0);
             transform.localPosition = new Vector3(0, 0, 0);
+        }
+
+        public void NewTurn(Actor old, Actor cur) {
+            // TODO: Resets every  turn, not just at the start of their owner's turn.
+            movement = maxMovement;
         }
 
         private class UnitModel : MonoBehaviour {

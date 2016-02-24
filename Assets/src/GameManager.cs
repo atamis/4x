@@ -69,6 +69,7 @@ namespace game {
             if (c.GetType() == typeof(EndTurnCommand)) {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
+                w.NewTurn(ca, actors[currentActor]);
             }
         }
     } 

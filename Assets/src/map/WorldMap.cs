@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using game.actor;
 using UnityEngine;
 
 namespace game.map {
@@ -38,6 +39,11 @@ namespace game.map {
         void Update() {
 
         }
-        
+
+        public void NewTurn(Actor old, Actor cur) {
+            foreach(KeyValuePair<HexLoc, Hex> kv in map) {
+                kv.Value.NewTurn(old, cur);
+            }
+        }
     }
 }
