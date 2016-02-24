@@ -40,7 +40,7 @@ namespace game {
             mc.init(w);
 
             cm = new GameObject("Corruption Manager").AddComponent<CorruptManager>();
-            cm.init(this);
+            cm.init(w);
 
             
         }
@@ -62,6 +62,7 @@ namespace game {
             if (c.GetType() == typeof(EndTurnCommand)) {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
+                cm.nextTurn();
             }
         }
     } 
