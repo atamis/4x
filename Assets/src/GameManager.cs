@@ -62,7 +62,7 @@ namespace game {
             if (c.GetType() == typeof(EndTurnCommand)) {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
-                cm.nextTurn();
+                cm.processTurn(); //Process Corruptions turn after player is done
             }
         }
     } 

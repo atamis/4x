@@ -15,7 +15,7 @@ namespace game {
 
 		public void init (WorldMap w) {
 			this.w = w;
-			aggression = 0;
+			aggression = 1;
 		}
 
 		// Returns the percent chance a tile will be infected
@@ -31,14 +31,21 @@ namespace game {
 					return .08f;
 					break;
 				case 3: 
-					return 2f;
+					return .2f;
 					break;
 			}
 			return 0f;
 		}
 
-		//Call when the next turn for corruption should be processed
-		public void nextTurn(){
+		public void spawnSpores(){
+			//TODO
+		}
+
+		public void spawnUnits(){
+			//TODO
+		}
+
+		public void spreadCreep(){
 			List<Hex> tilesToTurn = new List<Hex>();
 			for (int q = 0; q <= MAP_WIDTH; q++) {
                 for (int r = 0; r <= MAP_HEIGHT; r++) {
@@ -57,6 +64,13 @@ namespace game {
 					tile.b = Biome.Corruption;
 				}
 			}
+		}
+
+		//Call when the next turn for corruption should be processed
+		public void processTurn(){
+			spreadCreep();
+			spawnSpores();
+			spawnUnits();
 		}
 	}
 }
