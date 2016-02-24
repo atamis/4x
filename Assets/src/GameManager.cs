@@ -48,7 +48,7 @@ namespace game {
             u.init(w, w.map[new HexLoc(1, 0, -1)]);
 
             mc = new GameObject("Map Click").AddComponent<MapClick>();
-            mc.init(w, player, u);
+            mc.init(w, player);
         }
             
 

@@ -46,6 +46,10 @@ namespace game.map.units {
             model = obj.AddComponent<UnitModel>();
         }
 
+        public override string ToString() {
+            return String.Format("[{0} mp:{1}]", name, movement);
+        }
+
         void Start() {
             
         }

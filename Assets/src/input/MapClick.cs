@@ -11,7 +11,6 @@ namespace game.input {
     class MapClick : MonoBehaviour {
         WorldMap w;
         Player p;
-        Unit u;
         private State s;
         private Hex selected;
         SelectedModel model;
@@ -25,10 +24,9 @@ namespace game.input {
             Moving
         }
 
-        public void init(WorldMap w, Player p, Unit u) {
+        public void init(WorldMap w, Player p) {
             this.w = w;
             this.p = p;
-            this.u = u;
             this.s = State.Default;
         }
 
@@ -38,9 +36,26 @@ namespace game.input {
         }
 
         void OnGUI() {
-            GUI.Label(new Rect(10, 30, 150, 20), "Click to select a hex.");
-            GUI.Label(new Rect(10, 50, 150, 20), "Press m to move units.");
+            List<string> messages = new List<String>();
+            messages.Add("Click to select a hex.");
+            messages.Add("Press m to move units.");
+            if (s == State.Selected) {
+                messages.Add("You selected " + selected);
+                messages.Add("Biome: " + selected.b.ToString());
+
+                if (selected.units.Count > 0) {
+                    messages.Add("Units: " +
+                        selected.units
+                        .Select(unit => unit.ToString())
+                        .Aggregate<String>((acc, str) => acc + ", " + str));
+                }
+            }
+
+            for(int i = 0; i < messages.Count; i++) {
+                GUI.Label(new Rect(10, 30 + i * 20, 200, 20), messages[i]);
+            }
         }
+        
 
         void Update() {
             // Each state method returns the next state;
