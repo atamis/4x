@@ -21,14 +21,13 @@ namespace game {
         private List<Actor> actors;
         private int currentActor;
         private Player player;
-        private CorruptManager cm;
 
         // Use this for initialization
         void Start() {
             player = new Player("Player");
             actors = new List<Actor>();
             actors.Add(player);
-            actors.Add(new PassTurnActor("Pass Turn Actor"));
+            actors.Add(new AIActor());
             currentActor = 0;
 
             new GameObject("Player Control").AddComponent<PlayerControl>().init(player);
@@ -46,9 +45,7 @@ namespace game {
             
             mc = new GameObject("Map Click").AddComponent<MapClick>();
             mc.init(w, player);
-
-            cm = new GameObject("Corruption Manager").AddComponent<CorruptManager>();
-            cm.init(w);
+            
 
             Unit u1 = new GameObject("Unit2").AddComponent<Unit>();
             u1.init(w, w.map[new HexLoc(1, 0, -1)]);
@@ -80,7 +77,7 @@ namespace game {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
                 w.NewTurn(ca, actors[currentActor]);
-                cm.processTurn(); //Process Corruptions turn after player is done
+                actors[currentActor].StartTurn();
             }
         }
     } 
