@@ -105,6 +105,9 @@ namespace game.input {
 
             // We're moving a unit.
             if (Input.GetKeyUp(KeyCode.M)) {
+                if (selected.units.Count() < 1) {
+                    return State.Selected;
+                }
                 return State.Moving;
             }
 
