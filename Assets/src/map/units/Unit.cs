@@ -72,6 +72,7 @@ namespace game.map.units {
             void Start() {
                 sp = gameObject.AddComponent<SpriteRenderer>();
                 sp.sprite = Resources.Load<Sprite>("Textures/Triangle");
+                sp.color = Color.black;
             }
 
             void Update() {
