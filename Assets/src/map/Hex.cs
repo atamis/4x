@@ -8,17 +8,56 @@ using game.actor;
 
 namespace game.map {
     public enum Biome {
-        Passable, Impassable, Corruption
+        Highlands, Plains, Forrest, Ocean, Desert, Jungle
     }
 
     public static class BiomeExtensions {
-        public static Biome Toggle(this Biome b) {
-            if (b == Biome.Impassable) {
-                return Biome.Passable;
-            } else if(b == Biome.Passable){
-                return Biome.Corruption;
-            } else {
-                return Biome.Impassable;
+        private static Sprite sprite = Resources.Load<Sprite>("Textures/Hexagon");
+
+        public static Sprite GetSprite(this Biome b) {
+            return sprite;
+        }
+
+        public static float Dropoff(this Biome b) {
+            switch (b) {
+                case Biome.Highlands:
+                    return 1f;
+                case Biome.Plains:
+                    return 1f;
+                case Biome.Forrest:
+                    return 1f;
+                case Biome.Ocean:
+                    return 1f;
+                case Biome.Desert:
+                    return -1f;
+                case Biome.Jungle:
+                    return 1f;
+                default:
+                    return -1f;
+            }
+
+        }
+
+        public static bool Passable(this Biome b) {
+            return b.PassCost() != -1;
+        }
+
+        public static int PassCost(this Biome b) {
+            switch(b) {
+                case Biome.Highlands:
+                    return 1;
+                case Biome.Plains:
+                    return 1;
+                case Biome.Forrest:
+                    return 1;
+                case Biome.Ocean:
+                    return 1;
+                case Biome.Desert:
+                    return -1;
+                case Biome.Jungle:
+                    return 1;
+                default:
+                    return -1;
             }
         }
      }
@@ -28,6 +67,9 @@ namespace game.map {
         public HexLoc loc;
         public Biome b;
 
+        // TODO: use enum instead?
+        public bool corrupted;
+
         public HashSet<Unit> units;
 
         HexModel model;
@@ -35,7 +77,8 @@ namespace game.map {
         public void init(WorldMap w, HexLoc loc) {
             this.w = w;
             this.loc = loc;
-            this.b = Biome.Passable;
+            this.b = Biome.Forrest;
+            this.corrupted = false;
 
             units = new HashSet<Unit>();
 
@@ -88,13 +131,36 @@ namespace game.map {
             }
 
             void Update() {
-                if (h.b == Biome.Impassable) {
-                    sp.color = new Color(0.2f, 0.2f, 0.2f);
-                } else if (h.b == Biome.Corruption){
-                    sp.color = new Color(.5f, 0f, .5f);
-                } else {
-                    sp.color = new Color(1f, 1f, 1f);
+                Color c;
+                switch(h.b) {
+                case Biome.Highlands:
+                    c = Color.gray;
+                    break;
+                case Biome.Plains:
+                    c = Color.yellow;
+                    break;
+                case Biome.Forrest:
+                    c = Color.green;
+                    break;
+                case Biome.Ocean:
+                    c = Color.blue;
+                    break;
+                case Biome.Desert:
+                    c = Color.white;
+                    break;
+                case Biome.Jungle:
+                    c = Color.green;
+                    break;
+                default:
+                    c = Color.black;
+                    break;
                 }
+
+                if (h.corrupted) {
+                    c = new Color(0.5f, 0, 0.5f);
+                }
+
+                sp.color = c;
             }
         }
     }

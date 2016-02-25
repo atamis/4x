@@ -21,7 +21,7 @@ namespace game.map {
                     map.Add(hl, makeHex(hl));
                 }
             }
-            map[new HexLoc(10, 10, -20)].b = Biome.Corruption;
+            map[new HexLoc(10, 10, -20)].corrupted = true;
         }
 
         private Hex makeHex(HexLoc l) {

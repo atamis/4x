@@ -31,20 +31,23 @@ namespace game.actor {
 
         public override void Apply(WorldMap w) {
             HashSet<Hex> tilesToTurn = new HashSet<Hex>();
+            int i = 0;
             foreach (KeyValuePair<HexLoc, Hex> kv in w.map) {
                 Hex tile = kv.Value;
-                if (tile.b == Biome.Corruption) {
+                if (tile.corrupted) {
+                    i++;
                     foreach (Hex t in tile.Neighbors()) {
-                        if (t.b == Biome.Passable) tilesToTurn.Add(t);
+                        if (t.b.Passable()) tilesToTurn.Add(t);
                     }
                 }
 
             }
+            
 
             foreach (Hex tile in tilesToTurn) {
                 float rand = UnityEngine.Random.value;
                 if (rand < infectChance()) {
-                    tile.b = Biome.Corruption;
+                    tile.corrupted = true;
                     tilesTurned.Add(tile);
                 }
             }
@@ -53,7 +56,7 @@ namespace game.actor {
 
         public override void Undo(WorldMap w) {
             foreach(Hex h in tilesTurned) {
-                h.b = Biome.Passable;
+                h.corrupted = false;
             }
         }
     }

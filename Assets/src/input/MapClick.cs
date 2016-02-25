@@ -42,6 +42,7 @@ namespace game.input {
             if (s == State.Selected) {
                 messages.Add("You selected " + selected);
                 messages.Add("Biome: " + selected.b.ToString());
+                messages.Add("Passable: " + (selected.b.Passable() ? "yes" : "no"));
 
                 if (selected.units.Count > 0) {
                     messages.Add("Units: " +

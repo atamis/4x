@@ -10,7 +10,7 @@ namespace game.actor {
 
         public AIActor() : base("AI Actor") {
             commands = new Queue<Command>();
-            this.aggression = 1;
+            this.aggression = 3;
         }
 
         public override void StartTurn() {
