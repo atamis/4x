@@ -47,18 +47,17 @@ namespace game {
 
 		public void spreadCreep(){
 			List<Hex> tilesToTurn = new List<Hex>();
-			for (int q = 0; q <= MAP_WIDTH; q++) {
-                for (int r = 0; r <= MAP_HEIGHT; r++) {
-                    HexLoc loc = new HexLoc(q, r, -q - r);
-                    Hex tile = w.map[loc];
-                    if(tile.b == Biome.Corruption){
-                    	foreach (Hex t in tile.Neighbors()){
-                    		if(t.b == Biome.Passable) tilesToTurn.Add(t);
-                    	}
+            foreach(KeyValuePair<HexLoc, Hex> kv in w.map) {
+                Hex tile = kv.Value;
+                if (tile.b == Biome.Corruption) {
+                    foreach (Hex t in tile.Neighbors()) {
+                        if (t.b == Biome.Passable) tilesToTurn.Add(t);
                     }
                 }
-			}
-			foreach (Hex tile in tilesToTurn){
+
+            }
+
+            foreach (Hex tile in tilesToTurn){
 				float rand = UnityEngine.Random.value;
 				if (rand < infectChance()){
 					tile.b = Biome.Corruption;
