@@ -21,6 +21,7 @@ namespace game {
         private List<Actor> actors;
         private int currentActor;
         private Player player;
+        private CorruptManager cm;
 
         // Use this for initialization
         void Start() {
@@ -42,9 +43,14 @@ namespace game {
 
             pc = new GameObject("Player Camera").AddComponent<PlayerCamera>();
             pc.init(Camera.main);
-
-            Unit u1 = new GameObject("Unit1").AddComponent<Unit>();
             
+            mc = new GameObject("Map Click").AddComponent<MapClick>();
+            mc.init(w, player);
+
+            cm = new GameObject("Corruption Manager").AddComponent<CorruptManager>();
+            cm.init(w);
+
+            Unit u1 = new GameObject("Unit2").AddComponent<Unit>();
             u1.init(w, w.map[new HexLoc(1, 0, -1)]);
 
             Unit u2 = new GameObject("Unit2").AddComponent<Unit>();
@@ -74,6 +80,7 @@ namespace game {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
                 w.NewTurn(ca, actors[currentActor]);
+                cm.processTurn(); //Process Corruptions turn after player is done
             }
         }
     } 

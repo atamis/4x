@@ -8,13 +8,15 @@ using game.actor;
 
 namespace game.map {
     public enum Biome {
-        Passable, Impassable
+        Passable, Impassable, Corruption
     }
 
     public static class BiomeExtensions {
         public static Biome Toggle(this Biome b) {
             if (b == Biome.Impassable) {
                 return Biome.Passable;
+            } else if(b == Biome.Passable){
+                return Biome.Corruption;
             } else {
                 return Biome.Impassable;
             }
@@ -33,7 +35,7 @@ namespace game.map {
         public void init(WorldMap w, HexLoc loc) {
             this.w = w;
             this.loc = loc;
-            this.b = Biome.Impassable;
+            this.b = Biome.Passable;
 
             units = new HashSet<Unit>();
 
@@ -88,6 +90,8 @@ namespace game.map {
             void Update() {
                 if (h.b == Biome.Impassable) {
                     sp.color = new Color(0.2f, 0.2f, 0.2f);
+                } else if (h.b == Biome.Corruption){
+                    sp.color = new Color(.5f, 0f, .5f);
                 } else {
                     sp.color = new Color(1f, 1f, 1f);
                 }
