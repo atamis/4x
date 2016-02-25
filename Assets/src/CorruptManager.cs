@@ -10,8 +10,6 @@ namespace game {
 	class CorruptManager : MonoBehaviour {
 		WorldMap w;
 		private int aggression;
-		private int MAP_WIDTH = 10;
-		private int MAP_HEIGHT = 10;
 
 		public void init (WorldMap w) {
 			this.w = w;
@@ -23,16 +21,12 @@ namespace game {
 			switch(aggression){
 				case 0: 
 					return .015f;
-					break;
 				case 1: 
 					return .03f;
-					break;
 				case 2:
 					return .08f;
-					break;
 				case 3: 
 					return .2f;
-					break;
 			}
 			return 0f;
 		}
