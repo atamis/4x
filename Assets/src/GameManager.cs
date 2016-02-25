@@ -43,9 +43,13 @@ namespace game {
             pc = new GameObject("Player Camera").AddComponent<PlayerCamera>();
             pc.init(Camera.main);
 
-            Unit u = new GameObject("Unit").AddComponent<Unit>();
+            Unit u1 = new GameObject("Unit1").AddComponent<Unit>();
             
-            u.init(w, w.map[new HexLoc(1, 0, -1)]);
+            u1.init(w, w.map[new HexLoc(1, 0, -1)]);
+
+            Unit u2 = new GameObject("Unit2").AddComponent<Unit>();
+
+            u2.init(w, w.map[new HexLoc(1, 2, -3)]);
 
             mc = new GameObject("Map Click").AddComponent<MapClick>();
             mc.init(w, player);
