@@ -14,6 +14,7 @@ namespace game {
         private List<Actor> actors;
         private int currentActor;
         private Player player;
+        private CorruptManager cm;
 
         // Use this for initialization
         void Start() {
@@ -38,6 +39,9 @@ namespace game {
             mc = new GameObject("Map Click").AddComponent<MapClick>();
             mc.init(w);
 
+            cm = new GameObject("Corruption Manager").AddComponent<CorruptManager>();
+            cm.init(w);
+
             
         }
             
@@ -58,6 +62,7 @@ namespace game {
             if (c.GetType() == typeof(EndTurnCommand)) {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
+                cm.processTurn(); //Process Corruptions turn after player is done
             }
         }
     } 
