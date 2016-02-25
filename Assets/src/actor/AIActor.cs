@@ -19,7 +19,10 @@ namespace game.actor {
         }
 
         public override Command GetNextCommand() {
-            return commands.Dequeue();
+            if (commands.Count > 0) {
+                return commands.Dequeue();
+            }
+            return null;
         }
     }
 }

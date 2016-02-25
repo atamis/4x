@@ -73,6 +73,7 @@ namespace game.map {
         public HashSet<Unit> units;
 
         HexModel model;
+        public Building building;
 
         public void init(WorldMap w, HexLoc loc) {
             this.w = w;
@@ -92,6 +93,9 @@ namespace game.map {
         }
 
         public void NewTurn(Actor old, Actor cur) {
+            if (building != null) {
+                building.NewTurn(old, cur);
+            }
             foreach(Unit u in units) {
                 u.NewTurn(old, cur);
             }
