@@ -15,4 +15,14 @@ namespace game.actor {
             return null;
         }
     }
+
+    class PassTurnActor : Actor {
+        public PassTurnActor(String name) : base(name) {
+
+        }
+
+        public override Command GetNextCommand() {
+            return new EndTurnCommand(this);
+        }
+    }
 }
