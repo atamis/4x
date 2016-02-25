@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using game.map;
 using game.input;
 using game.actor;
+using game.map.units;
+
+/*
+ * Current z-level layout:
+ * z = 0  : game board
+ * z = -1 : units
+ */
 
 namespace game {
     public class GameManager : MonoBehaviour {
@@ -20,6 +27,7 @@ namespace game {
             player = new Player("Player");
             actors = new List<Actor>();
             actors.Add(player);
+            actors.Add(new PassTurnActor("Pass Turn Actor"));
             currentActor = 0;
 
             new GameObject("Player Control").AddComponent<PlayerControl>().init(player);
@@ -35,10 +43,16 @@ namespace game {
             pc = new GameObject("Player Camera").AddComponent<PlayerCamera>();
             pc.init(Camera.main);
 
-            mc = new GameObject("Map Click").AddComponent<MapClick>();
-            mc.init(w);
-
+            Unit u1 = new GameObject("Unit1").AddComponent<Unit>();
             
+            u1.init(w, w.map[new HexLoc(1, 0, -1)]);
+
+            Unit u2 = new GameObject("Unit2").AddComponent<Unit>();
+
+            u2.init(w, w.map[new HexLoc(1, 2, -3)]);
+
+            mc = new GameObject("Map Click").AddComponent<MapClick>();
+            mc.init(w, player);
         }
             
 
@@ -53,11 +67,13 @@ namespace game {
             if (c == null)
                 return;
 
+            print("Executing " + c.ToString());
             c.Apply(w);
 
             if (c.GetType() == typeof(EndTurnCommand)) {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
+                w.NewTurn(ca, actors[currentActor]);
             }
         }
     } 
