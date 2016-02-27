@@ -74,6 +74,7 @@ namespace game.map {
 
         HexModel model;
         public Building building;
+        public bool powered;
 
         public void init(WorldMap w, HexLoc loc) {
             this.w = w;

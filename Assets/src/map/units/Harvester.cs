@@ -7,6 +7,14 @@ using game.actor;
 namespace game.map.units {
     class Harvester : Building {
 
+        public override bool Powered() {
+            return true;
+        }
+
+        public override bool ProjectsPower() {
+            return true;
+        }
+
         public override string GetName() {
             return "Harvester";
         }

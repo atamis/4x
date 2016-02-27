@@ -46,8 +46,14 @@ namespace game {
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
 
-            Building b = new GameObject("Building1").AddComponent<Harvester>();
-            b.init(player, w.map[new HexLoc(0, 0, 0)]);
+            Building b1 = new GameObject("Harvester1").AddComponent<Harvester>();
+            b1.init(player, w.map[new HexLoc(0, 0, 0)]);
+
+            Building b2 = new GameObject("Conduit1").AddComponent<Conduit>();
+            b2.init(player, w.map[new HexLoc(2, 2, -4)]);
+
+            Building b3 = new GameObject("Conduit2").AddComponent<Conduit>();
+            b3.init(player, w.map[new HexLoc(1, 1, -2)]);
 
             Unit u1 = new GameObject("Unit2").AddComponent<Unit>();
             u1.init(w, w.map[new HexLoc(1, 0, -1)]);
@@ -58,6 +64,8 @@ namespace game {
 
             mc = new GameObject("Map Click").AddComponent<MapClick>();
             mc.init(w, player);
+
+            w.NewTurn(null, actors[currentActor]);
         }
             
 

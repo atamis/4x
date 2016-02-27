@@ -43,6 +43,11 @@ namespace game.input {
                 messages.Add("You selected " + selected);
                 messages.Add("Biome: " + selected.b.ToString());
                 messages.Add("Passable: " + (selected.b.Passable() ? "yes" : "no"));
+                messages.Add("Powered: " + (selected.powered ? "yes" : "no"));
+
+                if (selected.building != null) {
+                    messages.Add("Building: " + selected.building.GetName());
+                }
 
                 if (selected.units.Count > 0) {
                     messages.Add("Units: " +

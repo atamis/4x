@@ -7,6 +7,7 @@ using game.actor;
 
 namespace game.map.units {
     class Building : MonoBehaviour {
+        public bool grided;
         public Hex h {
             get;
             internal set;
@@ -18,7 +19,9 @@ namespace game.map.units {
 
         public void init(Actor a, Hex h) {
             this.a = a;
+            this.h = h;
             h.building = this;
+            this.grided = false;
 
             transform.parent = h.gameObject.transform;
             transform.localPosition = new Vector3(0, 0, 0);
@@ -35,8 +38,42 @@ namespace game.map.units {
             return "Building";
         }
 
+        public virtual bool Powered() {
+            return h.powered;
+        }
+
+        public virtual bool ProjectsPower() {
+            return false;
+        }
+
+        public virtual void PowerGrid() {
+            this.grided = true;
+            if (Powered() && ProjectsPower()) {
+                HashSet<Hex> hexes = h.Neighbors().Aggregate(new HashSet<Hex>(),
+                    (HashSet<Hex> acc, Hex hs) => {
+                        acc.Add(h);
+                        foreach (Hex n in hs.Neighbors()) {
+                            acc.Add(n);
+                        }
+                        return acc;
+                    });
+
+                foreach(Hex hs in hexes) {
+                    hs.powered = true;
+                }
+
+                foreach(Hex hs in hexes) {
+                    if (hs.building != null && !hs.building.grided) {
+                        hs.building.PowerGrid();
+                    }
+                }
+            }
+        }
+
         public virtual void NewTurn(Actor old, Actor cur) {
-            
+            if (a == cur) {
+
+            }
         }
 
         class BuildingModel : MonoBehaviour {

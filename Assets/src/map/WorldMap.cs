@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using game.actor;
+using game.map.units;
 using UnityEngine;
 
 namespace game.map {
@@ -42,8 +43,24 @@ namespace game.map {
         }
 
         public void NewTurn(Actor old, Actor cur) {
-            foreach(KeyValuePair<HexLoc, Hex> kv in map) {
+            List<Building> poweredBuildings = new List<Building>();
+            foreach (KeyValuePair<HexLoc, Hex> kv in map) {
+                kv.Value.powered = false;
+                var b = kv.Value.building;
+                if (b != null) {
+                    b.grided = false;
+                    if (b.Powered()) {
+                        poweredBuildings.Add(b);
+                    }
+                }
+            }
+
+            foreach (KeyValuePair<HexLoc, Hex> kv in map) {
                 kv.Value.NewTurn(old, cur);
+            }
+
+            foreach(Building b in poweredBuildings) {
+                b.PowerGrid();
             }
         }
     }
