@@ -21,7 +21,9 @@ namespace game.input {
             // We've selected a hex
             Selected,
             // We're moving a unit.
-            Moving
+            Moving,
+            // We're building a building
+            Building
         }
 
         public void init(WorldMap w, Player p) {
@@ -38,7 +40,9 @@ namespace game.input {
         void OnGUI() {
             List<string> messages = new List<String>();
             messages.Add("Click to select a hex.");
+            messages.Add("State: " + s.ToString());
             messages.Add("Press m to move units.");
+            messages.Add("Press b to build buildings.");
             if (s == State.Selected) {
                 messages.Add("You selected " + selected);
                 messages.Add("Biome: " + selected.b.ToString());
@@ -79,6 +83,9 @@ namespace game.input {
                     return;
                 case State.Moving:
                     s = UpdateMoving();
+                    return;
+                case State.Building:
+                    s = UpdateBuilding();
                     return;
             }
         }
@@ -122,6 +129,10 @@ namespace game.input {
                 return State.Moving;
             }
 
+            if (Input.GetKeyUp(KeyCode.B)) {
+                return State.Building;
+            }
+
             return State.Selected;
         }
 
@@ -157,6 +168,18 @@ namespace game.input {
 
             // Just wait.
             return State.Moving;
+        }
+
+        State UpdateBuilding() {
+            if (Input.GetMouseButtonUp(0)) {
+                Hex h = GetHexAtMouse();
+                Building b2 = new GameObject("A Conduit").AddComponent<Conduit>();
+                b2.init(p, h);
+
+                return State.Selected;
+            }
+
+            return State.Building;
         }
 
         private Hex GetHexAtMouse() {
