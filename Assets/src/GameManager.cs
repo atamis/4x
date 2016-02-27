@@ -8,7 +8,11 @@ using game.map.units;
 /*
  * Current z-level layout:
  * z = 0  : game board
- * z = -1 : units
+ * z = -1 : corruption
+ * z = -2 : buildings
+ * z = -3 : units
+ * z = -4 : units FX
+ * z = -5 : building FX
  */
 
 namespace game {
@@ -64,9 +68,6 @@ namespace game {
             Unit u2 = new GameObject("Unit2").AddComponent<Unit>();
 
             u2.init(w, w.map[new HexLoc(1, 2, -3)]);
-
-            mc = new GameObject("Map Click").AddComponent<MapClick>();
-            mc.init(w, player);
 
             w.NewTurn(null, actors[currentActor]);
         }

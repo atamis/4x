@@ -41,8 +41,7 @@ namespace game.map.units {
 
             var obj = new GameObject("Unit Model");
             obj.transform.parent = transform;
-            // z = -1 to it's for sure in front of the map.
-            obj.transform.localPosition = new Vector3(0, 0, -1);
+            
             model = obj.AddComponent<UnitModel>();
         }
 
@@ -70,6 +69,8 @@ namespace game.map.units {
             SpriteRenderer sp;
 
             void Start() {
+                transform.localPosition = new Vector3(0, 0, -3);
+
                 sp = gameObject.AddComponent<SpriteRenderer>();
                 sp.sprite = Resources.Load<Sprite>("Textures/Triangle");
                 sp.color = Color.black;
