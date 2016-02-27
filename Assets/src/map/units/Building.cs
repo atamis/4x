@@ -13,6 +13,8 @@ namespace game.map.units {
             internal set;
         }
 
+        public PowerNetwork pn;
+
         public Actor a;
 
         private BuildingModel model;
@@ -22,6 +24,7 @@ namespace game.map.units {
             this.h = h;
             h.building = this;
             this.grided = false;
+            pn = null;
 
             transform.parent = h.gameObject.transform;
             transform.localPosition = new Vector3(0, 0, 0);
@@ -46,8 +49,14 @@ namespace game.map.units {
             return false;
         }
 
-        public virtual void PowerGrid() {
+        public virtual void SpreadPower(PowerNetwork pn) {
             this.grided = true;
+
+            if (this.pn == null) {
+                this.pn = pn;
+            }
+            
+
             if (Powered() && ProjectsPower()) {
                 HashSet<Hex> hexes = h.Neighbors().Aggregate(new HashSet<Hex>(),
                     (HashSet<Hex> acc, Hex hs) => {
@@ -64,7 +73,7 @@ namespace game.map.units {
 
                 foreach(Hex hs in hexes) {
                     if (hs.building != null && !hs.building.grided) {
-                        hs.building.PowerGrid();
+                        hs.building.SpreadPower(pn);
                     }
                 }
             }

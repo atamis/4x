@@ -55,6 +55,9 @@ namespace game {
             Building b3 = new GameObject("Conduit2").AddComponent<Conduit>();
             b3.init(player, w.map[new HexLoc(1, 1, -2)]);
 
+            Building b4 = new GameObject("Harvester1").AddComponent<Harvester>();
+            b4.init(player, w.map[new HexLoc(5, 6, -11)]);
+
             Unit u1 = new GameObject("Unit2").AddComponent<Unit>();
             u1.init(w, w.map[new HexLoc(1, 0, -1)]);
 

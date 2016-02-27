@@ -46,7 +46,12 @@ namespace game.input {
                 messages.Add("Powered: " + (selected.powered ? "yes" : "no"));
 
                 if (selected.building != null) {
-                    messages.Add("Building: " + selected.building.GetName());
+                    var b = selected.building;
+                    messages.Add("Building: " + b.GetName());
+                    if (b.pn != null) {
+                        messages.Add("Power: " + b.pn.power);
+                        messages.Add("Network: " + b.pn.id);
+                    }
                 }
 
                 if (selected.units.Count > 0) {

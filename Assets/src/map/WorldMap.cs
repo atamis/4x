@@ -49,6 +49,7 @@ namespace game.map {
                 var b = kv.Value.building;
                 if (b != null) {
                     b.grided = false;
+                    b.pn = null;
                     if (b.Powered()) {
                         poweredBuildings.Add(b);
                     }
@@ -60,7 +61,9 @@ namespace game.map {
             }
 
             foreach(Building b in poweredBuildings) {
-                b.PowerGrid();
+                if (!b.grided) {
+                    b.SpreadPower(new PowerNetwork());
+                }
             }
         }
     }
