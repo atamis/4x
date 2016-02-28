@@ -23,7 +23,7 @@ namespace game.map.units {
 
         private BuildingModel model;
 
-        public void init(Actor a, Hex h) {
+        public virtual void init(Actor a, Hex h) {
             this.a = a;
             this.h = h;
             h.building = this;
@@ -76,7 +76,7 @@ namespace game.map.units {
                     });
 
                 foreach(Hex hs in hexes) {
-                    hs.powered = true;
+                    hs.pn = pn;
                 }
 
                 foreach(Hex hs in hexes) {

@@ -29,7 +29,6 @@ namespace game.map.units {
                     pn.power -= MAX_POWER;
                 } else {
                     power += pn.power;
-                    print("Now have " + power);
                     pn.power = 0;
                 }
             }

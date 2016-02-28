@@ -31,9 +31,9 @@ namespace game.actor {
         }
 
         public override void Apply(WorldMap w) {
-            Building b = addBuildingComponent(new GameObject("New Building"));
+            WarpingBuilding b = new GameObject("Warping " + t.ToString()).AddComponent<WarpingBuilding>();
 
-            b.init(a, h);
+            b.init(a, h, t);
         }
 
         public override void Undo(WorldMap w) {

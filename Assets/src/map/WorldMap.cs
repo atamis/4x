@@ -56,7 +56,7 @@ namespace game.map {
         public void NewTurn(Actor old, Actor cur) {
             List<Building> poweredBuildings = new List<Building>();
             foreach (KeyValuePair<HexLoc, Hex> kv in map) {
-                kv.Value.powered = false;
+                kv.Value.pn = null;
                 var b = kv.Value.building;
                 if (b != null) {
                     b.grided = false;
