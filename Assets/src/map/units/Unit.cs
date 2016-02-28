@@ -41,8 +41,7 @@ namespace game.map.units {
 
             var obj = new GameObject("Unit Model");
             obj.transform.parent = transform;
-            // z = -1 to it's for sure in front of the map.
-            obj.transform.localPosition = new Vector3(0, 0, -1);
+            
             model = obj.AddComponent<UnitModel>();
         }
 
@@ -61,6 +60,10 @@ namespace game.map.units {
             transform.localPosition = new Vector3(0, 0, 0);
         }
 
+        public virtual void PreTurn(Actor old, Actor cur) {
+
+        }
+
         public void NewTurn(Actor old, Actor cur) {
             // TODO: Resets every  turn, not just at the start of their owner's turn.
             movement = maxMovement;
@@ -70,6 +73,8 @@ namespace game.map.units {
             SpriteRenderer sp;
 
             void Start() {
+                transform.localPosition = new Vector3(0, 0, Layer.Units);
+
                 sp = gameObject.AddComponent<SpriteRenderer>();
                 sp.sprite = Resources.Load<Sprite>("Textures/Triangle");
                 sp.color = Color.black;
@@ -78,6 +83,10 @@ namespace game.map.units {
             void Update() {
 
             }
+        }
+
+        public virtual void PostTurn(Actor old, Actor cur) {
+
         }
     }
 }

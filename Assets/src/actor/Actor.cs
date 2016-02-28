@@ -11,6 +11,10 @@ namespace game.actor {
             this.name = name;
         }
 
+        public virtual void StartTurn() {
+
+        }
+
         public virtual Command GetNextCommand() {
             return null;
         }
