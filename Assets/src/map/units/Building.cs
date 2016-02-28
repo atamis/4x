@@ -93,7 +93,7 @@ namespace game.map.units {
                 this.b = b;
 
                 transform.parent = b.gameObject.transform;
-                transform.localPosition = new Vector3(0, 0, -2);
+                transform.localPosition = new Vector3(0, 0, Layer.Buildings);
 
                 sp = gameObject.AddComponent<SpriteRenderer>();
                 sp.sprite = Resources.Load<Sprite>("Textures/" + b.GetName());

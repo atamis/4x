@@ -5,16 +5,6 @@ using game.input;
 using game.actor;
 using game.map.units;
 
-/*
- * Current z-level layout:
- * z = 0  : game board
- * z = -1 : corruption
- * z = -2 : buildings
- * z = -3 : units
- * z = -4 : units FX
- * z = -5 : building FX
- */
-
 namespace game {
     public class GameManager : MonoBehaviour {
 

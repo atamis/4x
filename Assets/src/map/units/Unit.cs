@@ -69,7 +69,7 @@ namespace game.map.units {
             SpriteRenderer sp;
 
             void Start() {
-                transform.localPosition = new Vector3(0, 0, -3);
+                transform.localPosition = new Vector3(0, 0, Layer.Units);
 
                 sp = gameObject.AddComponent<SpriteRenderer>();
                 sp.sprite = Resources.Load<Sprite>("Textures/Triangle");

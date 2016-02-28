@@ -88,7 +88,6 @@ namespace game.map {
 
             var o = new GameObject("Hex Model");
             o.transform.parent = transform;
-            o.transform.localPosition = new Vector2(0, 0);
             model = o.AddComponent<HexModel>();
             model.init(this);
         }
@@ -128,6 +127,9 @@ namespace game.map {
 
             public void init(Hex h) {
                 this.h = h;
+
+
+                transform.localPosition = new Vector3(0, 0, Layer.Board);
 
                 sp = gameObject.AddComponent<SpriteRenderer>();
 
