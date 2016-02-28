@@ -42,6 +42,17 @@ namespace game.map {
 
         }
 
+        public void PreTurn(Actor old, Actor cur) {
+
+            foreach (KeyValuePair<HexLoc, Hex> kv in map) {
+                kv.Value.PreTurn(old, cur);
+            }
+
+
+
+        }
+
+
         public void NewTurn(Actor old, Actor cur) {
             List<Building> poweredBuildings = new List<Building>();
             foreach (KeyValuePair<HexLoc, Hex> kv in map) {
@@ -56,15 +67,23 @@ namespace game.map {
                 }
             }
 
-            foreach (KeyValuePair<HexLoc, Hex> kv in map) {
-                kv.Value.NewTurn(old, cur);
-            }
-
-            foreach(Building b in poweredBuildings) {
+            foreach (Building b in poweredBuildings) {
                 if (!b.grided) {
                     b.SpreadPower(new PowerNetwork());
                 }
             }
+
+
+            foreach (KeyValuePair<HexLoc, Hex> kv in map) {
+                kv.Value.NewTurn(old, cur);
+            }
         }
+
+        public void PostTurn(Actor old, Actor cur) {
+            foreach (KeyValuePair<HexLoc, Hex> kv in map) {
+                kv.Value.PostTurn(old, cur);
+            }
+        }
+
     }
 }

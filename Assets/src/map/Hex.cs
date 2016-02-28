@@ -65,6 +65,7 @@ namespace game.map {
     class Hex : MonoBehaviour {
         WorldMap w;
         public HexLoc loc;
+
         public Biome b;
 
         // TODO: use enum instead?
@@ -92,12 +93,32 @@ namespace game.map {
             model.init(this);
         }
 
+        internal void PreTurn(Actor old, Actor cur) {
+            if (building != null) {
+                building.PreTurn(old, cur);
+            }
+
+            foreach(Unit u in units) {
+                u.PreTurn(old, cur);
+            }
+        }
+
         public void NewTurn(Actor old, Actor cur) {
             if (building != null) {
                 building.NewTurn(old, cur);
             }
             foreach(Unit u in units) {
                 u.NewTurn(old, cur);
+            }
+        }
+
+        internal void PostTurn(Actor old, Actor cur) {
+            if (building != null) {
+                building.PostTurn(old, cur);
+            }
+
+            foreach (Unit u in units) {
+                u.PostTurn(old, cur);
             }
         }
 

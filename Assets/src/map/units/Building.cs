@@ -87,10 +87,20 @@ namespace game.map.units {
             }
         }
 
+        public virtual void PreTurn(Actor old, Actor cur) {
+            
+        }
+
+
         public virtual void NewTurn(Actor old, Actor cur) {
             if (a == cur) {
 
             }
+        }
+
+
+        public virtual void PostTurn(Actor old, Actor cur) {
+            
         }
 
         class BuildingModel : MonoBehaviour {

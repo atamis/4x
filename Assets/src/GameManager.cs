@@ -40,7 +40,7 @@ namespace game {
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
 
-            Building b1 = new GameObject("Harvester1").AddComponent<Harvester>();
+            Building b1 = new GameObject("WarpGate1").AddComponent<WarpGate>();
             b1.init(player, w.map[new HexLoc(0, 0, 0)]);
 
             Building b2 = new GameObject("Conduit1").AddComponent<Conduit>();
@@ -59,7 +59,9 @@ namespace game {
 
             u2.init(w, w.map[new HexLoc(1, 2, -3)]);
 
+            w.PreTurn(null, actors[currentActor]);
             w.NewTurn(null, actors[currentActor]);
+            w.PostTurn(null, actors[currentActor]);
         }
             
 
@@ -80,7 +82,9 @@ namespace game {
             if (c.GetType() == typeof(EndTurnCommand)) {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
+                w.PreTurn(ca, actors[currentActor]);
                 w.NewTurn(ca, actors[currentActor]);
+                w.PostTurn(ca, actors[currentActor]);
                 actors[currentActor].StartTurn();
             }
         }

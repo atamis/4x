@@ -60,6 +60,10 @@ namespace game.map.units {
             transform.localPosition = new Vector3(0, 0, 0);
         }
 
+        public virtual void PreTurn(Actor old, Actor cur) {
+
+        }
+
         public void NewTurn(Actor old, Actor cur) {
             // TODO: Resets every  turn, not just at the start of their owner's turn.
             movement = maxMovement;
@@ -79,6 +83,10 @@ namespace game.map.units {
             void Update() {
 
             }
+        }
+
+        public virtual void PostTurn(Actor old, Actor cur) {
+
         }
     }
 }
