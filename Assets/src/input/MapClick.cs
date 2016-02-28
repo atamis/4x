@@ -13,6 +13,8 @@ namespace game.input {
         Player p;
         private State s;
         private Hex selected;
+        private BuildingType buildingType;
+
         SelectedModel model;
 
         private enum State {
@@ -22,8 +24,10 @@ namespace game.input {
             Selected,
             // We're moving a unit.
             Moving,
-            // We're building a building
-            Building
+            // Select a building type
+            SelectBuilding,
+            // Build a building
+            BuildBuilding
         }
 
         public void init(WorldMap w, Player p) {
@@ -66,8 +70,18 @@ namespace game.input {
                 }
             }
 
+            if (s == State.SelectBuilding) {
+                messages.Add("Select building: 1 Conduit");
+                messages.Add("2 Harvester");
+                messages.Add("3 WarpGate");
+            }
+
+            if (s == State.BuildBuilding) {
+                messages.Add("Select hex to build " + buildingType.ToString());
+            }
+
             for(int i = 0; i < messages.Count; i++) {
-                GUI.Label(new Rect(10, 30 + i * 20, 200, 20), messages[i]);
+                GUI.Label(new Rect(10, 30 + i * 20, 300, 20), messages[i]);
             }
         }
         
@@ -84,8 +98,11 @@ namespace game.input {
                 case State.Moving:
                     s = UpdateMoving();
                     return;
-                case State.Building:
-                    s = UpdateBuilding();
+                case State.SelectBuilding:
+                    s = UpdateSelectBuilding();
+                    return;
+                case State.BuildBuilding:
+                    s = UpdateBuildBuilding();
                     return;
             }
         }
@@ -130,7 +147,7 @@ namespace game.input {
             }
 
             if (Input.GetKeyUp(KeyCode.B)) {
-                return State.Building;
+                return State.SelectBuilding;
             }
 
             return State.Selected;
@@ -170,16 +187,36 @@ namespace game.input {
             return State.Moving;
         }
 
-        State UpdateBuilding() {
+        State UpdateSelectBuilding() {
+
+            if (Input.GetKeyUp(KeyCode.Alpha1)) {
+                buildingType = BuildingType.Conduit;
+                return State.BuildBuilding;
+            }
+
+            if (Input.GetKeyUp(KeyCode.Alpha2)) {
+                buildingType = BuildingType.Harvester;
+                return State.BuildBuilding;
+            }
+
+            if (Input.GetKeyUp(KeyCode.Alpha3)) {
+                buildingType = BuildingType.WarpGate;
+                return State.BuildBuilding;
+            }
+
+
+            return State.SelectBuilding;
+        }
+
+        State UpdateBuildBuilding() {
             if (Input.GetMouseButtonUp(0)) {
                 Hex h = GetHexAtMouse();
-                Building b2 = new GameObject("A Conduit").AddComponent<Conduit>();
-                b2.init(p, h);
+                p.AddCommand(new BuildBuildingsCommand(p, h, buildingType));
 
                 return State.Selected;
             }
 
-            return State.Building;
+            return State.BuildBuilding;
         }
 
         private Hex GetHexAtMouse() {
