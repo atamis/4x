@@ -22,6 +22,10 @@ namespace game.actor {
                 throw new Exception(u + " doesn't have enough movement points (" +
                     u.movement + " vs. " + target.loc.Distance(oldLocation.loc)  + ")");
             }
+            if (target.units.Count > 0){
+                throw new Exception("The target hex already has a unit on it " +
+                    "(Number of units on target = " + target.Count + ")");
+            }
         }
 
         public override void Apply(WorldMap w) {
