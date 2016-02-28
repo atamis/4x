@@ -8,14 +8,35 @@ using game.actor;
 
 namespace game.map {
     public enum Biome {
-        Highlands, Plains, Forrest, Ocean, Desert, Jungle
+        Highlands, Plains, Forest, Ocean, Desert, Jungle
     }
 
     public static class BiomeExtensions {
-        private static Sprite sprite = Resources.Load<Sprite>("Textures/Hexagon");
+        private static Sprite hexagon = Resources.Load<Sprite>("Textures/Hexagon");
+        private static Sprite desert = Resources.Load<Sprite>("Textures/T_Hex_Desert");
+        private static Sprite forest = Resources.Load<Sprite>("Textures/T_Hex_Forest");
+        private static Sprite highlands = Resources.Load<Sprite>("Textures/T_Hex_Highlands");
+        private static Sprite jungle = Resources.Load<Sprite>("Textures/T_Hex_Jungle");
+        private static Sprite ocean = Resources.Load<Sprite>("Textures/T_Hex_Ocean");
+        private static Sprite plains = Resources.Load<Sprite>("Textures/T_Hex_Plains");
 
         public static Sprite GetSprite(this Biome b) {
-            return sprite;
+            switch (b) {
+                case Biome.Highlands:
+                    return highlands;
+                case Biome.Plains:
+                    return plains;
+                case Biome.Forest:
+                    return forest;
+                case Biome.Ocean:
+                    return ocean;
+                case Biome.Desert:
+                    return desert;
+                case Biome.Jungle:
+                    return jungle;
+                default:
+                    return hexagon;
+            }
         }
 
         public static float Dropoff(this Biome b) {
@@ -24,7 +45,7 @@ namespace game.map {
                     return 1f;
                 case Biome.Plains:
                     return 1f;
-                case Biome.Forrest:
+                case Biome.Forest:
                     return 1f;
                 case Biome.Ocean:
                     return 1f;
@@ -48,7 +69,7 @@ namespace game.map {
                     return 1;
                 case Biome.Plains:
                     return 1;
-                case Biome.Forrest:
+                case Biome.Forest:
                     return 1;
                 case Biome.Ocean:
                     return 1;
@@ -85,7 +106,7 @@ namespace game.map {
         public void init(WorldMap w, HexLoc loc) {
             this.w = w;
             this.loc = loc;
-            this.b = Biome.Forrest;
+            this.b = Biome.Plains;
             this.corrupted = false;
 
             units = new HashSet<Unit>();
@@ -158,42 +179,15 @@ namespace game.map {
                 transform.localPosition = new Vector3(0, 0, Layer.Board);
 
                 sp = gameObject.AddComponent<SpriteRenderer>();
-
-                sp.sprite = Resources.Load<Sprite>("Textures/Hexagon");
+                
+                sp.sprite = h.b.GetSprite();
                 sp.transform.localScale = new Vector3(1.9f, 1.9f);
             }
 
             void Update() {
-                Color c;
-                switch(h.b) {
-                case Biome.Highlands:
-                    c = Color.gray;
-                    break;
-                case Biome.Plains:
-                    c = Color.yellow;
-                    break;
-                case Biome.Forrest:
-                    c = Color.green;
-                    break;
-                case Biome.Ocean:
-                    c = Color.blue;
-                    break;
-                case Biome.Desert:
-                    c = Color.white;
-                    break;
-                case Biome.Jungle:
-                    c = Color.green;
-                    break;
-                default:
-                    c = Color.black;
-                    break;
-                }
-
                 if (h.corrupted) {
-                    c = new Color(0.5f, 0, 0.5f);
+                    sp.color = new Color(0.5f, 0, 0.5f);
                 }
-
-                sp.color = c;
             }
         }
     }

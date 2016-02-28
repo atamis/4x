@@ -114,7 +114,7 @@ namespace game.map.units {
                 transform.localPosition = new Vector3(0, 0, Layer.Buildings);
 
                 sp = gameObject.AddComponent<SpriteRenderer>();
-                sp.sprite = Resources.Load<Sprite>("Textures/" + b.GetName());
+                sp.sprite = Resources.Load<Sprite>("Textures/T_" + b.GetName());
 
             }
         }

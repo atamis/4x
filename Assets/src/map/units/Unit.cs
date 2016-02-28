@@ -76,8 +76,7 @@ namespace game.map.units {
                 transform.localPosition = new Vector3(0, 0, Layer.Units);
 
                 sp = gameObject.AddComponent<SpriteRenderer>();
-                sp.sprite = Resources.Load<Sprite>("Textures/Triangle");
-                sp.color = Color.black;
+                sp.sprite = Resources.Load<Sprite>("Textures/T_Unit");
             }
 
             void Update() {
