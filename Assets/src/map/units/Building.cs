@@ -6,6 +6,10 @@ using UnityEngine;
 using game.actor;
 
 namespace game.map.units {
+    public enum BuildingType {
+        Conduit, Harvester, WarpGate
+    }
+
     class Building : MonoBehaviour {
         public bool grided;
         public Hex h {
@@ -47,6 +51,10 @@ namespace game.map.units {
 
         public virtual bool ProjectsPower() {
             return false;
+        }
+
+        internal void Destroy() {
+            Destroy(gameObject);
         }
 
         public virtual void SpreadPower(PowerNetwork pn) {
