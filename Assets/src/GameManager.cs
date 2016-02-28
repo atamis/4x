@@ -5,12 +5,6 @@ using game.input;
 using game.actor;
 using game.map.units;
 
-/*
- * Current z-level layout:
- * z = 0  : game board
- * z = -1 : units
- */
-
 namespace game {
     public class GameManager : MonoBehaviour {
 
@@ -21,14 +15,13 @@ namespace game {
         private List<Actor> actors;
         private int currentActor;
         private Player player;
-        private CorruptManager cm;
 
         // Use this for initialization
         void Start() {
             player = new Player("Player");
             actors = new List<Actor>();
             actors.Add(player);
-            actors.Add(new PassTurnActor("Pass Turn Actor"));
+            actors.Add(new AIActor());
             currentActor = 0;
 
             new GameObject("Player Control").AddComponent<PlayerControl>().init(player);
@@ -44,11 +37,20 @@ namespace game {
             pc = new GameObject("Player Camera").AddComponent<PlayerCamera>();
             pc.init(Camera.main);
             
-            mc = new GameObject("Map Click").AddComponent<MapClick>();
+            mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
 
-            cm = new GameObject("Corruption Manager").AddComponent<CorruptManager>();
-            cm.init(w);
+            Building b1 = new GameObject("WarpGate1").AddComponent<WarpGate>();
+            b1.init(player, w.map[new HexLoc(0, 0, 0)]);
+
+            Building b2 = new GameObject("Conduit1").AddComponent<Conduit>();
+            b2.init(player, w.map[new HexLoc(2, 2, -4)]);
+
+            Building b3 = new GameObject("Conduit2").AddComponent<Conduit>();
+            b3.init(player, w.map[new HexLoc(1, 1, -2)]);
+
+            Building b4 = new GameObject("Harvester1").AddComponent<Harvester>();
+            b4.init(player, w.map[new HexLoc(5, 6, -11)]);
 
             Unit u1 = new GameObject("Unit2").AddComponent<Unit>();
             u1.init(w, w.map[new HexLoc(1, 0, -1)]);
@@ -57,8 +59,9 @@ namespace game {
 
             u2.init(w, w.map[new HexLoc(1, 2, -3)]);
 
-            mc = new GameObject("Map Click").AddComponent<MapClick>();
-            mc.init(w, player);
+            w.PreTurn(null, actors[currentActor]);
+            w.NewTurn(null, actors[currentActor]);
+            w.PostTurn(null, actors[currentActor]);
         }
             
 
@@ -79,8 +82,10 @@ namespace game {
             if (c.GetType() == typeof(EndTurnCommand)) {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
+                w.PreTurn(ca, actors[currentActor]);
                 w.NewTurn(ca, actors[currentActor]);
-                cm.processTurn(); //Process Corruptions turn after player is done
+                w.PostTurn(ca, actors[currentActor]);
+                actors[currentActor].StartTurn();
             }
         }
     } 

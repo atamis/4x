@@ -13,6 +13,8 @@ namespace game.input {
         Player p;
         private State s;
         private Hex selected;
+        private BuildingType buildingType;
+
         SelectedModel model;
 
         private enum State {
@@ -21,7 +23,11 @@ namespace game.input {
             // We've selected a hex
             Selected,
             // We're moving a unit.
-            Moving
+            Moving,
+            // Select a building type
+            SelectBuilding,
+            // Build a building
+            BuildBuilding
         }
 
         public void init(WorldMap w, Player p) {
@@ -38,10 +44,23 @@ namespace game.input {
         void OnGUI() {
             List<string> messages = new List<String>();
             messages.Add("Click to select a hex.");
+            messages.Add("State: " + s.ToString());
             messages.Add("Press m to move units.");
+            messages.Add("Press b to build buildings.");
             if (s == State.Selected) {
                 messages.Add("You selected " + selected);
                 messages.Add("Biome: " + selected.b.ToString());
+                messages.Add("Passable: " + (selected.b.Passable() ? "yes" : "no"));
+                messages.Add("Powered: " + (selected.powered ? "yes" : "no"));
+
+                if (selected.building != null) {
+                    var b = selected.building;
+                    messages.Add("Building: " + b.GetName());
+                    if (b.pn != null) {
+                        messages.Add("Power: " + b.pn.power);
+                        messages.Add("Network: " + b.pn.id);
+                    }
+                }
 
                 if (selected.units.Count > 0) {
                     messages.Add("Units: " +
@@ -51,8 +70,18 @@ namespace game.input {
                 }
             }
 
+            if (s == State.SelectBuilding) {
+                messages.Add("Select building: 1 Conduit");
+                messages.Add("2 Harvester");
+                messages.Add("3 WarpGate");
+            }
+
+            if (s == State.BuildBuilding) {
+                messages.Add("Select hex to build " + buildingType.ToString());
+            }
+
             for(int i = 0; i < messages.Count; i++) {
-                GUI.Label(new Rect(10, 30 + i * 20, 200, 20), messages[i]);
+                GUI.Label(new Rect(10, 30 + i * 20, 300, 20), messages[i]);
             }
         }
         
@@ -68,6 +97,12 @@ namespace game.input {
                     return;
                 case State.Moving:
                     s = UpdateMoving();
+                    return;
+                case State.SelectBuilding:
+                    s = UpdateSelectBuilding();
+                    return;
+                case State.BuildBuilding:
+                    s = UpdateBuildBuilding();
                     return;
             }
         }
@@ -105,7 +140,14 @@ namespace game.input {
 
             // We're moving a unit.
             if (Input.GetKeyUp(KeyCode.M)) {
+                if (selected.units.Count() < 1) {
+                    return State.Selected;
+                }
                 return State.Moving;
+            }
+
+            if (Input.GetKeyUp(KeyCode.B)) {
+                return State.SelectBuilding;
             }
 
             return State.Selected;
@@ -143,6 +185,38 @@ namespace game.input {
 
             // Just wait.
             return State.Moving;
+        }
+
+        State UpdateSelectBuilding() {
+
+            if (Input.GetKeyUp(KeyCode.Alpha1)) {
+                buildingType = BuildingType.Conduit;
+                return State.BuildBuilding;
+            }
+
+            if (Input.GetKeyUp(KeyCode.Alpha2)) {
+                buildingType = BuildingType.Harvester;
+                return State.BuildBuilding;
+            }
+
+            if (Input.GetKeyUp(KeyCode.Alpha3)) {
+                buildingType = BuildingType.WarpGate;
+                return State.BuildBuilding;
+            }
+
+
+            return State.SelectBuilding;
+        }
+
+        State UpdateBuildBuilding() {
+            if (Input.GetMouseButtonUp(0)) {
+                Hex h = GetHexAtMouse();
+                p.AddCommand(new BuildBuildingsCommand(p, h, buildingType));
+
+                return State.Selected;
+            }
+
+            return State.BuildBuilding;
         }
 
         private Hex GetHexAtMouse() {
