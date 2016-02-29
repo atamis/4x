@@ -16,13 +16,13 @@ namespace game.map {
 
             map = new Dictionary<HexLoc, Hex>();
 
-            for (int q = 0; q <= 10; q++) {
-                for (int r = 0; r <= 10; r++) {
-                    HexLoc hl = new HexLoc(q, r, -q - r);
+            for (int x = 0; x <= 17; x++) {
+                for (int y = 0; y <= 17; y++) {
+					HexLoc hl = new HexLoc(x, y);
                     map.Add(hl, makeHex(hl));
                 }
             }
-            map[new HexLoc(10, 10, -20)].corrupted = true;
+            //map[new HexLoc(10, 10, -20)].corrupted = true;
         }
 
         private Hex makeHex(HexLoc l) {

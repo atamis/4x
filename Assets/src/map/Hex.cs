@@ -5,10 +5,11 @@ using System.Text;
 using UnityEngine;
 using game.map.units;
 using game.actor;
+using game.world;
 
 namespace game.map {
     public enum Biome {
-        Highlands, Plains, Forrest, Ocean, Desert, Jungle
+		Highlands, Plains, Forrest, Desert, Jungle, Ocean, Count
     }
 
     public static class BiomeExtensions {
@@ -76,6 +77,11 @@ namespace game.map {
         HexModel model;
         public Building building;
         public PowerNetwork pn;
+
+		public float ev { get; set; }
+		Node node;
+		bool scanned;
+
         public bool powered {
             get {
                 return pn != null;
@@ -139,6 +145,10 @@ namespace game.map {
 
             return n;
         }
+
+		public void scan() {
+			this.node.setVisible();
+		}
 
         void Start() {
 
