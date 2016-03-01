@@ -24,6 +24,10 @@ namespace game.map.units {
             return false;
         }
 
+        public override bool VisuallyConnects() {
+            return true;
+        }
+
         private Building addBuildingComponent(GameObject obj) {
             switch (type) {
                 case BuildingType.WarpGate:
@@ -50,6 +54,7 @@ namespace game.map.units {
 
         public override void PostTurn(Actor old, Actor cur) {
             if (cur == a) {
+                // TODO: fix power draw (null dereference).
                 pn.power -= 1;
                 power += 1;
                 print("Now have " + power);

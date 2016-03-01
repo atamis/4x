@@ -15,6 +15,10 @@ namespace game.map.units {
             return true;
         }
 
+        public override bool VisuallyConnects() {
+            return true;
+        }
+
         public override string GetName() {
             return "Harvester";
         }

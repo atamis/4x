@@ -87,7 +87,7 @@ namespace game.map {
      }
 
     class Hex : MonoBehaviour {
-        WorldMap w;
+        public WorldMap w;
         public HexLoc loc;
 
         public Biome b;

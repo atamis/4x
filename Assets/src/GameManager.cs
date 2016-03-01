@@ -65,6 +65,10 @@ namespace game {
             w.PreTurn(null, actors[currentActor]);
             w.NewTurn(null, actors[currentActor]);
             w.PostTurn(null, actors[currentActor]);
+
+
+
+            BeamManager bm = new BeamManager(w);
         }
             
         // Update is called once per frame

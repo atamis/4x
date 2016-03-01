@@ -10,9 +10,11 @@ namespace game.map {
     class WorldMap : MonoBehaviour{
         public Dictionary<HexLoc, Hex> map;
         public Layout l;
-
+        public BeamManager bm;
+        
         public void init(Layout l) {
             this.l = l;
+            this.bm = new BeamManager(this);
 
             map = new Dictionary<HexLoc, Hex>();
 
@@ -67,12 +69,16 @@ namespace game.map {
                 }
             }
 
+            bm.Clear();
+
             foreach (Building b in poweredBuildings) {
                 if (!b.grided) {
                     b.SpreadPower(new PowerNetwork());
                 }
             }
 
+            bm.Create();
+            
 
             foreach (KeyValuePair<HexLoc, Hex> kv in map) {
                 kv.Value.NewTurn(old, cur);

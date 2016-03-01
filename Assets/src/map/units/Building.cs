@@ -53,6 +53,10 @@ namespace game.map.units {
             return false;
         }
 
+        public virtual bool VisuallyConnects() {
+            return false;
+        }
+
         internal void Destroy() {
             Destroy(gameObject);
         }
@@ -81,6 +85,10 @@ namespace game.map.units {
 
                 foreach(Hex hs in hexes) {
                     if (hs.building != null && !hs.building.grided) {
+                        if (VisuallyConnects() && hs.building.VisuallyConnects()) {
+                            h.w.bm.Add(h.loc, hs.loc);
+                        }
+
                         hs.building.SpreadPower(pn);
                     }
                 }

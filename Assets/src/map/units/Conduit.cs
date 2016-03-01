@@ -13,6 +13,10 @@ namespace game.map.units {
         public override bool ProjectsPower() {
             return true;
         }
+
+        public override bool VisuallyConnects() {
+            return true;
+        }
     }
 
 	class ConduitModel : MonoBehaviour {
