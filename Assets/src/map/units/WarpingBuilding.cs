@@ -55,9 +55,12 @@ namespace game.map.units {
         public override void PostTurn(Actor old, Actor cur) {
             if (cur == a) {
                 // TODO: fix power draw (null dereference).
-                pn.power -= 1;
-                power += 1;
-                print("Now have " + power);
+                if (pn != null) {
+                    if (pn.power > 0) {
+                        pn.power -= 1;
+                        power += 1;
+                    }
+                }
             }
         }
     }

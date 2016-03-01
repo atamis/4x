@@ -6,6 +6,7 @@ using game.actor;
 
 namespace game.map.units {
     class Harvester : Building {
+        private static readonly int POWER_GEN = 5;
 
         public override bool Powered() {
             return true;
@@ -19,14 +20,15 @@ namespace game.map.units {
             return true;
         }
 
-        public override string GetName() {
-            return "Harvester";
+        public override void NewTurn(Actor old, Actor cur) {
+            if (a == cur) {
+                pn.power += POWER_GEN;
+            }
         }
 
-        public override void NewTurn(Actor old, Actor cur) {
-            if (cur == a) {
-                print("Gathering energy!");
-            }
+
+        public override string GetName() {
+            return "Harvester";
         }
     }
 }

@@ -18,24 +18,4 @@ namespace game.map.units {
             return true;
         }
     }
-
-	class ConduitModel : MonoBehaviour {
-		private SpriteRenderer sp;
-		Conduit cond;
-
-		public void init(Conduit c) {
-			this.cond = cond;
-			sp = gameObject.AddComponent<SpriteRenderer>();
-		}
-	}
-
-	class ConnectionModel : MonoBehaviour {
-		private SpriteRenderer sp;
-		Conduit cond;
-
-		public void init(Conduit c) {
-			this.cond = cond;
-			sp = gameObject.AddComponent<SpriteRenderer>();
-		}
-	}
 }
