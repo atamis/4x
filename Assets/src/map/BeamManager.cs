@@ -84,7 +84,7 @@ namespace game.map {
             int ah = a.GetHashCode();
             int bh = b.GetHashCode();
 
-            return ah + bh;
+            return ah << 2 ^ bh << 4;
         }
 
         public override bool Equals(object o) {
