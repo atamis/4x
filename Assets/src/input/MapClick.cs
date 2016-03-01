@@ -158,6 +158,10 @@ namespace game.input {
                 }
             }
 
+            if (Input.GetKeyUp(KeyCode.B)) {
+                return State.SelectBuilding;
+            }
+
             return State.Default;
         }
 
@@ -190,6 +194,8 @@ namespace game.input {
             if (Input.GetKeyUp(KeyCode.B)) {
                 return State.SelectBuilding;
             }
+
+
 
             return State.Selected;
         }
