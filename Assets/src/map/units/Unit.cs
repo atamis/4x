@@ -21,8 +21,10 @@ namespace game.map.units {
                     _h.units.Remove(this);
                 }
                 this._h = value;
-                transform.parent = _h.gameObject.transform;
-                _h.units.Add(this);
+                if (_h != null) {
+                    transform.parent = _h.gameObject.transform;
+                    _h.units.Add(this);
+                }
             }
         }
         WorldMap w;
@@ -67,6 +69,12 @@ namespace game.map.units {
         public void NewTurn(Actor old, Actor cur) {
             // TODO: Resets every  turn, not just at the start of their owner's turn.
             movement = maxMovement;
+        }
+
+        public void SelfDestruct() {
+            Destroy(model);
+            h = null;
+            Destroy(gameObject);
         }
 
         private class UnitModel : MonoBehaviour {

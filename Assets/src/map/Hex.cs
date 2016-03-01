@@ -231,11 +231,9 @@ namespace game.map {
 					sp.color = Color.white;
 				}
                 
-				/*
                 if (h.corrupted) {
                     sp.color = new Color(0.5f, 0, 0.5f);
                 }
-                */
             }
         }
     }

@@ -111,6 +111,12 @@ namespace game.map.units {
             
         }
 
+        public void SelfDestruct() {
+            Destroy(model);
+            h.building = null;
+            Destroy(gameObject);
+        }
+
         class BuildingModel : MonoBehaviour {
             Building b;
             SpriteRenderer sp;

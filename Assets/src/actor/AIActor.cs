@@ -15,6 +15,7 @@ namespace game.actor {
 
         public override void StartTurn() {
             commands.Enqueue(new SpreadCorruptionCommand(this, aggression));
+            commands.Enqueue(new CorruptionDamageCommand(this));
             commands.Enqueue(new EndTurnCommand(this));
         }
 
