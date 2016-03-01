@@ -16,6 +16,7 @@ namespace game {
         private int currentActor;
         private Player player;
 		WorldManager wm;
+		AudioManager am;
 
         // Use this for initialization
         void Start() {
@@ -69,6 +70,9 @@ namespace game {
 
 
             BeamManager bm = new BeamManager(w);
+
+			am = new GameObject ("Audio Manager").AddComponent<AudioManager> ();
+			am.init (this);
         }
             
         // Update is called once per frame

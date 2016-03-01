@@ -7,11 +7,15 @@ namespace game.input {
         Camera cam;
         float speed = 1f;
 
+		AudioListener listener;
+
         public void init(Camera cam) {
             this.cam = cam;
 
             cam.transform.parent = transform;
 
+			var o = new GameObject ("Listener");
+			listener = o.AddComponent<AudioListener> ();
         }
 
         // Use this for initialization

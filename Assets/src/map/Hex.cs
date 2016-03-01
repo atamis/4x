@@ -172,7 +172,7 @@ namespace game.map {
         }
 
 		public void scan() {
-			this.ev = 0;
+			this.ev = .2f;
 			this.scanned = true;
 			if (this.node != null) {
 				this.ev = 1f;
