@@ -42,6 +42,29 @@ namespace game.input {
         }
 
         void OnGUI() {
+
+			// for units
+			GUILayout.BeginArea(new Rect (Screen.width/4, Screen.height*.8f, Screen.width/2, Screen.height * .9f));
+			GUILayout.BeginHorizontal ();
+
+			if (GUILayout.Button ("Move")) {
+				print ("moved");
+			}
+
+			if (GUILayout.Button ("Build")) {
+				print ("built");
+			}
+
+			if (GUILayout.Button ("Scan")) {
+				print ("Scanned");
+			}
+
+			if (GUILayout.Button ("Cleanse")) {
+				print ("Cleansed");
+			}
+			GUILayout.EndHorizontal ();
+			GUILayout.EndArea ();
+
             List<string> messages = new List<String>();
             messages.Add("Click to select a hex.");
             messages.Add("State: " + s.ToString());
@@ -80,10 +103,26 @@ namespace game.input {
                 messages.Add("Select hex to build " + buildingType.ToString());
             }
 
+            int length = 0;
             for(int i = 0; i < messages.Count; i++) {
-                GUI.Label(new Rect(10, 30 + i * 20, 300, 20), messages[i]);
+                length = 30 + i * 20;
+                GUI.Label(new Rect(10, length, 300, 20), messages[i]);
             }
+
+            GUIStyle boxStyle = new GUIStyle(GUI.skin.box);
+            boxStyle.normal.background = makeBlankTex();
+
+            GUI.Box(new Rect(10, 30, 300, length), "", boxStyle);
         }
+
+        private Texture2D makeBlankTex() {
+            Texture2D tex = new Texture2D(1, 1);
+            tex.SetPixel(0, 0, new Color(0, 0, 0, 0.6f));
+            tex.Apply();
+            return tex;
+        }
+
+
         
 
         void Update() {

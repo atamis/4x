@@ -10,11 +10,12 @@ namespace game {
 
         PlayerCamera pc;
         private Layout l;
-        private WorldMap w;
+		private WorldMap w;
         MapClick mc;
         private List<Actor> actors;
         private int currentActor;
         private Player player;
+		WorldManager wm;
 
         // Use this for initialization
         void Start() {
@@ -25,8 +26,6 @@ namespace game {
             currentActor = 0;
 
             new GameObject("Player Control").AddComponent<PlayerControl>().init(player);
-        
-
 
             this.l = new Layout(Orientation.Pointy, new Vector2(1, 1), new Vector2(0, 0));
 
@@ -39,6 +38,10 @@ namespace game {
             
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
+
+            wm = new WorldManager(this, w);
+
+            w.map[new HexLoc(32, 63, -95)].corrupted = true;
 
             Building b1 = new GameObject("WarpGate1").AddComponent<WarpGate>();
             b1.init(player, w.map[new HexLoc(0, 0, 0)]);
@@ -88,5 +91,9 @@ namespace game {
                 actors[currentActor].StartTurn();
             }
         }
+
+		void OnGui() {
+			
+		}
     } 
 }

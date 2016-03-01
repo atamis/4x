@@ -8,7 +8,10 @@ using game.actor;
 
 namespace game.map {
     public enum Biome {
-        Highlands, Plains, Forest, Ocean, Desert, Jungle
+        Highlands, Plains, Forest, Desert, Jungle,
+
+        // MUST BE LAST ASK NICK
+        Ocean,
     }
 
     public static class BiomeExtensions {
@@ -97,6 +100,11 @@ namespace game.map {
         HexModel model;
         public Building building;
         public PowerNetwork pn;
+
+		public float ev { get; set; }
+		Node node;
+		bool scanned;
+
         public bool powered {
             get {
                 return pn != null;
@@ -161,6 +169,10 @@ namespace game.map {
             return n;
         }
 
+		public void scan() {
+			this.node.setVisible();
+		}
+
         void Start() {
 
         }
@@ -180,11 +192,12 @@ namespace game.map {
 
                 sp = gameObject.AddComponent<SpriteRenderer>();
                 
-                sp.sprite = h.b.GetSprite();
+                
                 sp.transform.localScale = new Vector3(1.9f, 1.9f);
             }
 
             void Update() {
+                sp.sprite = h.b.GetSprite();
                 if (h.corrupted) {
                     sp.color = new Color(0.5f, 0, 0.5f);
                 }

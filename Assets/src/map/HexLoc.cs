@@ -22,6 +22,17 @@ namespace game.map {
                 throw new Exception("Invalid Hex Coordinates");
             }
         }
+
+		// Nick added hex location method
+		public HexLoc(int x, int y) {
+			this.q = x - (y - (y & 1)) / 2;
+			this.r = y;
+			this.s = -q - r;
+
+			if (q + r + s != 0) {
+				throw new Exception("Invalid Hex Coordinates");
+			}
+		}
         
         public override bool Equals(Object o) {
             if (o.GetType() != typeof(HexLoc)) {
