@@ -103,7 +103,7 @@ namespace game.map {
 
 		public float ev { get; set; }
 		Node node;
-		bool scanned;
+		public bool scanned;
 
         public bool powered {
             get {
@@ -187,20 +187,31 @@ namespace game.map {
             public void init(Hex h) {
                 this.h = h;
 
-
                 transform.localPosition = new Vector3(0, 0, Layer.Board);
 
                 sp = gameObject.AddComponent<SpriteRenderer>();
-                
                 
                 sp.transform.localScale = new Vector3(1.9f, 1.9f);
             }
 
             void Update() {
-                sp.sprite = h.b.GetSprite();
+				sp.sprite = h.b.GetSprite(); // make sure we have the right biome sprite
+
+				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
+					if (h.scanned == true) {
+						sp.color = new Color (h.ev / 10f, 1, 1, 1f);
+					} else {
+						sp.color = new Color (1, 1, 1);
+					}
+				} else {
+					sp.color = Color.white;
+				}
+                
+				/*
                 if (h.corrupted) {
                     sp.color = new Color(0.5f, 0, 0.5f);
                 }
+                */
             }
         }
     }

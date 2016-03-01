@@ -56,6 +56,8 @@ namespace game.input {
 			}
 
 			if (GUILayout.Button ("Scan")) {
+				Unit u = selected.units.First ();
+				p.AddCommand(new ScanCommand(p, u, u.h));
 				print ("Scanned");
 			}
 

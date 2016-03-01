@@ -67,10 +67,6 @@ namespace game {
             w.PostTurn(null, actors[currentActor]);
         }
             
-
-
-
-
         // Update is called once per frame
         void Update() {
             Actor ca = actors[currentActor];
