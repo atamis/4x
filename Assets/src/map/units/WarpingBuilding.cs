@@ -17,7 +17,7 @@ namespace game.map.units {
         }
 
         public override string GetName() {
-            return "Warping";
+            return "Warp";
         }
 
         public override bool ProjectsPower() {
