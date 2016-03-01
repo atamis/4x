@@ -78,6 +78,7 @@ namespace game {
 			Node node = obj.AddComponent<Node>();
 			Hex h = wm.map [new HexLoc (x, y)];
 			node.init (h);
+			h.node = node;
 			nodes.Add (node);
 		}
 

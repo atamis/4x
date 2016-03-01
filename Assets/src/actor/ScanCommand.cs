@@ -14,14 +14,17 @@ namespace game.actor {
 
 		public ScanCommand(Actor a, Unit u, Hex target) : base(a) {
 			this.target = target;
+			if (u == null) {
+				UnityEngine.Debug.Log ("");
+			}
 			Console.WriteLine(target);
 		}
 
 		public override void Apply(WorldMap w) {
 			UnityEngine.Debug.Log("Scanned " + target);
-			target.scanned = true;
+			target.scan();
 			foreach (Hex h in target.Neighbors()) {
-				h.scanned = true;
+				h.scan();
 			}
 		}
 	}

@@ -73,7 +73,7 @@ namespace game {
             
         // Update is called once per frame
         void Update() {
-            Actor ca = actors[currentActor];
+	            Actor ca = actors[currentActor];
             Command c = ca.GetNextCommand();
             
             if (c == null)

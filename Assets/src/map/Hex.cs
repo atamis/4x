@@ -102,7 +102,7 @@ namespace game.map {
         public PowerNetwork pn;
 
 		public float ev { get; set; }
-		Node node;
+		public Node node = null;
 		public bool scanned;
 
         public bool powered {
@@ -125,6 +125,8 @@ namespace game.map {
             o.transform.parent = transform;
             model = o.AddComponent<HexModel>();
             model.init(this);
+
+			this.scanned = false;
         }
 
         internal void PreTurn(Actor old, Actor cur) {
@@ -170,7 +172,29 @@ namespace game.map {
         }
 
 		public void scan() {
-			this.node.setVisible();
+			this.ev = 0;
+			this.scanned = true;
+			if (this.node != null) {
+				this.ev = 1f;
+				this.node.setVisible ();
+			}
+			foreach (Hex h in Neighbors()) {
+				if (h.node != null) {
+					if (.6f > this.ev) {
+						this.ev = .6f;
+						break;
+					}
+				}
+				foreach (Hex h2 in h.Neighbors()) {
+					if (h2.node != null) {
+						if (.33f > this.ev) {
+							this.ev = .33f;
+							break;
+						}
+					}
+				}
+			}
+			print ("Set ev to " + this.ev);
 		}
 
         void Start() {
@@ -199,7 +223,7 @@ namespace game.map {
 
 				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
 					if (h.scanned == true) {
-						sp.color = new Color (h.ev / 10f, 1, 1, 1f);
+						sp.color = new Color (1 - this.h.ev, 1, 1, 1f);
 					} else {
 						sp.color = new Color (1, 1, 1);
 					}
