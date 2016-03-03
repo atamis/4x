@@ -30,7 +30,6 @@ namespace game {
 
             this.l = new Layout(Orientation.Pointy, new Vector2(1, 1), new Vector2(0, 0));
 
-
             w = new GameObject("World Map").AddComponent<WorldMap>();
             w.init(l);
 
@@ -40,10 +39,11 @@ namespace game {
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
 
-            wm = new WorldManager(this, w);
+			wm = new WorldManager(this, w, player);
 
             w.map[new HexLoc(32, 63, -95)].corrupted = true;
 
+			/*
             Building b1 = new GameObject("WarpGate1").AddComponent<WarpGate>();
             b1.init(player, w.map[new HexLoc(0, 0, 0)]);
 
@@ -55,13 +55,7 @@ namespace game {
 
             Building b4 = new GameObject("Harvester1").AddComponent<Harvester>();
             b4.init(player, w.map[new HexLoc(5, 6, -11)]);
-
-            Unit u1 = new GameObject("Unit2").AddComponent<Unit>();
-            u1.init(w, w.map[new HexLoc(1, 0, -1)]);
-
-            Unit u2 = new GameObject("Unit2").AddComponent<Unit>();
-
-            u2.init(w, w.map[new HexLoc(1, 2, -3)]);
+			*/
 
             w.PreTurn(null, actors[currentActor]);
             w.NewTurn(null, actors[currentActor]);

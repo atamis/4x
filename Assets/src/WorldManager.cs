@@ -1,23 +1,29 @@
 ﻿using UnityEngine;
-using game.map;
 using System.Collections.Generic;
+using game.map;
+using game.actor;
+using game.map.units;
 
 namespace game {
 	class WorldManager  {
 
 		GameManager parent;
 		WorldMap wm;
+		Player player;
 		GameObject nFolder;
 		List<Node> nodes;
 		public int BIOME_SIZE = 4;
+		int offset = 5; // the distance the player is from the true center of the map
 
-		public WorldManager(GameManager parent, WorldMap wm) {
+		public WorldManager(GameManager parent, WorldMap wm, Player player) {
 			this.parent = parent;
 			this.wm = wm;
+			this.player = player;
 
 			gen_map (64);
+			gen_player (64);
 		}
-
+			
 		void gen_map(int size) {
 			// seed the biomes
 			Dictionary<Vector2, Biome> seeds = new Dictionary<Vector2, Biome> ();
@@ -92,6 +98,22 @@ namespace game {
 					//print("Placed node at: " + i + ", " + j);
 				}
 			}
+		}
+
+		void gen_player(int mapsize) {
+			int center = mapsize / 2;
+
+			int start_x = center + Random.Range (-offset, offset);
+			int start_y = center + Random.Range (-offset, offset);
+				
+			Building b1 =  new GameObject("WarpGate1").AddComponent<WarpGate>();
+			b1.init(player, wm.map[new HexLoc(start_x, start_y)]);
+
+			Unit u1 = new GameObject("Unit1").AddComponent<Unit>();
+			u1.init(wm, wm.map[new HexLoc(start_x + Random.Range(-1, 1), start_y+Random.Range(-1, 1))]);
+
+			Unit u2 = new GameObject("Unit2").AddComponent<Unit>();
+			u2.init(wm, wm.map[new HexLoc(start_x + Random.Range(-1, 1), start_y+Random.Range(-1, 1))]);
 		}
 	}
 }
