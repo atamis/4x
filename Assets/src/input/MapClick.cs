@@ -68,6 +68,7 @@ namespace game.input {
 			GUILayout.EndArea ();
 
             List<string> messages = new List<String>();
+            messages.Add("Turn " + w.turn + ", time: " + w.time);
             messages.Add("Click to select a hex.");
             messages.Add("State: " + s.ToString());
             messages.Add("Press m to move units.");
