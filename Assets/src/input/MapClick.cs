@@ -48,6 +48,7 @@ namespace game.input {
             messages.Add("State: " + s.ToString());
             messages.Add("Press m to move units.");
             messages.Add("Press b to build buildings.");
+            messages.Add("Press g on warpgate to build unit.");
             if (s == State.Selected) {
                 messages.Add("You selected " + selected);
                 messages.Add("Biome: " + selected.b.ToString());
@@ -173,6 +174,13 @@ namespace game.input {
 
             if (Input.GetKeyUp(KeyCode.B)) {
                 return State.SelectBuilding;
+            }
+
+            if (Input.GetKeyUp(KeyCode.G)) {
+                if (selected.building.GetType() == typeof(WarpGate)) {
+                    var g = (WarpGate) selected.building;
+                    p.AddCommand(new WarpUnitCommand(p, g));
+                }
             }
 
 

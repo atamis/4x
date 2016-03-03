@@ -73,7 +73,7 @@ namespace game.input {
                         b.Append(h.building.GetName());
                     }
 
-                    GUILayout.Box(b.ToString());
+                    GUILayout.Box("Building: " + h.building.GetTooltip());
                 }
 
                 if (h.units.Count > 0) {

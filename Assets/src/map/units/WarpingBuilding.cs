@@ -25,6 +25,19 @@ namespace game.map.units {
             return "Warp";
         }
 
+        public override string GetTooltip() {
+            StringBuilder b = new StringBuilder("Building: ");
+            var w = (WarpingBuilding)h.building;
+            b.Append("warping ");
+            b.Append(w.type.ToString());
+            b.Append(", ");
+            b.Append(w.power);
+            b.Append("/");
+            b.Append(w.required);
+
+            return b.ToString();
+        }
+
         public override bool ProjectsPower() {
             return false;
         }
@@ -61,7 +74,8 @@ namespace game.map.units {
             if (cur == a) {
                 // TODO: fix power draw (null dereference).
                 if (pn != null) {
-                    if (pn.power > 0) {
+                    if (pn.power > 0 && pn.warpgates > 0) {
+                        pn.warpgates--;
                         pn.power -= 1;
                         power += 1;
                     }

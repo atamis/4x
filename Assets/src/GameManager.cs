@@ -30,13 +30,12 @@ namespace game {
 
             this.l = new Layout(Orientation.Pointy, new Vector2(1, 1), new Vector2(0, 0));
 
-
             w = new GameObject("World Map").AddComponent<WorldMap>();
             w.init(l);
 
             pc = new GameObject("Player Camera").AddComponent<PlayerCamera>();
             pc.init(Camera.main);
-            
+
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
 
@@ -45,10 +44,14 @@ namespace game {
 
             gameObject.AddComponent<PlayerControl>().init(player, mc);
 
-            wm = new WorldManager(this, w);
+            t = gameObject.AddComponent<TooltipUI>();
+            t.init(w);
+
+            wm = new WorldManager(this, w, player);
 
             w.map[new HexLoc(32, 63, -95)].corrupted = true;
 
+			/*
             Building b1 = new GameObject("WarpGate1").AddComponent<WarpGate>();
             b1.init(player, w.map[new HexLoc(0, 0, 0)]);
 
@@ -60,28 +63,21 @@ namespace game {
 
             Building b4 = new GameObject("Harvester1").AddComponent<Harvester>();
             b4.init(player, w.map[new HexLoc(5, 6, -11)]);
-
-            Unit u1 = new GameObject("Unit2").AddComponent<Unit>();
-            u1.init(w, w.map[new HexLoc(1, 0, -1)]);
-
-            Unit u2 = new GameObject("Unit2").AddComponent<Unit>();
-
-            u2.init(w, w.map[new HexLoc(1, 2, -3)]);
+			*/
 
             w.PreTurn(null, actors[currentActor]);
             w.NewTurn(null, actors[currentActor]);
             w.PostTurn(null, actors[currentActor]);
             
-
 			am = gameObject.AddComponent<AudioManager> ();
 			am.init (this);
         }
-            
+
         // Update is called once per frame
         void Update() {
 	            Actor ca = actors[currentActor];
             Command c = ca.GetNextCommand();
-            
+
             if (c == null)
                 return;
 
@@ -101,7 +97,7 @@ namespace game {
         }
 
 		void OnGui() {
-			
+
 		}
-    } 
+    }
 }

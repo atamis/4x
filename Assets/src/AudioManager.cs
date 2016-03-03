@@ -26,7 +26,7 @@ namespace game {
 		void Update () {
 			ticks++;
 
-			if (ticks % 90000 == 0) {
+			if (ticks % 8000 == 0) {
 				source.PlayOneShot(clip);
 			}
 		}

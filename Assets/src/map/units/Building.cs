@@ -45,6 +45,10 @@ namespace game.map.units {
             return "Building";
         }
 
+        public virtual string GetTooltip() {
+            return GetName();
+        }
+
         public virtual bool Powered() {
             return h.powered;
         }
@@ -67,7 +71,6 @@ namespace game.map.units {
             if (this.pn == null) {
                 this.pn = pn;
             }
-            
 
             if (Powered() && ProjectsPower()) {
                 HashSet<Hex> hexes = h.Neighbors().Aggregate(new HashSet<Hex>(),
