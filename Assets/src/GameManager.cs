@@ -17,6 +17,7 @@ namespace game {
         private Player player;
 		WorldManager wm;
 		AudioManager am;
+        TooltipUI t;
 
         // Use this for initialization
         void Start() {
@@ -26,7 +27,6 @@ namespace game {
             actors.Add(new AIActor());
             currentActor = 0;
 
-            new GameObject("Player Control").AddComponent<PlayerControl>().init(player);
 
             this.l = new Layout(Orientation.Pointy, new Vector2(1, 1), new Vector2(0, 0));
 
@@ -35,11 +35,16 @@ namespace game {
 
             pc = new GameObject("Player Camera").AddComponent<PlayerCamera>();
             pc.init(Camera.main);
-            
+
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
 
-			wm = new WorldManager(this, w, player);
+            t = gameObject.AddComponent<TooltipUI>();
+            t.init(w);
+
+            gameObject.AddComponent<PlayerControl>().init(player, mc);
+
+            wm = new WorldManager(this, w);
 
             w.map[new HexLoc(32, 63, -95)].corrupted = true;
 
@@ -60,20 +65,16 @@ namespace game {
             w.PreTurn(null, actors[currentActor]);
             w.NewTurn(null, actors[currentActor]);
             w.PostTurn(null, actors[currentActor]);
-
-
-
-            BeamManager bm = new BeamManager(w);
-
-			am = new GameObject ("Audio Manager").AddComponent<AudioManager> ();
+            
+			am = gameObject.AddComponent<AudioManager> ();
 			am.init (this);
         }
-            
+
         // Update is called once per frame
         void Update() {
 	            Actor ca = actors[currentActor];
             Command c = ca.GetNextCommand();
-            
+
             if (c == null)
                 return;
 
@@ -83,15 +84,17 @@ namespace game {
             if (c.GetType() == typeof(EndTurnCommand)) {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
+
                 w.PreTurn(ca, actors[currentActor]);
                 w.NewTurn(ca, actors[currentActor]);
                 w.PostTurn(ca, actors[currentActor]);
+
                 actors[currentActor].StartTurn();
             }
         }
 
 		void OnGui() {
-			
+
 		}
-    } 
+    }
 }

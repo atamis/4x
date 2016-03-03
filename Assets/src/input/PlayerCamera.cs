@@ -7,8 +7,6 @@ namespace game.input {
         Camera cam;
         float speed = 1f;
 
-		AudioListener listener;
-
         public void init(Camera cam) {
             this.cam = cam;
 

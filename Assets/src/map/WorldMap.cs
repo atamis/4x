@@ -7,14 +7,30 @@ using game.map.units;
 using UnityEngine;
 
 namespace game.map {
+    enum GameTime {
+        Day, Night
+    }
+
     class WorldMap : MonoBehaviour{
         public Dictionary<HexLoc, Hex> map;
         public Layout l;
         public BeamManager bm;
+        public int turn;
+        public GameTime time {
+            get {
+                if (turn % 20 >= 10) {
+                    return GameTime.Night;
+                } else {
+                    return GameTime.Day;
+                }
+            }
+        } 
         
         public void init(Layout l) {
             this.l = l;
             this.bm = new BeamManager(this);
+
+            turn = 0;
 
             map = new Dictionary<HexLoc, Hex>();
 
@@ -45,6 +61,7 @@ namespace game.map {
         }
 
         public void PreTurn(Actor old, Actor cur) {
+            turn++;
 
             foreach (KeyValuePair<HexLoc, Hex> kv in map) {
                 kv.Value.PreTurn(old, cur);
