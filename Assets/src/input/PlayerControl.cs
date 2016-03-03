@@ -14,14 +14,33 @@ namespace game.input {
         MapClick mc;
         private bool buildMenu;
 
+        private static Texture2D UI_Move = Resources.Load<Texture2D>("Textures/T_UI_Move");
+        private static Texture2D UI_Scan = Resources.Load<Texture2D>("Textures/T_UI_Scan");
+        private static Texture2D UI_Build = Resources.Load<Texture2D>("Textures/T_UI_Build");
+        private static Texture2D UI_Purify = Resources.Load<Texture2D>("Textures/T_UI_Purify");
+        private static Texture2D UI_MoveH = Resources.Load<Texture2D>("Textures/T_UI_MoveH");
+        private static Texture2D UI_ScanH = Resources.Load<Texture2D>("Textures/T_UI_ScanH");
+        private static Texture2D UI_BuildH = Resources.Load<Texture2D>("Textures/T_UI_BuildH");
+        private static Texture2D UI_PurifyH = Resources.Load<Texture2D>("Textures/T_UI_PurifyH");
+        private static Texture2D UI_MoveC = Resources.Load<Texture2D>("Textures/T_UI_MoveC");
+        private static Texture2D UI_ScanC = Resources.Load<Texture2D>("Textures/T_UI_ScanC");
+        private static Texture2D UI_BuildC = Resources.Load<Texture2D>("Textures/T_UI_BuildC");
+        private static Texture2D UI_PurifyC = Resources.Load<Texture2D>("Textures/T_UI_PurifyC");
+        private static Texture2D UI_End = Resources.Load<Texture2D>("Textures/T_UI_End");
+        private static Texture2D UI_EndH = Resources.Load<Texture2D>("Textures/T_UI_EndH");
+        private static Texture2D UI_EndC = Resources.Load<Texture2D>("Textures/T_UI_EndC");
+
+        private GUIStyle ButtonStyle;
+
         public void init(Player p, MapClick mc) {
             this.p = p;
             this.mc = mc;
             buildMenu = false;
+
         }
 
         void Start() {
-            
+
         }
 
         void Update() {
@@ -34,18 +53,33 @@ namespace game.input {
             GUILayout.BeginArea(new Rect (Screen.width * .3f, Screen.height*.8f, Screen.width/2, Screen.height * .9f));
             GUILayout.BeginHorizontal ();
 
-
-            if (GUILayout.Button ("Move", GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .15f))) {
-                print ("moved");
+            // Move Button        
+            ButtonStyle = new GUIStyle(GUI.skin.label);
+            ButtonStyle.normal.background = UI_Move;
+            ButtonStyle.hover.background = UI_MoveH;
+            ButtonStyle.active.background = UI_MoveC;
+            if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f),
+                GUILayout.Height(Screen.height * .13f))){
+                print ("Move");
             }
 
-            if (GUILayout.Button ("Build", GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .15f))) {
-                if(buildMenu) buildMenu = false;
+            // Build Button
+            ButtonStyle.normal.background = UI_Build;
+            ButtonStyle.hover.background = UI_BuildH;
+            ButtonStyle.active.background = UI_BuildC;
+            if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f),
+                GUILayout.Height(Screen.height * .13f))){
+                  if(buildMenu) buildMenu = false;
                 else buildMenu = true;
                 print ("Opened Menu");
             }
 
-            if (GUILayout.Button ("Scan", GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .15f))) {
+            // Scan Button
+            ButtonStyle.normal.background = UI_Scan;
+            ButtonStyle.hover.background = UI_ScanH;
+            ButtonStyle.active.background = UI_ScanC;
+            if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f),
+                GUILayout.Height(Screen.height * .13f))){
                 if(mc.getSelected() != null){
                     Unit u = mc.getSelected().units.First ();
                     p.AddCommand(new ScanCommand(p, u, u.h));
@@ -53,11 +87,21 @@ namespace game.input {
                 }
             }
 
-            if (GUILayout.Button ("Cleanse", GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .15f))) {
+            //Purify Button
+            ButtonStyle.normal.background = UI_Purify;
+            ButtonStyle.hover.background = UI_PurifyH;
+            ButtonStyle.active.background = UI_PurifyC;
+            if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f),
+                GUILayout.Height(Screen.height * .13f))){
                 print ("Cleansed");
             }
 
-            if (GUILayout.Button("End Turn", GUILayout.Width(Screen.width * .12f), GUILayout.Height(Screen.height * .15f))) {
+            //End Turn Button
+            ButtonStyle.normal.background = UI_End;
+            ButtonStyle.hover.background = UI_EndH;
+            ButtonStyle.active.background = UI_EndC;
+            if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .12f),
+                GUILayout.Height(Screen.height * .13f))){  
                 p.AddCommand(new EndTurnCommand(p));
             }
             GUILayout.EndHorizontal ();
