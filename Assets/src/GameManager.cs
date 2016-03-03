@@ -26,7 +26,6 @@ namespace game {
             actors.Add(new AIActor());
             currentActor = 0;
 
-            new GameObject("Player Control").AddComponent<PlayerControl>().init(player);
 
             this.l = new Layout(Orientation.Pointy, new Vector2(1, 1), new Vector2(0, 0));
 
@@ -39,6 +38,8 @@ namespace game {
             
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
+
+            new GameObject("Player Control").AddComponent<PlayerControl>().init(player, mc);
 
             wm = new WorldManager(this, w);
 
