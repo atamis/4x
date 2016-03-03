@@ -17,6 +17,7 @@ namespace game {
         private Player player;
 		WorldManager wm;
 		AudioManager am;
+        TooltipUI t;
 
         // Use this for initialization
         void Start() {
@@ -39,7 +40,8 @@ namespace game {
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
 
-            new GameObject("Player Control").AddComponent<PlayerControl>().init(player, mc);
+
+            gameObject.AddComponent<PlayerControl>().init(player, mc);
 
             wm = new WorldManager(this, w);
 
@@ -67,12 +69,9 @@ namespace game {
             w.PreTurn(null, actors[currentActor]);
             w.NewTurn(null, actors[currentActor]);
             w.PostTurn(null, actors[currentActor]);
+            
 
-
-
-            BeamManager bm = new BeamManager(w);
-
-			am = new GameObject ("Audio Manager").AddComponent<AudioManager> ();
+			am = gameObject.AddComponent<AudioManager> ();
 			am.init (this);
         }
             
@@ -90,9 +89,11 @@ namespace game {
             if (c.GetType() == typeof(EndTurnCommand)) {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
+
                 w.PreTurn(ca, actors[currentActor]);
                 w.NewTurn(ca, actors[currentActor]);
                 w.PostTurn(ca, actors[currentActor]);
+
                 actors[currentActor].StartTurn();
             }
         }

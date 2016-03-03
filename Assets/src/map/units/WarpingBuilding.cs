@@ -7,8 +7,13 @@ using UnityEngine;
 
 namespace game.map.units {
     class WarpingBuilding : Building {
-        public static readonly int BUILD_COST = 5;
         public int power = 0;
+        public int required = 5;
+        public float progress {
+            get {
+                return power / required;
+            }
+        }
         public BuildingType type;
 
         public void init(Actor a, Hex h, BuildingType type) {
@@ -43,7 +48,7 @@ namespace game.map.units {
 
 
         public override void PreTurn(Actor old, Actor cur) {
-            if (power >= BUILD_COST) {
+            if (power >= required) {
                 print("Building");
                 Building b = addBuildingComponent(new GameObject("New " + type.ToString()));
 
