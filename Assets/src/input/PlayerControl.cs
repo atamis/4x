@@ -31,21 +31,21 @@ namespace game.input {
         void OnGUI() {
             //Hex selected = mc.getSelected();
             // for units
-            GUILayout.BeginArea(new Rect (Screen.width/4, Screen.height*.8f, Screen.width/2, Screen.height * .9f));
+            GUILayout.BeginArea(new Rect (Screen.width * .3f, Screen.height*.8f, Screen.width/2, Screen.height * .9f));
             GUILayout.BeginHorizontal ();
 
 
-            if (GUILayout.Button ("Move", GUILayout.Width(100), GUILayout.Height(100))) {
+            if (GUILayout.Button ("Move", GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .15f))) {
                 print ("moved");
             }
 
-            if (GUILayout.Button ("Build", GUILayout.Width(100), GUILayout.Height(100))) {
+            if (GUILayout.Button ("Build", GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .15f))) {
                 if(buildMenu) buildMenu = false;
                 else buildMenu = true;
                 print ("Opened Menu");
             }
 
-            if (GUILayout.Button ("Scan", GUILayout.Width(100), GUILayout.Height(100))) {
+            if (GUILayout.Button ("Scan", GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .15f))) {
                 if(mc.getSelected() != null){
                     Unit u = mc.getSelected().units.First ();
                     p.AddCommand(new ScanCommand(p, u, u.h));
@@ -53,11 +53,11 @@ namespace game.input {
                 }
             }
 
-            if (GUILayout.Button ("Cleanse", GUILayout.Width(100), GUILayout.Height(100))) {
+            if (GUILayout.Button ("Cleanse", GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .15f))) {
                 print ("Cleansed");
             }
 
-            if (GUILayout.Button("End Turn", GUILayout.Width(140), GUILayout.Height(100))) {
+            if (GUILayout.Button("End Turn", GUILayout.Width(Screen.width * .12f), GUILayout.Height(Screen.height * .15f))) {
                 p.AddCommand(new EndTurnCommand(p));
             }
             GUILayout.EndHorizontal ();
@@ -65,22 +65,22 @@ namespace game.input {
 
             //If the build menu is open
             if(buildMenu == true){
-                GUILayout.BeginArea(new Rect (Screen.width/4, Screen.height*.7f, Screen.width/2, Screen.height * .9f));
+                GUILayout.BeginArea(new Rect (Screen.width * .3f, Screen.height*.7f, Screen.width/2, Screen.height * .9f));
                 GUILayout.BeginHorizontal ();
 
-                if (GUILayout.Button("Cond.", GUILayout.Width(45), GUILayout.Height(45))) {
+                if (GUILayout.Button("Cond.",  GUILayout.Width(Screen.width * .035f), GUILayout.Height(Screen.height * .08f))) {
                     p.AddCommand(new EndTurnCommand(p));
                 }
 
-                if (GUILayout.Button("Harv.", GUILayout.Width(45), GUILayout.Height(45))) {
+                if (GUILayout.Button("Harv.", GUILayout.Width(Screen.width * .035f), GUILayout.Height(Screen.height * .08f))) {
                     p.AddCommand(new EndTurnCommand(p));
                 }
 
-                if (GUILayout.Button("Tow.", GUILayout.Width(45), GUILayout.Height(45))) {
+                if (GUILayout.Button("Tow.", GUILayout.Width(Screen.width * .035f), GUILayout.Height(Screen.height * .08f))) {
                     p.AddCommand(new EndTurnCommand(p));
                 }
 
-                if (GUILayout.Button("Warp", GUILayout.Width(45), GUILayout.Height(45))) {
+                if (GUILayout.Button("Warp", GUILayout.Width(Screen.width * .035f), GUILayout.Height(Screen.height * .08f))) {
                     p.AddCommand(new EndTurnCommand(p));
                 }
 

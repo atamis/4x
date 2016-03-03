@@ -40,6 +40,8 @@ namespace game {
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
 
+            t = gameObject.AddComponent<TooltipUI>();
+            t.init(w);
 
             gameObject.AddComponent<PlayerControl>().init(player, mc);
 
