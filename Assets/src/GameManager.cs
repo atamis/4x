@@ -17,6 +17,7 @@ namespace game {
         private Player player;
 		WorldManager wm;
 		AudioManager am;
+        TooltipUI t;
 
         // Use this for initialization
         void Start() {
@@ -39,6 +40,9 @@ namespace game {
             
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
+
+            t = gameObject.AddComponent<TooltipUI>();
+            t.init(w);
 
             wm = new WorldManager(this, w);
 
