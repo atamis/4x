@@ -27,7 +27,7 @@ namespace game {
             actors.Add(new AIActor());
             currentActor = 0;
 
-            new GameObject("Player Control").AddComponent<PlayerControl>().init(player);
+            gameObject.AddComponent<PlayerControl>().init(player);
 
             this.l = new Layout(Orientation.Pointy, new Vector2(1, 1), new Vector2(0, 0));
 
@@ -70,12 +70,9 @@ namespace game {
             w.PreTurn(null, actors[currentActor]);
             w.NewTurn(null, actors[currentActor]);
             w.PostTurn(null, actors[currentActor]);
+            
 
-
-
-            BeamManager bm = new BeamManager(w);
-
-			am = new GameObject ("Audio Manager").AddComponent<AudioManager> ();
+			am = gameObject.AddComponent<AudioManager> ();
 			am.init (this);
         }
             
@@ -93,9 +90,11 @@ namespace game {
             if (c.GetType() == typeof(EndTurnCommand)) {
                 print(ca + " ends their turn.");
                 currentActor = (currentActor + 1) % actors.Count;
+
                 w.PreTurn(ca, actors[currentActor]);
                 w.NewTurn(ca, actors[currentActor]);
                 w.PostTurn(ca, actors[currentActor]);
+
                 actors[currentActor].StartTurn();
             }
         }
