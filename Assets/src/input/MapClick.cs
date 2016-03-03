@@ -260,7 +260,7 @@ namespace game.input {
                 Hex h = GetHexAtMouse();
                 p.AddCommand(new BuildBuildingsCommand(p, h, buildingType));
 
-                return State.Selected;
+                return State.Default;
             }
 
             return State.BuildBuilding;
