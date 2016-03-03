@@ -42,31 +42,6 @@ namespace game.input {
         }
 
         void OnGUI() {
-
-			// for units
-			GUILayout.BeginArea(new Rect (Screen.width/4, Screen.height*.8f, Screen.width/2, Screen.height * .9f));
-			GUILayout.BeginHorizontal ();
-
-			if (GUILayout.Button ("Move")) {
-				print ("moved");
-			}
-
-			if (GUILayout.Button ("Build")) {
-				print ("built");
-			}
-
-			if (GUILayout.Button ("Scan")) {
-				Unit u = selected.units.First ();
-				p.AddCommand(new ScanCommand(p, u, u.h));
-				print ("Scanned");
-			}
-
-			if (GUILayout.Button ("Cleanse")) {
-				print ("Cleansed");
-			}
-			GUILayout.EndHorizontal ();
-			GUILayout.EndArea ();
-
             List<string> messages = new List<String>();
             messages.Add("Turn " + w.turn + ", time: " + w.time);
             messages.Add("Click to select a hex.");
@@ -147,6 +122,10 @@ namespace game.input {
                     s = UpdateBuildBuilding();
                     return;
             }
+        }
+
+        public Hex getSelected(){
+            return selected;
         }
 
         State UpdateDefault() {
