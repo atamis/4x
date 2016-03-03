@@ -45,6 +45,10 @@ namespace game.map.units {
             return "Building";
         }
 
+        public virtual string GetTooltip() {
+            return GetName();
+        }
+
         public virtual bool Powered() {
             return h.powered;
         }

@@ -25,6 +25,19 @@ namespace game.map.units {
             return "Warp";
         }
 
+        public override string GetTooltip() {
+            StringBuilder b = new StringBuilder("Building: ");
+            var w = (WarpingBuilding)h.building;
+            b.Append("warping ");
+            b.Append(w.type.ToString());
+            b.Append(", ");
+            b.Append(w.power);
+            b.Append("/");
+            b.Append(w.required);
+
+            return b.ToString();
+        }
+
         public override bool ProjectsPower() {
             return false;
         }

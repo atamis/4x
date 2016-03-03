@@ -3,12 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using game.actor;
+using UnityEngine;
 
 namespace game.map.units {
     class WarpGate : Building {
         public static readonly int MAX_POWER = 100;
         public static readonly int POWER_GEN = 5;
+        public static readonly int UNIT_COST = 5; // In turns
         public int power = 0;
+
+        public int unitQueue = 0;
+        // In turns.
+        public int progress = 0;
+
+        public bool BuildingUnit() {
+            return unitQueue > 0;
+        }
 
         public override bool Powered() {
             return true;
@@ -24,6 +34,13 @@ namespace game.map.units {
 
         public override string GetName() {
             return "WarpGate";
+        }
+
+        public override string GetTooltip() {
+            if (BuildingUnit()) {
+                return GetName() + "(" + unitQueue + " units, " + progress + "/" + UNIT_COST + ")";
+            }
+            return base.GetTooltip();
         }
 
         public override void SpreadPower(PowerNetwork pn) {
@@ -45,7 +62,19 @@ namespace game.map.units {
 
         public override void NewTurn(Actor old, Actor cur) {
             if (a == cur) {
-                pn.power += POWER_GEN;
+                if (BuildingUnit()) {
+                    progress++;
+                    if (progress == UNIT_COST) {
+                        progress = 0;
+                        unitQueue--;
+
+                        var u = new GameObject("Warped Unit").AddComponent<Unit>();
+                        u.init(h.w, h);
+
+                    }
+                } else {
+                    pn.power += POWER_GEN;
+                }
             }
         }
 
