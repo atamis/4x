@@ -61,7 +61,8 @@ namespace game.map.units {
             if (cur == a) {
                 // TODO: fix power draw (null dereference).
                 if (pn != null) {
-                    if (pn.power > 0) {
+                    if (pn.power > 0 && pn.warpgates > 0) {
+                        pn.warpgates--;
                         pn.power -= 1;
                         power += 1;
                     }

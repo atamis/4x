@@ -67,7 +67,6 @@ namespace game.map.units {
             if (this.pn == null) {
                 this.pn = pn;
             }
-            
 
             if (Powered() && ProjectsPower()) {
                 HashSet<Hex> hexes = h.Neighbors().Aggregate(new HashSet<Hex>(),

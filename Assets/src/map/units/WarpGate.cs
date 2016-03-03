@@ -26,6 +26,11 @@ namespace game.map.units {
             return "WarpGate";
         }
 
+        public override void SpreadPower(PowerNetwork pn) {
+            base.SpreadPower(pn);
+            pn.warpgates++;
+        }
+
         public override void PreTurn(Actor old, Actor cur) {
             if (pn != null) {
                 if (pn.power > MAX_POWER) {
