@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using game.map;
 using game.actor;
 using game.map.units;
+using game.input;
 
 namespace game {
 	class WorldManager  {
@@ -12,13 +13,15 @@ namespace game {
 		Player player;
 		GameObject nFolder;
 		List<Node> nodes;
+		PlayerCamera pc;
 		public int BIOME_SIZE = 4;
 		int offset = 5; // the distance the player is from the true center of the map
 
-		public WorldManager(GameManager parent, WorldMap wm, Player player) {
+		public WorldManager(GameManager parent, WorldMap wm, Player player, PlayerCamera pc) {
 			this.parent = parent;
 			this.wm = wm;
 			this.player = player;
+			this.pc = pc;
 
 			gen_map (64);
 			gen_player (64);
@@ -103,9 +106,13 @@ namespace game {
 		void gen_player(int mapsize) {
 			int center = mapsize / 2;
 
+			
+
 			int start_x = center + Random.Range (-offset, offset);
 			int start_y = center + Random.Range (-offset, offset);
 				
+			pc.cam.transform.Translate( new Vector3(start_x * 1.7f, start_y * 1.5f, 0));			
+
 			Building b1 =  new GameObject("WarpGate1").AddComponent<WarpGate>();
 			b1.init(player, wm.map[new HexLoc(start_x, start_y)]);
 

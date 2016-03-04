@@ -47,7 +47,7 @@ namespace game {
             t = gameObject.AddComponent<TooltipUI>();
             t.init(w);
 
-            wm = new WorldManager(this, w, player);
+            wm = new WorldManager(this, w, player, pc);
 
             w.map[new HexLoc(32, 63, -95)].corrupted = true;
 

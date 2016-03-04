@@ -4,7 +4,7 @@ using System.Collections;
 namespace game.input {
     public class PlayerCamera : MonoBehaviour {
 
-        Camera cam;
+        public Camera cam;
         float speed = 1f;
 
         public void init(Camera cam) {
