@@ -21,7 +21,7 @@ namespace game.map.units {
 
         public Actor a;
 
-        private BuildingModel model;
+        protected BuildingModel model;
 
         public virtual void init(Actor a, Hex h) {
             this.a = a;
@@ -120,11 +120,11 @@ namespace game.map.units {
             Destroy(gameObject);
         }
 
-        class BuildingModel : MonoBehaviour {
+        public class BuildingModel : MonoBehaviour {
             Building b;
             SpriteRenderer sp;
 
-            public void init(Building b) {
+            public virtual void init(Building b) {
                 this.b = b;
 
                 transform.parent = b.gameObject.transform;

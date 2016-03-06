@@ -82,5 +82,38 @@ namespace game.map.units {
                 }
             }
         }
+
+        internal override void AddModel() {
+            model = new GameObject("WarpingBuilding Model").AddComponent<WarpingBuildingModel>();
+            model.init(this);
+        }
+
+
+        private class WarpingBuildingModel : BuildingModel {
+            private static AudioClip clip = Resources.Load<AudioClip>("Audio/Buildings/Warping In 1");
+
+            private static System.Random positionRand = new System.Random();
+
+            AudioSource au;
+
+            public override void init(Building b) {
+                base.init(b);
+
+                au = gameObject.AddComponent<AudioSource>();
+                au.clip = clip;
+
+                au.volume = 0.4f;
+                au.spatialBlend = 1f;
+
+                au.time = (float) positionRand.NextDouble() * 1.5f;
+
+                au.loop = true;
+            }
+
+            void Start() {
+                au.Play();
+            }
+
+        }
     }
 }
