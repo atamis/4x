@@ -50,8 +50,6 @@ namespace game.input {
 
             // Include zoom-level to make zoomed-out movement faster.
             transform.localPosition += control * Time.deltaTime * cam.orthographicSize;
-
-
         }
     }
 }

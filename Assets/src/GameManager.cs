@@ -44,35 +44,21 @@ namespace game {
 
             gameObject.AddComponent<PlayerControl>().init(player, mc);
 
-            wm = new WorldManager(this, w);
+			wm = new WorldManager(this, w, player);
 
             w.map[new HexLoc(32, 63, -95)].corrupted = true;
-
-			/*
-            Building b1 = new GameObject("WarpGate1").AddComponent<WarpGate>();
-            b1.init(player, w.map[new HexLoc(0, 0, 0)]);
-
-            Building b2 = new GameObject("Conduit1").AddComponent<Conduit>();
-            b2.init(player, w.map[new HexLoc(2, 2, -4)]);
-
-            Building b3 = new GameObject("Conduit2").AddComponent<Conduit>();
-            b3.init(player, w.map[new HexLoc(1, 1, -2)]);
-
-            Building b4 = new GameObject("Harvester1").AddComponent<Harvester>();
-            b4.init(player, w.map[new HexLoc(5, 6, -11)]);
-			*/
 
             w.PreTurn(null, actors[currentActor]);
             w.NewTurn(null, actors[currentActor]);
             w.PostTurn(null, actors[currentActor]);
-            
+
 			am = gameObject.AddComponent<AudioManager> ();
 			am.init (this);
         }
 
         // Update is called once per frame
         void Update() {
-	            Actor ca = actors[currentActor];
+	        Actor ca = actors[currentActor];
             Command c = ca.GetNextCommand();
 
             if (c == null)
@@ -92,9 +78,5 @@ namespace game {
                 actors[currentActor].StartTurn();
             }
         }
-
-		void OnGui() {
-
-		}
     }
 }

@@ -32,7 +32,7 @@ namespace game.map {
 
             turn = 0;
 
-            map = new Dictionary<HexLoc, Hex>();
+            //map = new Dictionary<HexLoc, Hex>();
 
             for (int x = 0; x <= 64; x++) {
                 for (int y = 0; y <= 64; y++) {

@@ -92,9 +92,6 @@ namespace game.map {
 
         public Biome b;
 
-        // TODO: use enum instead?
-        public bool corrupted;
-
         public HashSet<Unit> units;
 
         HexModel model;
@@ -104,6 +101,7 @@ namespace game.map {
 		public float ev { get; set; }
 		public Node node = null;
 		public bool scanned;
+		public bool corrupted; // TODO: use enum instead?
 
         public bool powered {
             get {
@@ -194,7 +192,6 @@ namespace game.map {
 					}
 				}
 			}
-			print ("Set ev to " + this.ev);
 		}
 
         void Start() {
@@ -205,8 +202,11 @@ namespace game.map {
         }
 
         private class HexModel : MonoBehaviour {
-            public Hex h;
+			public float intensity = 0;
+			public Hex h;
             SpriteRenderer sp;
+
+			Material[] mats;
 
             public void init(Hex h) {
                 this.h = h;
@@ -214,23 +214,42 @@ namespace game.map {
                 transform.localPosition = new Vector3(0, 0, Layer.Board);
 
                 sp = gameObject.AddComponent<SpriteRenderer>();
-                
                 sp.transform.localScale = new Vector3(1.9f, 1.9f);
+			
+				mats = new Material[3] {
+					new Material(Shader.Find("Sprites/Default")),
+					new Material(Shader.Find("Custom/CRTShader")),
+					new Material(Shader.Find("Custom/GlitchShader"))
+				};
+
+				sp.material = mats[0];
             }
 
             void Update() {
 				sp.sprite = h.b.GetSprite(); // make sure we have the right biome sprite
 
 				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
-					if (h.scanned == true) {
-						sp.color = new Color (1 - this.h.ev, 1, 1, 1f);
+					// apply glitch effect
+					if (this.h.corrupted == true) {
+						mats [2].SetFloat ("_Intensity", intensity);
+						sp.material = mats [2];
 					} else {
-						sp.color = new Color (1, 1, 1);
+						// apply overlay
+						if (this.h.scanned = true) {
+							sp.material = mats [1];
+							mats [1].SetFloat ("_EvValue", 1 - this.h.ev);
+						} else {
+							sp.material = mats [1];
+							mats [1].SetFloat ("_EvValue", 1 - this.h.ev);
+						}
 					}
 				} else {
-					sp.color = Color.white;
+					// default shader
+					sp.material = mats[0];
+
 				}
-                
+
+
                 if (h.corrupted) {
                     sp.color = new Color(0.5f, 0, 0.5f);
                 }
