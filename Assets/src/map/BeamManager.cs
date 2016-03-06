@@ -40,15 +40,24 @@ namespace game.map {
         }
 
         private class BeamModel : MonoBehaviour {
+            private static AudioClip shortBeam = Resources.Load<AudioClip>("Audio/Buildings/Beam Short");
+            private static AudioClip mediumBeam = Resources.Load<AudioClip>("Audio/Buildings/Beam Medium");
+
+            private static System.Random positionRand = new System.Random();
+
             private BeamManager bm;
             Layout l;
-            private UnorderedPair<HexLoc> locs;
+            public UnorderedPair<HexLoc> locs;
             LineRenderer lr;
+            AudioSource au;
 
             public void init(BeamManager bm, UnorderedPair<HexLoc> locs) {
                 this.bm = bm;
                 this.l = bm.wm.l;
                 this.locs = locs;
+
+                // Mostly for audio reasons.
+                transform.position = bm.wm.l.HexPixel(locs.a + (locs.b - locs.a));
 
                 lr = gameObject.AddComponent<LineRenderer>();
                 lr.useWorldSpace = true;
@@ -56,8 +65,27 @@ namespace game.map {
                 var mat = lr.material;
                 mat.color = new Color(0.46f, 1, 0.9f, 0.7f);
                 mat.shader = Shader.Find("Sprites/Default");
+
+                au = gameObject.AddComponent<AudioSource>();
+
+                au.volume = 0.2f;
+                au.spatialBlend = 1f;
+
+                if (locs.a.Distance(locs.b) == 1) {
+                    au.clip = shortBeam;
+                } else {
+                    au.clip = mediumBeam;
+                }
+
+                // The clips are about 15 seconds (one is 18).
+                au.time = (float) positionRand.NextDouble() * 15;
+
+                au.loop = true;
             }
 
+            void Start() {
+                au.Play();
+            }
             void Update() {
                 Vector2[] _vecs = (from loc in locs.ToVec() select l.HexPixel(loc)).ToArray();
                 Vector3[] vecs = (from v in _vecs select new Vector3(v.x, v.y, Layer.BuildingFX)).ToArray();
