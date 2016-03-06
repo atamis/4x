@@ -11,7 +11,7 @@ namespace game {
 
 		public void init(GameManager gm) {
 			this.gm = gm;
-			this.clip = Resources.Load<AudioClip>("Audio/spacemanSpiff");
+			this.clip = Resources.Load<AudioClip>("Audio/Music/spacemanSpiff");
 
 			source = gameObject.AddComponent<AudioSource>();
             source.clip = clip;
