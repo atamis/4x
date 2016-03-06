@@ -111,7 +111,7 @@ namespace game {
 			int start_x = center + Random.Range (-offset, offset);
 			int start_y = center + Random.Range (-offset, offset);
 				
-			pc.cam.transform.Translate( new Vector3(start_x * 1.7f, start_y * 1.5f, 0));			
+			pc.gameObject.transform.Translate( new Vector3(start_x * 1.7f, start_y * 1.5f, 0));			
 
 			Building b1 =  new GameObject("WarpGate1").AddComponent<WarpGate>();
 			b1.init(player, wm.map[new HexLoc(start_x, start_y)]);

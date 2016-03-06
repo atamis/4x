@@ -36,6 +36,8 @@ namespace game {
             pc = new GameObject("Player Camera").AddComponent<PlayerCamera>();
             pc.init(Camera.main);
 
+            gameObject.AddComponent<AmbienceManager>().init(pc, w);
+
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
 
