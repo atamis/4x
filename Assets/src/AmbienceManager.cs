@@ -88,7 +88,7 @@ namespace game {
             // all the counts added together.
             float total = 71;
 
-            print(String.Format("desert {0}, forerst {1}, mountain {2}, ocean {3}, total {4}", desertC / total, forestC / total, mountainC / total, oceanC / total, total));
+            //print(String.Format("desert {0}, forerst {1}, mountain {2}, ocean {3}, total {4}", desertC / total, forestC / total, mountainC / total, oceanC / total, total));
 
             desertAU.volume = desertC / total;
             forestAU.volume = forestC / total;
