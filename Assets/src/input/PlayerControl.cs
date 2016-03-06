@@ -6,6 +6,7 @@ using UnityEngine;
 using game.actor;
 using game.map.units;
 using game.map;
+using game.input;
 
 
 namespace game.input {
@@ -50,7 +51,8 @@ namespace game.input {
         void OnGUI() {
             //Hex selected = mc.getSelected();
             // for units
-            GUILayout.BeginArea(new Rect (Screen.width * .3f, Screen.height*.8f, Screen.width/2, Screen.height * .9f));
+            GUILayout.BeginArea(new Rect (Screen.width * .3f, Screen.height*.8f,
+                 Screen.width/2, Screen.height * .9f));
             GUILayout.BeginHorizontal ();
 
             // Move Button        
@@ -60,6 +62,10 @@ namespace game.input {
             ButtonStyle.active.background = UI_MoveC;
             if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f),
                 GUILayout.Height(Screen.height * .13f))){
+                Hex h = mc.selected;
+                if (mc.selected.units.Count() < 1) {
+                    mc.s = MapClick.State.Selected;
+                }else mc.s = MapClick.State.Moving;
                 print ("Move");
             }
 
@@ -80,7 +86,7 @@ namespace game.input {
             ButtonStyle.active.background = UI_ScanC;
             if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f),
                 GUILayout.Height(Screen.height * .13f))){
-                if(mc.getSelected() != null){
+                if(mc.getSelected() != null && mc.getSelected().units.Count > 0){
                     Unit u = mc.getSelected().units.First ();
                     p.AddCommand(new ScanCommand(p, u, u.h));
                     print ("Scanned");
@@ -93,7 +99,11 @@ namespace game.input {
             ButtonStyle.active.background = UI_PurifyC;
             if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f),
                 GUILayout.Height(Screen.height * .13f))){
-                print ("Cleansed");
+                if(mc.getSelected() != null && mc.getSelected().units.Count > 0){
+                    Unit u = mc.getSelected().units.First ();
+                    p.AddCommand(new PurifyCommand(p, u, u.h));
+                    print ("Scanned");
+                }
             }
 
             //End Turn Button
@@ -112,20 +122,36 @@ namespace game.input {
                 GUILayout.BeginArea(new Rect (Screen.width * .3f, Screen.height*.7f, Screen.width/2, Screen.height * .9f));
                 GUILayout.BeginHorizontal ();
 
+                // Build conduit button
                 if (GUILayout.Button("Cond.",  GUILayout.Width(Screen.width * .035f), GUILayout.Height(Screen.height * .08f))) {
-                    p.AddCommand(new EndTurnCommand(p));
+                    if(mc.getSelected() != null){
+                        Hex h = mc.getSelected();
+                        p.AddCommand(new BuildBuildingsCommand(p, h, BuildingType.Conduit));
+                        print ("Built Conduit");
+                   }
                 }
 
+                // Build harvester button
                 if (GUILayout.Button("Harv.", GUILayout.Width(Screen.width * .035f), GUILayout.Height(Screen.height * .08f))) {
-                    p.AddCommand(new EndTurnCommand(p));
+                    if(mc.getSelected() != null){
+                        Hex h = mc.getSelected();
+                        p.AddCommand(new BuildBuildingsCommand(p, h, BuildingType.Harvester));
+                        print ("Built Harvester");
+                   }
                 }
 
+                // Build Tower button
                 if (GUILayout.Button("Tow.", GUILayout.Width(Screen.width * .035f), GUILayout.Height(Screen.height * .08f))) {
-                    p.AddCommand(new EndTurnCommand(p));
+                    // TODO once towers are implemented
                 }
 
+                // Build warp gate button
                 if (GUILayout.Button("Warp", GUILayout.Width(Screen.width * .035f), GUILayout.Height(Screen.height * .08f))) {
-                    p.AddCommand(new EndTurnCommand(p));
+                    if(mc.getSelected() != null){
+                        Hex h = mc.getSelected();
+                        p.AddCommand(new BuildBuildingsCommand(p, h, BuildingType.WarpGate));
+                        print ("Built Warp Gate");
+                   }
                 }
 
                 GUILayout.EndHorizontal ();

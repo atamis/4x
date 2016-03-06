@@ -11,13 +11,13 @@ namespace game.input {
     class MapClick : MonoBehaviour {
         WorldMap w;
         Player p;
-        private State s;
-        private Hex selected;
+        public State s;
+        public Hex selected;
         private BuildingType buildingType;
 
         SelectedModel model;
 
-        private enum State {
+        public enum State {
             // Nothing's happening.
             Default,
             // We've selected a hex
@@ -101,9 +101,19 @@ namespace game.input {
             return tex;
         }
 
+        // This needs to be updated if we change the location of GUI elements
+        // There is no good way to deal with clicking through GUI elements
+        public bool isPointerOverGUI(){
+            float x1 = Screen.width * .3f;
+            float x2 = x1 + Screen.width * .08f * 4 + Screen.width * .15f;
+            float y1 = Screen.height - Screen.height * .8f;
+            float y2 = Screen.height - Screen.height * .92f;
+            Vector3 mousePos = Input.mousePosition;
 
+            if(mousePos.x > x1 && mousePos.x < x2 && mousePos.y < y1 && mousePos.y > y2) return true;
+            return false;
+        }
         
-
         void Update() {
             // Each state method returns the next state;
             switch (s) {
@@ -131,7 +141,7 @@ namespace game.input {
 
         State UpdateDefault() {
             // Select a hex.
-            if (Input.GetMouseButtonUp(0)) {
+            if (Input.GetMouseButtonUp(0) && isPointerOverGUI() == false) {
                 Hex h = GetHexAtMouse();
                 if (h != null) {
                     selected = h;
@@ -152,7 +162,7 @@ namespace game.input {
                 s = State.Default;
             }
 
-            if (Input.GetMouseButtonUp(0)) {
+            if (Input.GetMouseButtonUp(0) && isPointerOverGUI() == false) {
                 Hex h = GetHexAtMouse();
                 if (h != null) {
                     // Change the selected hex
@@ -198,7 +208,7 @@ namespace game.input {
                 return State.Selected;
             }
 
-            if (Input.GetMouseButtonUp(0)) {
+            if (Input.GetMouseButtonUp(0) && isPointerOverGUI() == false) {
                 Hex h = GetHexAtMouse();
 
                 // Click outside the map to cancel.
@@ -244,7 +254,7 @@ namespace game.input {
         }
 
         State UpdateBuildBuilding() {
-            if (Input.GetMouseButtonUp(0)) {
+            if (Input.GetMouseButtonUp(0) && isPointerOverGUI() == false) {
                 Hex h = GetHexAtMouse();
                 p.AddCommand(new BuildBuildingsCommand(p, h, buildingType));
 
