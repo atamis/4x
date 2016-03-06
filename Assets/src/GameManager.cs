@@ -18,6 +18,7 @@ namespace game {
 		WorldManager wm;
 		AudioManager am;
         TooltipUI t;
+        public MessageBox mb;
 
         // Use this for initialization
         void Start() {
@@ -37,6 +38,9 @@ namespace game {
             pc.init(Camera.main);
 
             gameObject.AddComponent<AmbienceManager>().init(pc, w);
+
+            mb = gameObject.AddComponent<MessageBox>();
+            mb.init();
 
             mc = gameObject.AddComponent<MapClick>();
             mc.init(w, player);
