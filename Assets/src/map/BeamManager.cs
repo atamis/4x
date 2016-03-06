@@ -68,7 +68,7 @@ namespace game.map {
 
                 au = gameObject.AddComponent<AudioSource>();
 
-                au.volume = 0.2f;
+                au.volume = 0.6f;
                 au.spatialBlend = 1f;
 
                 if (locs.a.Distance(locs.b) == 1) {

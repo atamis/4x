@@ -102,7 +102,7 @@ namespace game.map.units {
                 au = gameObject.AddComponent<AudioSource>();
                 au.clip = clip;
 
-                au.volume = 0.4f;
+                au.volume = 1.0f;
                 au.spatialBlend = 1f;
 
                 au.time = (float) positionRand.NextDouble() * 1.5f;

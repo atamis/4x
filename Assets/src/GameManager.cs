@@ -8,7 +8,7 @@ using game.map.units;
 namespace game {
     public class GameManager : MonoBehaviour {
 
-        PlayerCamera pc;
+        public PlayerCamera pc;
         private Layout l;
 		private WorldMap w;
         MapClick mc;
