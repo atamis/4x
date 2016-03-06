@@ -45,7 +45,7 @@ namespace game.input {
                 style.alignment = TextAnchor.UpperLeft;
                 GUI.backgroundColor = new Color(0, 0, 0, 1);
 
-                GUILayout.BeginArea(new Rect(mp, new Vector2(250, 150)));
+                GUILayout.BeginArea(new Rect(mp, new Vector2(250, 200)));
 
                 GUILayout.Box(h.ToString());
                 GUILayout.Box((h.corrupted ? "Corrupted " : "") + h.b.ToString());
