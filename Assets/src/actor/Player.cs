@@ -1,25 +1,26 @@
-﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using game.actor.commands;
 
 namespace game.actor {
-    class Player : Actor {
-        public Queue<Command> commands;
-        public Player(String name) : base(name) {
-            commands = new Queue<Command>();
-        }
+	
+	class Player : Actor {
+		public Queue<Command> commands;
 
-        public void AddCommand(Command c) {
-            commands.Enqueue(c);
-        }
+		public Player(string name) : base(name) {
+			commands = new Queue<Command> ();
 
-        public override Command GetNextCommand() {
-            if (commands.Count > 0) {
-                return commands.Dequeue();
-            }
+		}
 
-            return null;
-        }
-    }
+		public void AddCommand(Command c) {
+			commands.Enqueue (c);
+		}
+
+		public override Command GetNextCommand () {
+			if (commands.Count > 0) {
+				return commands.Dequeue ();
+			}
+			return null;
+		}
+	}
 }

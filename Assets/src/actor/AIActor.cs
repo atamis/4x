@@ -1,29 +1,25 @@
-﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using game.actor.commands;
 
 namespace game.actor {
-    class AIActor : Actor {
-        Queue<Command> commands;
-        private int aggression;
+	class AIActor : Actor {
+		Queue<Command> commands;
 
-        public AIActor() : base("AI Actor") {
-            commands = new Queue<Command>();
-            this.aggression = 3;
-        }
+		public AIActor() : base("AI Actor") {
+			commands = new Queue<Command> ();
+		}
 
-        public override void StartTurn() {
-            commands.Enqueue(new SpreadCorruptionCommand(this, aggression));
-            commands.Enqueue(new CorruptionDamageCommand(this));
-            commands.Enqueue(new EndTurnCommand(this));
-        }
+		public override void StartTurn() {
 
-        public override Command GetNextCommand() {
-            if (commands.Count > 0) {
-                return commands.Dequeue();
-            }
-            return null;
-        }
-    }
+		}
+
+		public override Command GetNextCommand () {
+			if (commands.Count > 0) {
+				return commands.Dequeue ();
+			}
+			return null;
+		}
+
+	}
 }
