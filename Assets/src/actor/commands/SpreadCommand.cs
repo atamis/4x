@@ -1,4 +1,4 @@
-﻿using System; 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,14 +29,20 @@ namespace game.actor.commands {
 
 		public override void Apply (WorldMap w) {
 			HashSet<Hex> tiles = new HashSet<Hex> ();
+
 			//int i = 0;
 			foreach (KeyValuePair<HexLoc, Hex> kv in w.map) {
 				Hex tile = kv.Value;
-				if (tile.miasma != null && tile.miasma.canSpread() ) {
-					//i++;
-					foreach (Hex t in tile.Neighbors()) {
-						if (t.b.Passable ()) tiles.Add (t);
+				if (tile.miasma != null) {
+					if (tile.miasma.level < 3) {
+						if (w.turn % 4 == 0) tile.miasma.level++;
 					}
+					if (tile.miasma.canSpread ()) {
+						foreach (Hex t in tile.Neighbors()) {
+							if (t.b.Passable ()) tiles.Add (t);
+						}
+					}
+
 				}
 			}
 			foreach (Hex t in tiles) {
@@ -46,6 +52,7 @@ namespace game.actor.commands {
 					m.init (w, t);
 				}
 			}
+
 		}
 
 		public override void Undo(WorldMap w) {

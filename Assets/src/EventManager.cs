@@ -8,7 +8,13 @@ namespace game {
 
 	static class EventManager {
 		public delegate void GameEvent(GameEventArgs eventArgs);
-		public static event GameEvent ScanEvent, MoveEvent, SpreadEvent;
+		public static event GameEvent StartEvent, ScanEvent, MoveEvent, SpreadEvent;
+
+		public static void TriggerStartEvent(GameEventArgs eventArgs = null) {
+			if (StartEvent != null) {
+				StartEvent(eventArgs);
+			}
+		}
 
 		public static void TriggerScanEvent(GameEventArgs eventArgs = null) {
 			if (ScanEvent != null) { // if the number of subscribers isn't null

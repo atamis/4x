@@ -45,6 +45,8 @@ namespace game {
 
 			gameObject.AddComponent<AudioManager> ().init(this);
             gameObject.AddComponent<AmbienceManager>().init(pc, w);
+
+			EventManager.TriggerStartEvent(new GameEventArgs{} );
         }
 
 		void Update() {

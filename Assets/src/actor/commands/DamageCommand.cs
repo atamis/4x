@@ -1,4 +1,4 @@
-﻿using System; 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using game.math;
@@ -12,8 +12,13 @@ namespace game.actor.commands {
 		public override void Apply(WorldMap w) {
 			foreach (KeyValuePair<HexLoc, Hex> kv in w.map) {
 				Hex tile = kv.Value;
-				int l = tile.miasma.level;
+				int l = -1;
+				if (tile.miasma != null) {
+					l = tile.miasma.level;
+				}
 				switch (l) {
+				case -1:
+					break;
 				case 1:
 					if (tile.building != null) {
 						tile.building.disabled = true;

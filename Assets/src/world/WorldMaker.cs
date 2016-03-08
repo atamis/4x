@@ -5,7 +5,7 @@ using game.math;
 using game.world.units;
 using game.world.buildings;
 
-namespace game.world { 
+namespace game.world {
 	class WorldMaker {
 		Player player;
 		WorldMap w;
@@ -27,7 +27,7 @@ namespace game.world {
 
 			spawn = new Vector2 (c + UnityEngine.Random.Range (-off, off), c + UnityEngine.Random.Range (-off, off));
 		}
-			
+
 		private Vector2 getNearest(Vector2 pos, List<Vector2> points) {
 			Vector2 nearest = new Vector2(0, 0);
 			float prev = Mathf.Infinity;
@@ -93,13 +93,16 @@ namespace game.world {
 		void genPlayer() {
 			Building b1 =  new GameObject("WarpGate1").AddComponent<WarpGate>();
 			b1.init(player, w.map[new HexLoc((int)spawn.x, (int)spawn.y)]);
-		
-			Unit u1 = new GameObject("Unit1").AddComponent<Unit>();
-			u1.init(w, w.map[new HexLoc((int)spawn.x + Random.Range(-1, 1), (int)spawn.y+Random.Range(-1, 1))]);
 
-			Unit u2 = new GameObject("Unit1").AddComponent<Unit>();
-			u2.init(w, w.map[new HexLoc((int)spawn.x + Random.Range(-1, 1), (int)spawn.y+Random.Range(-1, 1))]);
-
+			int c = 0;
+			while (c < 2) {
+				HexLoc loc = new HexLoc((int)spawn.x + Random.Range(-1, 1), (int)spawn.y+Random.Range(-1, 1));
+				if (w.map[loc].unit == null) {
+					Unit u = new GameObject("Unit" + c).AddComponent<Unit>();
+					u.init(w, w.map[loc]);
+					c++;
+				}
+			}
 			Debug.Log (System.String.Format ("Generated Player at {0}", spawn));
 		}
 
@@ -158,7 +161,7 @@ namespace game.world {
 			int c = 0;
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
-				HexLoc loc = new HexLoc (x, y); 
+				HexLoc loc = new HexLoc (x, y);
 				if ((w.map [loc].b == Biome.Ocean) && (!inSpawnZone(new Vector2(x, y)))) {
 					continue;
 				}

@@ -38,19 +38,21 @@ namespace game.world.units {
 			model.init (this);
 
 			this.actions = 4;
+			h.reveal();
+			foreach (Hex h2 in h.Neighbors()) {
+				h2.reveal();
+			}
 		}
 
 		public virtual void PreTurn(Actor old, Actor cur) {
 
 		}
 
-		public virtual void PostTurn(Actor old, Actor cur) {
-
-		}
-
 		public void NewTurn(Actor old, Actor cur) {
 			actions = maxActions;
-			Debug.Log ("Reset Unit Actions");
+		}
+
+		public virtual void PostTurn(Actor old, Actor cur) {
 		}
 
 		void Update() {

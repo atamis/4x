@@ -28,6 +28,4 @@ namespace game.actor.commands {
 			EventManager.TriggerScanEvent(new GameEventArgs{});
 		}
 	}
-
-
 }

@@ -23,7 +23,6 @@ namespace game.actor.commands {
 		}
 
 		public override void Apply(WorldMap w) {
-			UnityEngine.Debug.Log ("Moved to " + target);
 			u.h = target;
 			u.actions -= distance;
 
@@ -31,6 +30,7 @@ namespace game.actor.commands {
 			foreach (Hex h in target.Neighbors()) {
 				h.reveal ();
 			}
+			UnityEngine.Debug.Log ("Moved to " + target);
 		}
 
 		public override void Undo(WorldMap w) {

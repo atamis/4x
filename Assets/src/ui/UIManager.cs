@@ -57,7 +57,7 @@ namespace game.ui {
 			t.init (this);
 
 			model = new GameObject ("Highlight Model").AddComponent<HighlightModel> ();
-			model.init ();
+			model.init (this);
 
 			state = State.Default;
 			//building = false;
@@ -67,7 +67,7 @@ namespace game.ui {
 			helper = gameObject.AddComponent<HelperUI>();
 			helper.init();
 		}
-			
+
 		void Update () {
 			if (Input.GetMouseButtonUp (0)) {
 				if ((state == State.Default) || (state == State.Selected)) {
@@ -119,7 +119,7 @@ namespace game.ui {
 				} else if (state == State.Moving) {
 					try {
 						p.AddCommand (new MoveCommand (p, u_target, getSelected ()));
-					} catch (Exception e) { 
+					} catch (Exception e) {
 						print (e);
 					}
 					state = State.Default;
@@ -162,7 +162,7 @@ namespace game.ui {
 			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
-						p.AddCommand (new CleanseCommand (p));
+						p.AddCommand (new CleanseCommand (p, h_target.unit));
 					}
 				}
 				Debug.Log ("Added Cleanse Command");
@@ -223,22 +223,30 @@ namespace game.ui {
 
 		class HighlightModel : MonoBehaviour {
 			SpriteRenderer sp;
+			UIManager m;
 
-			public void init() {
-
+			public void init(UIManager um) {
+				this.m = um;
 			}
 
 			void Start() {
-				sp = gameObject.AddComponent<SpriteRenderer> ();
-				sp.sprite = Resources.Load<Sprite> ("Textures/T_Highlight");
-				sp.color = new Color (1.0f, 1.0f, 1.0f, 0.3f);
+				sp = gameObject.AddComponent<SpriteRenderer>();
+				sp.sprite = Resources.Load<Sprite>("Textures/T_Selection");
+				sp.color = new Color(1.0f, 1.0f, 0.0f, 0.3f);
 				sp.enabled = false;
 			}
 
 			void Update() {
-				sp.enabled = true;
+				if (m.h_target != null) {
+					transform.parent = m.h_target.gameObject.transform;
+					// Have to set local position each time because changing
+					// transform parent doesn't move the game object.
+					transform.localPosition = new Vector3(0, 0, 0);
+					sp.enabled = true;
+				} else {
+					sp.enabled = false;
+				}
 			}
 		}
 	}
 }
-

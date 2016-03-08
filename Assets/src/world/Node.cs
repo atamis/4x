@@ -36,6 +36,8 @@ namespace game.world {
 			public void init(Node n) {
 				this.n = n;
 				sp = this.gameObject.AddComponent<SpriteRenderer>();
+                sp.sprite = Resources.Load<Sprite>("Textures/Node");
+				sp.color = new Color(1.0f, 1.0f, 0.0f, 0.3f);
 				this.transform.localPosition = new Vector3 (0, 0, Layer.Buildings);
 
 				sp.enabled = false;
@@ -49,5 +51,5 @@ namespace game.world {
 			}
 		}
 
-    } 
+    }
 }

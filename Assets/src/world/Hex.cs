@@ -162,9 +162,8 @@ namespace game.world {
 			if (building != null) {
 				building.PreTurn(old, cur);
 			}
-
-			foreach(Unit u in units) {
-				u.PreTurn(old, cur);
+			if (unit != null) {
+				unit.PreTurn(old, cur);
 			}
 		}
 
@@ -172,8 +171,8 @@ namespace game.world {
 			if (building != null) {
 				building.NewTurn(old, cur);
 			}
-			foreach(Unit u in units) {
-				u.NewTurn(old, cur);
+			if (unit != null) {
+				unit.NewTurn (old, cur);
 			}
 		}
 
@@ -181,9 +180,8 @@ namespace game.world {
 			if (building != null) {
 				building.PostTurn(old, cur);
 			}
-
-			foreach (Unit u in units) {
-				u.PostTurn(old, cur);
+			if (unit != null) {
+				unit.PostTurn (old, cur);
 			}
 		}
 
@@ -208,7 +206,7 @@ namespace game.world {
 				sp.material = mats[0];
 				sp.sprite = Resources.Load<Sprite> ("Textures/T_Fog");
 			}
-				
+
 			void Update() {
 				if (h.selected == true) {
 					sp.color = new Color (1, 0, 0, 1);
@@ -237,5 +235,5 @@ namespace game.world {
 		}
     }
 
-    
+
 }

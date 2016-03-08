@@ -69,7 +69,7 @@ namespace game.world {
 				kv.Value.PreTurn(old, cur);
 			}
 		}
-			
+
 		public void NewTurn(Actor old, Actor cur) {
 			List<Building> poweredBuildings = new List<Building>();
 			foreach (KeyValuePair<HexLoc, Hex> kv in map) {
@@ -93,7 +93,6 @@ namespace game.world {
 			}
 
 			bm.Create();
-
 
 			foreach (KeyValuePair<HexLoc, Hex> kv in map) {
 				kv.Value.NewTurn(old, cur);
