@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using game.actor;
 using game.actor.commands;
@@ -9,7 +9,7 @@ using game.world;
 
 namespace game {
 	class GameManager : MonoBehaviour {
-        PlayerCamera pc;
+        public PlayerCamera pc;
         private Layout l;
 		WorldMap w;
 		Player player;
@@ -43,7 +43,8 @@ namespace game {
 
 			gameObject.AddComponent<UIManager> ().init (player, w);
 
-			gameObject.AddComponent<AudioManager> ().init(pc, w);
+			gameObject.AddComponent<AudioManager> ().init(this);
+            gameObject.AddComponent<AmbienceManager>().init(pc, w);
         }
 
 		void Update() {
