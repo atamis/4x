@@ -26,6 +26,19 @@ namespace game.ui {
 		private static Texture2D UI_EndH = Resources.Load<Texture2D>("Textures/T_UI_EndH");
 		private static Texture2D UI_EndC = Resources.Load<Texture2D>("Textures/T_UI_EndC");
 
+		private static Texture2D UI_Cond = Resources.Load<Texture2D>("Textures/T_UI_Cond");
+		private static Texture2D UI_CondH = Resources.Load<Texture2D>("Textures/T_UI_CondH");
+		private static Texture2D UI_CondC = Resources.Load<Texture2D>("Textures/T_UI_CondC");
+		private static Texture2D UI_Gate = Resources.Load<Texture2D>("Textures/T_UI_Gate");
+		private static Texture2D UI_GateH = Resources.Load<Texture2D>("Textures/T_UI_GateH");
+		private static Texture2D UI_GateC = Resources.Load<Texture2D>("Textures/T_UI_GateC");
+		private static Texture2D UI_Harv = Resources.Load<Texture2D>("Textures/T_UI_Harv");
+		private static Texture2D UI_HarvH = Resources.Load<Texture2D>("Textures/T_UI_HarvH");
+		private static Texture2D UI_HarvC = Resources.Load<Texture2D>("Textures/T_UI_HarvC");
+		private static Texture2D UI_Tow = Resources.Load<Texture2D>("Textures/T_UI_Tow");
+		private static Texture2D UI_TowH = Resources.Load<Texture2D>("Textures/T_UI_TowH");
+		private static Texture2D UI_TowC = Resources.Load<Texture2D>("Textures/T_UI_TowC");
+
 		private GUIStyle ButtonStyle;
 
 		WorldMap w;
@@ -70,7 +83,10 @@ namespace game.ui {
 
 		void Update () {
 			if (Input.GetMouseButtonUp (0)) {
-				if ((state == State.Default) || (state == State.Selected)) {
+				if(Input.mousePosition.x > Screen.width*.3f && Input.mousePosition.x < Screen.width*.76f
+					&& Input.mousePosition.y > Screen.height*.1f && Input.mousePosition.y < Screen.height*.28f){
+					//If the player clicks on a GUI deadzone do not do anything
+				} else if ((state == State.Default) || (state == State.Selected)) {
 					Hex h = GetHexAtMouse ();
 					if (h != null) {
 						this.h_target = h;
@@ -78,11 +94,16 @@ namespace game.ui {
 					state = State.Selected;
 
 				} else if (state == State.Moving) {
-					Hex h = GetHexAtMouse ();
-					if (h != null) {
-						this.h_target = h;
+					if (Input.GetMouseButtonUp (0)) {
+						Hex h = GetHexAtMouse ();
+						try {
+							p.AddCommand (new MoveCommand (p, u_target, h));
+						} catch (Exception e) {
+							print (e);
+						}
+						state = State.Default;
+						Debug.Log ("Added Move Command");
 					}
-
 				} else if (state == State.Building) {
 
 				}
@@ -116,14 +137,6 @@ namespace game.ui {
 						u_target = h_target.unit;
 						state = State.Moving;
 					}
-				} else if (state == State.Moving) {
-					try {
-						p.AddCommand (new MoveCommand (p, u_target, getSelected ()));
-					} catch (Exception e) {
-						print (e);
-					}
-					state = State.Default;
-					Debug.Log ("Added Move Command");
 				} else {
 					state = State.Default;
 				}
@@ -181,7 +194,8 @@ namespace game.ui {
 				GUILayout.BeginArea (new Rect (Screen.width * .3f, Screen.height * .7f, Screen.width / 2, Screen.height * .9f));
 				GUILayout.BeginHorizontal ();
 
-				if (GUILayout.Button ("Cond", GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				ButtonStyle.normal.background = UI_Cond; ButtonStyle.hover.background = UI_CondH; ButtonStyle.active.background = UI_CondC;
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Conduit));
 					} catch (Exception e) {
@@ -190,7 +204,8 @@ namespace game.ui {
 					state = State.Default;
 				}
 
-				if (GUILayout.Button ("Harv", GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				ButtonStyle.normal.background = UI_Harv; ButtonStyle.hover.background = UI_HarvH; ButtonStyle.active.background = UI_HarvC;
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Harvester));
 					} catch (Exception e) {
@@ -199,7 +214,8 @@ namespace game.ui {
 					state = State.Default;
 				}
 
-				if (GUILayout.Button ("Tow", GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				ButtonStyle.normal.background = UI_Tow; ButtonStyle.hover.background = UI_TowH; ButtonStyle.active.background = UI_TowC;
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Conduit));
 					} catch (Exception e) {
@@ -208,7 +224,8 @@ namespace game.ui {
 					state = State.Default;
 				}
 
-				if (GUILayout.Button ("Warp", GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				ButtonStyle.normal.background = UI_Gate; ButtonStyle.hover.background = UI_GateH; ButtonStyle.active.background = UI_GateC;
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.WarpGate));
 					} catch (Exception e) {
