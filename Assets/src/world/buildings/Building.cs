@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,16 @@ namespace game.world.buildings {
 
 		public virtual void init(Actor a, Hex h) {
 			this.a = a;
+
+            if (h.building != null) {
+                // TODO: cleanup may be necessary.
+                throw new Exception("THere is already a building there.");
+            }
+
+            h.building = this;
+
+            this.h = h;
+
 			transform.parent = h.gameObject.transform;
 			transform.localPosition = new Vector3 (0, 0, 0);
 
