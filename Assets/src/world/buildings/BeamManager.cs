@@ -26,6 +26,7 @@ namespace game.world.buildings {
 			foreach (BeamModel m in models) {
 				m.Die ();
 			}
+            models.Clear();
 		}
 
 		public void Create() {
@@ -63,8 +64,8 @@ namespace game.world.buildings {
 				lr.SetPositions (vecs);
 			}
 
-			public void Die() {
-				Destroy (gameObject);
+            public void Die() {
+                Destroy(gameObject);
 			}
 		}
 	}
