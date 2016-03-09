@@ -61,6 +61,7 @@ namespace game.world.buildings {
 			
 		public override void PreTurn(Actor old, Actor cur) {
 			if (power >= required) {
+                h.building = null;
 				print("Building");
 				Building b = addBuildingComponent(new GameObject("New " + type.ToString()));
 

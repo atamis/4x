@@ -32,7 +32,7 @@ namespace game.world.buildings {
 
             if (h.building != null) {
                 // TODO: cleanup may be necessary.
-                throw new Exception("THere is already a building there.");
+                throw new Exception("There is already a building there.");
             }
 
             h.building = this;
