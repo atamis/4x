@@ -9,6 +9,7 @@ namespace game.world {
 		WorldMap w;
         // 0...3
 		public int level { get; set; }
+		public bool saturated;
 
 		Hex _h;
 		public Hex h {
@@ -27,6 +28,7 @@ namespace game.world {
 		public void init(WorldMap w, Hex h) {
 			this.w = w;
 			this.h = h;
+			saturated = false;
 
 			var obj = new GameObject ("Misama Model");
 			obj.transform.parent = transform;
@@ -40,6 +42,10 @@ namespace game.world {
 		}
 
 		public bool canSpread() {
+			if(saturated) {
+				return false;
+				print("Saturated yo");
+			}
 			switch (level) {
 			case 0:
 				return false;
@@ -66,6 +72,7 @@ namespace game.world {
 		}
 			
 		public void Die() {
+			model.sr.sprite = null;
 			Destroy(model);
 			h = null;
 			Destroy (gameObject);

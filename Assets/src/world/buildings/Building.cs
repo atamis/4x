@@ -12,7 +12,7 @@ namespace game.world.buildings {
     }
     
 	public enum BuildingType {
-		Conduit, Harvester, WarpGate
+		Conduit, Harvester, WarpGate, Purifier
 	}
 
     class Building : MonoBehaviour {

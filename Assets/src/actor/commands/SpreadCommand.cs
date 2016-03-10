@@ -29,7 +29,6 @@ namespace game.actor.commands {
 
 		public override void Apply (WorldMap w) {
 			HashSet<Hex> tiles = new HashSet<Hex> ();
-
 			//int i = 0;
 			foreach (KeyValuePair<HexLoc, Hex> kv in w.map) {
 				Hex tile = kv.Value;
@@ -41,6 +40,13 @@ namespace game.actor.commands {
 						foreach (Hex t in tile.Neighbors()) {
 							if (t.b.Passable ()) tiles.Add (t);
 						}
+					}
+					if(tile.miasma.level == 3 && tile.miasma.canSpread()){
+						bool saturated = true;
+						foreach (Hex t in tile.Neighbors()){
+							if(t.miasma != null && t.miasma.level < 3) saturated = false;
+						}
+						tile.miasma.saturated = saturated;
 					}
 
 				}

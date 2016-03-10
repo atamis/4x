@@ -54,6 +54,8 @@ namespace game.world.buildings {
 				return obj.AddComponent<Conduit>();
 			case BuildingType.Harvester:
 				return obj.AddComponent<Harvester>();
+			case BuildingType.Purifier:
+				return obj.AddComponent<Purifier>();
 			default:
 				return obj.AddComponent<Building>();
 			}

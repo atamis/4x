@@ -217,7 +217,7 @@ namespace game.ui {
 				ButtonStyle.normal.background = UI_Tow; ButtonStyle.hover.background = UI_TowH; ButtonStyle.active.background = UI_TowC;
 				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
-						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Conduit));
+						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Purifier));
 					} catch (Exception e) {
 						print (e);
 					}
