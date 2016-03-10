@@ -2,13 +2,28 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace game {
+	public class InvalidActionArgs : System.EventArgs {
+		public string msg { get; set; }
+	}
+
 	public class GameEventArgs : System.EventArgs {
 
 	}
 
 	static class EventManager {
+		// game event handler
 		public delegate void GameEvent(GameEventArgs eventArgs);
 		public static event GameEvent StartEvent, ScanEvent, MoveEvent, SpreadEvent;
+
+		// Invalid event handler
+		public delegate void InvalidActionEvent(InvalidActionArgs eventArgs);
+		public static event InvalidActionEvent InvalidEvent;
+
+		public static void PostInvalidAction(InvalidActionArgs args = null) {
+			if (InvalidEvent != null) {
+				InvalidEvent(args);
+			}
+		}
 
 		public static void TriggerStartEvent(GameEventArgs eventArgs = null) {
 			if (StartEvent != null) {

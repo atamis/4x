@@ -46,6 +46,7 @@ namespace game.ui {
 
 		TooltipUI t;
 		public HelperUI helper;
+        MinimapManager mmm;
 		public bool ev_view = true;
 
 		HighlightModel model;
@@ -69,6 +70,8 @@ namespace game.ui {
 			t = gameObject.AddComponent<TooltipUI> ();
 			t.init (this);
 
+            mmm = gameObject.AddComponent<MinimapManager>();
+
 			model = new GameObject ("Highlight Model").AddComponent<HighlightModel> ();
 			model.init (this);
 
@@ -81,36 +84,59 @@ namespace game.ui {
 			helper.init();
 		}
 
-		void Update () {
-			if (Input.GetMouseButtonUp (0)) {
-				if(Input.mousePosition.x > Screen.width*.3f && Input.mousePosition.x < Screen.width*.76f
-					&& Input.mousePosition.y > Screen.height*.1f && Input.mousePosition.y < Screen.height*.28f){
-					//If the player clicks on a GUI deadzone do not do anything
-				} else if ((state == State.Default) || (state == State.Selected)) {
-					Hex h = GetHexAtMouse ();
-					if (h != null) {
-						this.h_target = h;
-					}
-					state = State.Selected;
+        void Update() {
+            if (Input.GetMouseButtonUp(0)) {
+                if (Input.mousePosition.x > Screen.width * .3f && Input.mousePosition.x < Screen.width * .76f
+                    && Input.mousePosition.y > Screen.height * .1f && Input.mousePosition.y < Screen.height * .28f) {
+                    //If the player clicks on a GUI deadzone do not do anything
+                } else if ((state == State.Default) || (state == State.Selected)) {
+                    Hex h = GetHexAtMouse();
+                    if (h != null) {
+                        this.h_target = h;
+                    }
+                    state = State.Selected;
 
-				} else if (state == State.Moving) {
-					if (Input.GetMouseButtonUp (0)) {
-						Hex h = GetHexAtMouse ();
-						try {
-							p.AddCommand (new MoveCommand (p, u_target, h));
-						} catch (Exception e) {
-							print (e);
-						}
-						state = State.Default;
-						Debug.Log ("Added Move Command");
-					}
-				} else if (state == State.Building) {
+                } else if (state == State.Moving) {
+                    if (Input.GetMouseButtonUp(0)) {
+                        Hex h = GetHexAtMouse();
+                        try {
+                            p.AddCommand(new MoveCommand(p, u_target, h));
+                            this.h_target = h;
+                        } catch (Exception e) {
+                            EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
+                        }
+                        state = State.Default;
+                        Debug.Log("Added Move Command");
+                    }
+                } else if (state == State.Building) {
 
-				}
-			}
-		}
+                }
+            }
 
-		public Hex GetHexAtMouse() {
+            if (Input.GetMouseButtonUp(1)) {
+                if (Input.mousePosition.x > Screen.width * .3f && Input.mousePosition.x < Screen.width * .76f
+                    && Input.mousePosition.y > Screen.height * .1f && Input.mousePosition.y < Screen.height * .28f) {
+                } else {
+                    if (state == State.Selected) {
+                        Hex h = GetHexAtMouse();
+
+                        Unit u = getSelected().unit;
+
+                        if (u != null) {
+                            try {
+                                p.AddCommand(new MoveCommand(p, getSelected().unit, h));
+                                this.h_target = h;
+                            } catch (Exception e) {
+                                EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+        public Hex GetHexAtMouse() {
 			Vector3 worldPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			HexLoc l = w.l.PixelHex (worldPos);
 			if (w.map.ContainsKey (l)) {
@@ -149,7 +175,6 @@ namespace game.ui {
 					if (h_target.unit != null) {
 						u_target = h_target.unit;
 						state = State.Building;
-						Debug.Log ("Switched to Build State");
 					}
 				} else if (state == State.Building) {
 					state = State.Default;
@@ -163,9 +188,8 @@ namespace game.ui {
 						try {
 							p.AddCommand (new ScanCommand (p, h_target.unit, h_target));
 						} catch (Exception e) {
-							Debug.Log (e);
+							EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
 						}
-
 					}
 				}
 				Debug.Log ("Added Scan Command");
@@ -175,7 +199,12 @@ namespace game.ui {
 			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
-						p.AddCommand (new CleanseCommand (p, h_target.unit));
+						try {
+							p.AddCommand (new CleanseCommand (p, h_target.unit));
+						} catch (Exception e) {
+							EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
+						}
+
 					}
 				}
 				Debug.Log ("Added Cleanse Command");
@@ -249,7 +278,7 @@ namespace game.ui {
 			void Start() {
 				sp = gameObject.AddComponent<SpriteRenderer>();
 				sp.sprite = Resources.Load<Sprite>("Textures/T_Selection");
-				sp.color = new Color(1.0f, 1.0f, 0.0f, 0.3f);
+				sp.color = new Color(1.0f, 1.0f, 0.0f, 1.0f);
 				sp.enabled = false;
 			}
 
@@ -259,6 +288,7 @@ namespace game.ui {
 					// Have to set local position each time because changing
 					// transform parent doesn't move the game object.
 					transform.localPosition = new Vector3(0, 0, 0);
+					transform.localScale = new Vector3(1.9f, 1.9f, 1.9f);
 					sp.enabled = true;
 				} else {
 					sp.enabled = false;

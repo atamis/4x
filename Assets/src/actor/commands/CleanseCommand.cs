@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using game.world;
 using game.world.units;
+using UnityEngine;
 
 namespace game.actor.commands {
 	class CleanseCommand : Command {
@@ -12,7 +13,7 @@ namespace game.actor.commands {
 		public CleanseCommand(Actor a, Unit u) : base(a) {
 			this.u = u;
 			this.h = u.h;
-            
+
 			if (u.actions < 2) {
 				throw new Exception (u + "doesn't have enough action points!");
 			}
@@ -20,6 +21,7 @@ namespace game.actor.commands {
 
         private void purify(Hex h) {
             if (h.miasma != null) {
+				Debug.Log("Cleansed!");
                 h.miasma.level -= 1;
                 if (h.miasma.level < 0) {
                     h.miasma.Die();

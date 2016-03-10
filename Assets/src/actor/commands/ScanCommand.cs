@@ -23,7 +23,9 @@ namespace game.actor.commands {
 
 		public override void Apply(WorldMap w) {
 			UnityEngine.Debug.Log ("Scanned at " + this.target.ToString ());
-            
+
+            u.actions--;
+
 			target.scanned = true;
 			foreach (Hex h in target.Neighbors()) {
 				h.scanned = true;

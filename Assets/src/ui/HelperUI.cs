@@ -17,7 +17,7 @@ namespace game.ui {
 			AddMessage("Enjoy the game.");
 
 			EventManager.StartEvent += new EventManager.GameEvent(OnStartEvent);
-			
+			EventManager.InvalidEvent += new EventManager.InvalidActionEvent(OnInvalidAction);
 		}
 
 		void Start() {
@@ -26,6 +26,10 @@ namespace game.ui {
 
 		public void AddMessage(string msg) {
 			messages.AddFirst(msg);
+		}
+
+		void OnInvalidAction(InvalidActionArgs evt) {
+			messages.AddFirst(evt.msg);
 		}
 
 		void OnStartEvent(GameEventArgs eventArgs) {
