@@ -105,7 +105,6 @@ namespace game.world {
 				return pn != null;
 			}
 		}
-		public HashSet<Unit> units;
 
         public void init(WorldMap wm, HexLoc loc) {
 			this.wm = wm;
@@ -120,8 +119,7 @@ namespace game.world {
 
 			this.ev = 0;
 			this.scanned = false;
-
-			units = new HashSet<Unit>();
+            
         }
 
 		public void scan() {

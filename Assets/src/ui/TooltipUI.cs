@@ -53,11 +53,8 @@ namespace game.ui {
 					GUILayout.Box("Building: " + h.building.GetTooltip());
 				}
 
-				if (h.units.Count > 0) {
-					GUILayout.Box("Units: " +
-						h.units
-						.Select(unit => unit.ToString())
-						.Aggregate<String>((acc, str) => acc + ", " + str));
+				if (h.unit != null) {
+					GUILayout.Box("Unit: " + h.unit.ToString());
 				}
 				GUILayout.EndArea ();
 			}
