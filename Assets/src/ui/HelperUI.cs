@@ -10,7 +10,7 @@ namespace game.ui {
 		private LinkedList<string> messages;
 
 		public void init() {
-			tex = Resources.Load<Texture2D>("Textures/T_HelperL1");
+			tex = Resources.Load<Texture2D>("Textures/Helper/T_HelperL1");
 			messages = new LinkedList<string>();
 
 			AddMessage("Team Yog-Sothoth welcomes you.");
