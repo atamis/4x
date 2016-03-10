@@ -34,11 +34,10 @@ namespace game {
                     GUILayout.Box("Team Yog-Sothoth Presents:\n\n4X Game");
 
                     if (GUILayout.Button("Start Game")) {
-                        SceneManager.LoadSceneAsync("4xLoad");
+                        SceneManager.LoadSceneAsync("GameLoad");
                     }
 
                     if (GUILayout.Button("Credits")) {
-                        print("Credits");
                         state = MenuState.Credits;
                         return;
                     }
