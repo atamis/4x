@@ -81,36 +81,60 @@ namespace game.ui {
 			helper.init();
 		}
 
-		void Update () {
-			if (Input.GetMouseButtonUp (0)) {
-				if(Input.mousePosition.x > Screen.width*.3f && Input.mousePosition.x < Screen.width*.76f
-					&& Input.mousePosition.y > Screen.height*.1f && Input.mousePosition.y < Screen.height*.28f){
-					//If the player clicks on a GUI deadzone do not do anything
-				} else if ((state == State.Default) || (state == State.Selected)) {
-					Hex h = GetHexAtMouse ();
-					if (h != null) {
-						this.h_target = h;
-					}
-					state = State.Selected;
+        void Update() {
+            if (Input.GetMouseButtonUp(0)) {
+                if (Input.mousePosition.x > Screen.width * .3f && Input.mousePosition.x < Screen.width * .76f
+                    && Input.mousePosition.y > Screen.height * .1f && Input.mousePosition.y < Screen.height * .28f) {
+                    //If the player clicks on a GUI deadzone do not do anything
+                } else if ((state == State.Default) || (state == State.Selected)) {
+                    Hex h = GetHexAtMouse();
+                    if (h != null) {
+                        this.h_target = h;
+                    }
+                    state = State.Selected;
 
-				} else if (state == State.Moving) {
-					if (Input.GetMouseButtonUp (0)) {
-						Hex h = GetHexAtMouse ();
-						try {
-							p.AddCommand (new MoveCommand (p, u_target, h));
-						} catch (Exception e) {
-							print (e);
-						}
-						state = State.Default;
-						Debug.Log ("Added Move Command");
-					}
-				} else if (state == State.Building) {
+                } else if (state == State.Moving) {
+                    if (Input.GetMouseButtonUp(0)) {
+                        Hex h = GetHexAtMouse();
+                        try {
+                            p.AddCommand(new MoveCommand(p, u_target, h));
+                            h_target = h;
+                        } catch (Exception e) {
+                            print(e);
+                        }
+                        state = State.Default;
+                        Debug.Log("Added Move Command");
+                    }
+                } else if (state == State.Building) {
 
-				}
-			}
-		}
+                }
+            }
 
-		public Hex GetHexAtMouse() {
+            if (Input.GetMouseButtonUp(1)) {
+                if (Input.mousePosition.x > Screen.width * .3f && Input.mousePosition.x < Screen.width * .76f
+                    && Input.mousePosition.y > Screen.height * .1f && Input.mousePosition.y < Screen.height * .28f) {
+                } else {
+                    if (state == State.Selected) {
+                        Hex h = GetHexAtMouse();
+
+                        Unit u = getSelected().unit;
+
+                        if (u != null) {
+                            try {
+                                p.AddCommand(new MoveCommand(p, getSelected().unit, h));
+                                h_target = h;
+                            } catch (Exception e) {
+                                print(e);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
+
+        public Hex GetHexAtMouse() {
 			Vector3 worldPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			HexLoc l = w.l.PixelHex (worldPos);
 			if (w.map.ContainsKey (l)) {
