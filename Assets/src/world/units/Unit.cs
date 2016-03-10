@@ -5,6 +5,7 @@ using game.actor;
 namespace game.world.units {
 
 	class Unit : MonoBehaviour {
+        public AudioSource au;
 		UnitModel model;
 		WorldMap w;
 		Hex _h;
@@ -35,6 +36,8 @@ namespace game.world.units {
 			obj.transform.parent = transform;
 
 			model = obj.AddComponent<UnitModel> ();
+            au = obj.AddComponent<AudioSource>();
+            au.spatialBlend = 1.0f;
 			model.init (this);
 
 			this.actions = 4;

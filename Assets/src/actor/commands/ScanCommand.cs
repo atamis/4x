@@ -8,7 +8,9 @@ using game.world.units;
 namespace game.actor.commands {
 
 	class ScanCommand : Command {
-		Unit u;
+        private static readonly AudioClip scanSound = Resources.Load<AudioClip>("Audio/Scan 3");
+
+        Unit u;
 		Hex target;
 
 		public ScanCommand(Actor a, Unit u, Hex target) : base(a) {
@@ -21,11 +23,15 @@ namespace game.actor.commands {
 
 		public override void Apply(WorldMap w) {
 			UnityEngine.Debug.Log ("Scanned at " + this.target.ToString ());
+            
 			target.scanned = true;
 			foreach (Hex h in target.Neighbors()) {
 				h.scanned = true;
 			}
-			EventManager.TriggerScanEvent(new GameEventArgs{});
+
+            u.au.PlayOneShot(scanSound);
+
+            EventManager.TriggerScanEvent(new GameEventArgs{});
 		}
 	}
 }
