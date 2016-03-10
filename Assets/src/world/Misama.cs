@@ -7,6 +7,7 @@ namespace game.world {
 	class Miasma : MonoBehaviour {
 		MiasmaModel model;
 		WorldMap w;
+        // 0...3
 		public int level { get; set; }
 
 		Hex _h;
@@ -15,9 +16,6 @@ namespace game.world {
 				return _h;
 			}
 			set {
-				if (_h != null) {
-					_h.unit = null;
-				}
 				this._h = value;
 				if (_h != null) {
 					transform.parent = _h.gameObject.transform;

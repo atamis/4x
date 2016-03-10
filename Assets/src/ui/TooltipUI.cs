@@ -28,6 +28,11 @@ namespace game.ui {
 
 				GUILayout.BeginArea (new Rect (mp, new Vector2 (250, 150)));
 				GUILayout.Box (h.ToString ());
+                
+                if (h.miasma != null) {
+                    GUILayout.Box("Miasma: level " + h.miasma.level);
+                }
+
 				GUILayout.Box("Energy: " + (h.scanned ? h.ev.ToString() : "??"));
 
 				if (h.pn != null) {
