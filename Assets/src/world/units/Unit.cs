@@ -1,6 +1,7 @@
 using UnityEngine;
 using game.ui;
 using game.actor;
+using System;
 
 namespace game.world.units {
 
@@ -47,7 +48,12 @@ namespace game.world.units {
 			}
 		}
 
-		public virtual void PreTurn(Actor old, Actor cur) {
+        public override string ToString() {
+            return String.Format("[{0} actions:{1}]", name, actions);
+        }
+
+
+        public virtual void PreTurn(Actor old, Actor cur) {
 
 		}
 
