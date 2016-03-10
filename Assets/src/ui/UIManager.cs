@@ -46,6 +46,7 @@ namespace game.ui {
 
 		TooltipUI t;
 		public HelperUI helper;
+        MinimapManager mmm;
 		public bool ev_view = true;
 
 		HighlightModel model;
@@ -68,6 +69,8 @@ namespace game.ui {
 
 			t = gameObject.AddComponent<TooltipUI> ();
 			t.init (this);
+
+            mmm = gameObject.AddComponent<MinimapManager>();
 
 			model = new GameObject ("Highlight Model").AddComponent<HighlightModel> ();
 			model.init (this);
