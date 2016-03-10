@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using game.world;
+using game.world.units;
+
+namespace game.actor.commands {
+	class MoveCommand : Command {
+		Unit u;
+		Hex target;
+		Hex prev;
+		int distance;
+
+		public MoveCommand(Actor a, Unit u, Hex target) : base(a) {
+			this.u = u;
+			this.prev = u.h;
+			this.target = target;
+
+			distance = target.loc.Distance (prev.loc);
+			if (distance > u.actions) {
+				throw new Exception (u + "doesn't have enough movement points!");
+			}
+		}
+
+		public override void Apply(WorldMap w) {
+			u.h = target;
+			u.actions -= distance;
+
+			target.reveal ();
+			foreach (Hex h in target.Neighbors()) {
+				h.reveal ();
+			}
+			UnityEngine.Debug.Log ("Moved to " + target);
+		}
+
+		public override void Undo(WorldMap w) {
+			u.h = prev;
+		}
+	}
+
+
+}

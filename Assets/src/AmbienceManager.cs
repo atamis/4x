@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using game.map;
 using game.input;
+using game.world;
+using game.math;
+using game.ui;
 
 namespace game {
     class AmbienceManager : MonoBehaviour {
