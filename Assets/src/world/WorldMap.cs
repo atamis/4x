@@ -15,7 +15,7 @@ namespace game.world {
 		public Dictionary<HexLoc, Hex> map;
 		public List<Node> nodes;
 		public Layout l;
-		public int size = 64;
+		public int size = 32;
 		public int turn;
 		public BeamManager bm;
 
