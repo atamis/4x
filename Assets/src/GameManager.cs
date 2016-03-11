@@ -25,7 +25,7 @@ namespace game {
 			currentActor = 0;
 
 			pc = new GameObject ("Player Camera").AddComponent<PlayerCamera> ();
-			pc.init (Camera.main);
+			pc.init (this, Camera.main);
 
 			this.l = new Layout(Orientation.Pointy, new Vector2(1, 1), new Vector2(0, 0));
 

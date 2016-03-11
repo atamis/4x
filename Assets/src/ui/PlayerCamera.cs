@@ -1,16 +1,19 @@
 using UnityEngine;
 using System.Collections;
 using game.effects;
+using game;
 
 namespace game.ui {
-    public class PlayerCamera : MonoBehaviour {
+    class PlayerCamera : MonoBehaviour {
         public Camera cam;
         float speed = 1f;
+		GameManager gm;
+		OverviewEffect filter;
 
-        public void init(Camera cam) {
+        public void init(GameManager gm, Camera cam) {
             this.cam = cam;
+			this.gm = gm;
             cam.transform.parent = transform;
-			gameObject.AddComponent<TintEffect> ();
         }
 
         void Start() {
@@ -51,6 +54,10 @@ namespace game.ui {
 
             // Include zoom-level to make zoomed-out movement faster.
             transform.localPosition += control * Time.deltaTime * cam.orthographicSize;
+
+			if (Input.GetKeyDown (KeyCode.LeftShift) | Input.GetKeyDown (KeyCode.RightShift)) {
+				
+			}
         }
     }
 }

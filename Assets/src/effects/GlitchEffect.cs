@@ -55,7 +55,5 @@ namespace game.effects {
 
 			Graphics.Blit (source, dest, mat);
 		}
-
-
 	}
 }

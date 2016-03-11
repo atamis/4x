@@ -9,3 +9,5 @@ EditorBuildSettings:
     path: Assets/MainMenu.unity
   - enabled: 1
     path: Assets/4xLoad.unity
+  - enabled: 1
+    path: Assets/4x.unity

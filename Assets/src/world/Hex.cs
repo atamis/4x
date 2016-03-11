@@ -5,6 +5,7 @@ using game.actor;
 using game.ui;
 using game.world.buildings;
 using game.world.units;
+using game.effects;
 
 namespace game.world {
 	public enum Biome {
@@ -75,9 +76,9 @@ namespace game.world {
                 case Biome.Forest:
                     return 1;
                 case Biome.Ocean:
-                    return 1;
-                case Biome.Desert:
                     return -1;
+                case Biome.Desert:
+                    return 1;
                 case Biome.Jungle:
                     return 1;
                 default:
@@ -186,7 +187,18 @@ namespace game.world {
 		private class HexModel : MonoBehaviour {
 			public Hex h;
 			SpriteRenderer sp;
-			Material[] mats;
+			CustomMaterial[] mats;
+
+			// TODO
+			private class TileMaterial : CustomMaterial {
+				public TileMaterial(Shader s) : base(s) {
+
+				}
+
+				public override void tick(params float[] list) {
+
+				}
+			}
 
 			public void init(Hex h) {
 				this.h = h;
@@ -196,35 +208,38 @@ namespace game.world {
 				sp.transform.localScale = new Vector3(1.9f, 1.9f);
 				transform.localPosition = new Vector3(0, 0, Layer.Board);
 
-				mats = new Material[3] {
-					new Material(Shader.Find("Sprites/Default")),
-					new Material(Shader.Find("Custom/CRTShader")),
-					new Material(Shader.Find("Custom/GlitchShader"))
+				mats = new CustomMaterial[3] {
+					new TileMaterial(Shader.Find("Sprites/Default")),
+					new CRTMaterial(Shader.Find("Custom/CRTShader")),
+					new GlitchMaterial(Shader.Find("Custom/GlitchShader")),
 				};
 				sp.material = mats[0];
 				sp.sprite = Resources.Load<Sprite> ("Textures/T_Fog");
 			}
 
 			void Update() {
-				if (h.selected == true) {
-					sp.color = new Color (1, 0, 0, 1);
-				} else {
-					sp.color = new Color (1, 1, 1, 1);
-				}
-				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.LeftShift)) {
+				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
 					if (this.h.scanned) {
-						sp.material = mats [1];
-						mats [1].SetFloat ("_EvValue", 1 - this.h.ev);
-					} else {
-						sp.material = mats [0];
-						//sp.material = mats [1];
-						//mats [1].SetFloat ("_EvValue", 1 - this.h.ev);
-					}
+						// set glitch texture
+						if (this.h.miasma != null) { 
+							sp.material = mats [2];
+							mats [2].tick ();
 
+						// set scanned texture
+						} else {
+							sp.material = mats [1];
+							mats [1].tick (1 - this.h.ev);
+						}
+					} else {
+						// TODO Colorize
+						sp.material = mats [0];
+						mats [0].tick ();
+					}
+				// default textures
 				} else {
 					sp.material = mats [0];
+					mats [0].tick ();
 				}
-
 			}
 
 			public void reveal() {

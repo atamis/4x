@@ -98,6 +98,7 @@ namespace game.world {
 				};
 
 				sr.sprite = texs [0];
+				sr.enabled = false;
 			}
 
 			void Update() {
