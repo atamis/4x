@@ -18,10 +18,6 @@ namespace game.world {
             model.init(this);
         }
 
-        public void setVisible() {
-			this.model.sp.enabled = true;
-		}
-
         void Start() {
         }
 
@@ -45,6 +41,10 @@ namespace game.world {
 			}
 
 			void Update() {
+                if (n.h.revealed && n.h.scanned) {
+                    sp.enabled = true;
+                }
+
 				clock += 0.05f;
 				transform.localScale = new Vector3(2+Mathf.Sin(clock)/3, 2+Mathf.Sin(clock)/3,1);
 				transform.eulerAngles = new Vector3(0,0,7*clock);

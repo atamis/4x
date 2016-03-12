@@ -100,6 +100,7 @@ namespace game.world {
         public bool scanned { get; set; }
 		public bool selected = false;
 		public PowerNetwork pn;
+        public bool revealed;
 
 		public bool powered {
 			get {
@@ -119,21 +120,13 @@ namespace game.world {
             transform.localPosition = wm.l.HexPixel(loc);
 
 			this.ev = 0;
-			this.scanned = false;
-            
+            this.scanned = false;
+            this.revealed = false;
         }
-
-		public void scan() {
-			if (this.node != null) {
-				this.node.setVisible ();
-			}
-		}
+        
 
 		public void reveal() {
-			this.model.reveal ();
-			if (this.miasma != null) {
-				this.miasma.setVisible ();
-			}
+            revealed = true;
 		}
 
         void Start() {
@@ -218,6 +211,10 @@ namespace game.world {
 			}
 
 			void Update() {
+                if (h.revealed) {
+                    sp.sprite = h.b.GetSprite();
+                }
+
 				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
 					if (this.h.scanned) {
 						// set glitch texture
@@ -240,10 +237,6 @@ namespace game.world {
 					sp.material = mats [0];
 					mats [0].tick ();
 				}
-			}
-
-			public void reveal() {
-				sp.sprite = h.b.GetSprite ();
 			}
 		}
     }
