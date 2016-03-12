@@ -66,7 +66,7 @@ namespace game.world.buildings {
 						unitQueue--;
 
 						var u = new GameObject("Warped Unit").AddComponent<Unit>();
-						u.init(h.wm, h);
+						u.init(a, h.wm, h);
 
 					}
 				} else {

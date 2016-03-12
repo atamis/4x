@@ -4,6 +4,7 @@ using game.math;
 using game.world;
 using game.world.buildings;
 using game.actor;
+using System;
 
 namespace game.world {
 	public enum GameTime {
@@ -99,7 +100,28 @@ namespace game.world {
 			}
 		}
 
-		public void PostTurn(Actor old, Actor cur) {
+        internal bool Defeat(Actor a) {
+            foreach (KeyValuePair<HexLoc, Hex> kv in map) {
+                var building = kv.Value.building;
+                var unit = kv.Value.unit;
+                if ((building != null && building.a == a)
+                    || (unit != null && unit.actor == a)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        internal bool Victory() {
+            foreach(KeyValuePair<HexLoc, Hex> kv in map) {
+                if (kv.Value.miasma != null) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public void PostTurn(Actor old, Actor cur) {
 			foreach (KeyValuePair<HexLoc, Hex> kv in map) {
 				kv.Value.PostTurn(old, cur);
 			}
