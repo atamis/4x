@@ -4,7 +4,8 @@ using game.world.units;
 
 namespace game.world.buildings {
 	class WarpGate : Building {
-		public static readonly int MAX_POWER = 100;
+
+        public static readonly int MAX_POWER = 200;
 		public static readonly int POWER_GEN = 5;
 		public static readonly int UNIT_COST = 5; // In turns
 		public int power = 0;

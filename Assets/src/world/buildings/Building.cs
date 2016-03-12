@@ -12,11 +12,72 @@ namespace game.world.buildings {
     }
     
 	public enum BuildingType {
-		Conduit, Harvester, WarpGate, Purifier
+        // 5 over 1 turn.
+		Conduit,
+        // 24 over 3 turns
+        Harvester,
+        // 150 over 10 turns.
+        WarpGate,
+        // 40 over 4 turns.
+        Purifier
 	}
 
+    public static class BuildingTypeExtensions {
+        public static int BuildPerTurn(this BuildingType b) {
+            switch(b) {
+                case BuildingType.Conduit:
+                    return 5;
+                case BuildingType.Harvester:
+                    return 8;
+                case BuildingType.WarpGate:
+                    return 15;
+                case BuildingType.Purifier:
+                    return 10;
+                default:
+                    return 5;
+            }
+        }
+
+        public static int BuildTotal(this BuildingType b) {
+            switch (b) {
+                case BuildingType.Conduit:
+                    return 5;
+                case BuildingType.Harvester:
+                    return 24;
+                case BuildingType.WarpGate:
+                    return 150;
+                case BuildingType.Purifier:
+                    return 40;
+                default:
+                    return 5;
+            }
+        }
+
+        public static int PowerGen(this BuildingType b) {
+            switch(b) {
+                case BuildingType.Harvester:
+                    return 5;
+                case BuildingType.WarpGate:
+                    return 1;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int PowerDrain(this BuildingType b) {
+            switch (b) {
+                case BuildingType.Purifier:
+                    return 5;
+                default:
+                    return 0;
+            }
+        }
+    }
+
+
     class Building : MonoBehaviour {
-		protected BuildingModel model;
+
+        protected BuildingModel model;
 		public Hex h {
 			get;
 			internal set;
