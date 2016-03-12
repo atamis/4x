@@ -84,12 +84,18 @@ namespace game.ui {
 			helper.init();
 		}
 
+        private bool inToolbarBoundary(Vector3 v) {
+            // TODO: this seems a tiny bit too high. The bottoms of
+            // buttons pass through clicks, and there's a section on top
+            // with no button which blocks clicks.
+            return v.x > Screen.width * .3f && v.x < Screen.width * .76f
+                    && v.y > Screen.height * .1f && v.y < Screen.height * .28f;
+        }
+
         void Update() {
             if (Input.GetMouseButtonUp(0)) {
-                if (Input.mousePosition.x > Screen.width * .3f && Input.mousePosition.x < Screen.width * .76f
-                    && Input.mousePosition.y > Screen.height * .1f && Input.mousePosition.y < Screen.height * .28f) {
-                    //If the player clicks on a GUI deadzone do not do anything
-                } else if ((state == State.Default) || (state == State.Selected)) {
+                if (!inToolbarBoundary(Input.mousePosition) &&
+                    ((state == State.Default) || (state == State.Selected))) {
                     Hex h = GetHexAtMouse();
                     if (h != null) {
                         this.h_target = h;
@@ -114,9 +120,7 @@ namespace game.ui {
             }
 
             if (Input.GetMouseButtonUp(1)) {
-                if (Input.mousePosition.x > Screen.width * .3f && Input.mousePosition.x < Screen.width * .76f
-                    && Input.mousePosition.y > Screen.height * .1f && Input.mousePosition.y < Screen.height * .28f) {
-                } else {
+                if (!inToolbarBoundary(Input.mousePosition)) {
                     if (state == State.Selected) {
                         Hex h = GetHexAtMouse();
 
