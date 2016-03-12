@@ -19,9 +19,14 @@ namespace game.world.buildings {
 		public void init(Actor a, Hex h, BuildingType type) {
 			base.init(a, h);
 			this.type = type;
+            required = type.BuildTotal();
 		}
 
-		public override string GetName() {
+        public override BuildingType? getBuildingType() {
+            return null;
+        }
+
+        public override string GetName() {
 			return "Warp";
 		}
 
@@ -78,8 +83,9 @@ namespace game.world.buildings {
 				if (pn != null) {
 					if (pn.power > 0 && pn.warpgates > 0) {
 						pn.warpgates--;
-						pn.power -= 1;
-						power += 1;
+                        var drain = Math.Min(type.BuildPerTurn(), pn.power);
+						pn.power -= drain;
+						power += drain;
 					}
 				}
 			}

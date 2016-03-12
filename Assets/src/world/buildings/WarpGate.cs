@@ -6,7 +6,6 @@ namespace game.world.buildings {
 	class WarpGate : Building {
 
         public static readonly int MAX_POWER = 200;
-		public static readonly int POWER_GEN = 5;
 		public static readonly int UNIT_COST = 5; // In turns
 		public int power = 0;
 
@@ -14,7 +13,11 @@ namespace game.world.buildings {
 		// In turns.
 		public int progress = 0;
 
-		public bool BuildingUnit() {
+        public override BuildingType? getBuildingType() {
+            return BuildingType.WarpGate;
+        }
+
+        public bool BuildingUnit() {
 			return unitQueue > 0;
 		}
 
@@ -73,7 +76,7 @@ namespace game.world.buildings {
 					}
 				} else {
 					model.sp.sprite = Resources.Load<Sprite> ("Textures/T_WarpGate");
-					pn.power += POWER_GEN;
+                    base.NewTurn(old, cur);
 				}
 			}
 		}

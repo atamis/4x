@@ -75,7 +75,7 @@ namespace game.world.buildings {
     }
 
 
-    class Building : MonoBehaviour {
+    abstract class Building : MonoBehaviour {
 
         protected BuildingModel model;
 		public Hex h {
@@ -87,6 +87,7 @@ namespace game.world.buildings {
 
 		public bool disabled { get; set; }
 		public bool grided;
+        private bool powerDrainSuccessful;
 
 		public virtual void init(Actor a, Hex h) {
 			this.a = a;
@@ -106,7 +107,10 @@ namespace game.world.buildings {
 			AddModel ();
 
 			disabled = false;
+            powerDrainSuccessful = false;
 		}
+
+        public abstract BuildingType? getBuildingType();
 
 		internal virtual void AddModel() {
 			model = new GameObject ("Building Model").AddComponent<BuildingModel> ();
@@ -122,7 +126,7 @@ namespace game.world.buildings {
 		}
 
 		public virtual bool Powered() {
-			return h.powered;
+			return h.powered && powerDrainSuccessful;
 		}
 
 		public virtual bool ProjectsPower() {
@@ -177,14 +181,32 @@ namespace game.world.buildings {
 		}
 
 		public virtual void NewTurn(Actor old, Actor cur) {
+            if (pn != null && getBuildingType().HasValue) {
+                pn.power += getBuildingType().Value.PowerGen();
+            }
+        }
 
-		}
+        public virtual void PostTurn(Actor old, Actor cur) {
+            powerDrainSuccessful = false;
 
-		public virtual void PostTurn(Actor old, Actor cur) {
+            if (pn != null) {
+                if (getBuildingType().HasValue) {
+                    var drain = getBuildingType().Value.PowerDrain();
 
-		}
+                    if (drain == 0) {
+                        powerDrainSuccessful = true;
+                        return;
+                    }
 
-		public class BuildingModel : MonoBehaviour {
+                    if (pn.power > drain) {
+                        pn.power -= drain;
+                        powerDrainSuccessful = true;
+                    }
+                }
+            }
+        }
+
+        public class BuildingModel : MonoBehaviour {
 			public SpriteRenderer sp;
 			Building b;
 			Material mat;

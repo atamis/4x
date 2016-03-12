@@ -1,12 +1,18 @@
 using UnityEngine;
 using System.Collections;
 using game.actor;
+using System;
 
 namespace game.world.buildings {
 
     class Harvester : Building {
 
         private static readonly int POWER_GEN = 5;
+
+
+        public override BuildingType? getBuildingType() {
+            return BuildingType.Harvester;
+        }
 
         public override bool Powered() {
             return true;
@@ -30,5 +36,6 @@ namespace game.world.buildings {
         public override string GetName() {
 			return "Harvester";
 		}
+
     }
 }

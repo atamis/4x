@@ -8,6 +8,10 @@ namespace game.world.buildings {
 
     class Purifier: Building {
 
+        public override BuildingType? getBuildingType() {
+            return BuildingType.Purifier;
+        }
+
         public override bool ProjectsPower() {
             return false;
         }
