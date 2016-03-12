@@ -100,7 +100,7 @@ namespace game.ui {
                     if (Input.GetMouseButtonUp(0)) {
                         Hex h = GetHexAtMouse();
                         try {
-                            p.AddCommand(new MoveCommand(p, u_target, h));
+                            p.AddAllCommands(MoveCommand.pathfind(w, p, u_target, h));
                             this.h_target = h;
                         } catch (Exception e) {
                             EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
@@ -124,7 +124,7 @@ namespace game.ui {
 
                         if (u != null) {
                             try {
-                                p.AddCommand(new MoveCommand(p, getSelected().unit, h));
+                                p.AddAllCommands(MoveCommand.pathfind(w, p, u, h));
                                 this.h_target = h;
                             } catch (Exception e) {
                                 EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });

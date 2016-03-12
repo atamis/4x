@@ -101,8 +101,9 @@ namespace game.world {
 		public bool selected = false;
 		public PowerNetwork pn;
         public bool revealed;
+        internal WorldPathfinding.PathfindingInfo pathfind;
 
-		public bool powered {
+        public bool powered {
 			get {
 				return pn != null;
 			}
