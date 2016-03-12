@@ -31,7 +31,7 @@ namespace game.world.buildings {
 		}
 
 		public override string GetTooltip() {
-			StringBuilder b = new StringBuilder("Building: ");
+			StringBuilder b = new StringBuilder();
 			var w = (WarpingBuilding)h.building;
 			b.Append("warping ");
 			b.Append(w.type.ToString());
