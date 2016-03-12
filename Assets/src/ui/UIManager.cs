@@ -157,7 +157,7 @@ namespace game.ui {
 			ButtonStyle = new GUIStyle(GUI.skin.label);
 
 			ButtonStyle.normal.background = UI_Move; ButtonStyle.hover.background = UI_MoveH; ButtonStyle.active.background = UI_MoveC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))) {
+			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * .13f), GUILayout.Height(Screen.height * .13f))) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						u_target = h_target.unit;
@@ -170,7 +170,7 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_Build; ButtonStyle.hover.background = UI_BuildH; ButtonStyle.active.background = UI_BuildC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))){
+			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * .13f), GUILayout.Height(Screen.height * .13f))){
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						u_target = h_target.unit;
@@ -182,7 +182,7 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_Scan; ButtonStyle.hover.background = UI_ScanH; ButtonStyle.active.background = UI_ScanC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))) {
+			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * .13f), GUILayout.Height(Screen.height * .13f))) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						try {
@@ -196,7 +196,7 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_Purify; ButtonStyle.hover.background = UI_PurifyH; ButtonStyle.active.background = UI_PurifyC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))) {
+			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * .13f), GUILayout.Height(Screen.height * .13f))) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						try {
@@ -211,7 +211,7 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_End; ButtonStyle.hover.background = UI_EndH; ButtonStyle.active.background = UI_EndC;
-			if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * .12f), GUILayout.Height (Screen.height * .13f))) {
+			if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * .2f), GUILayout.Height (Screen.height * .13f))) {
 				p.AddCommand(new EndTurnCommand(p));
 				Debug.Log ("Added End Turn Command");
 
@@ -224,7 +224,7 @@ namespace game.ui {
 				GUILayout.BeginHorizontal ();
 
 				ButtonStyle.normal.background = UI_Cond; ButtonStyle.hover.background = UI_CondH; ButtonStyle.active.background = UI_CondC;
-				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Conduit));
 					} catch (Exception e) {
@@ -234,7 +234,7 @@ namespace game.ui {
 				}
 
 				ButtonStyle.normal.background = UI_Harv; ButtonStyle.hover.background = UI_HarvH; ButtonStyle.active.background = UI_HarvC;
-				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Harvester));
 					} catch (Exception e) {
@@ -244,7 +244,7 @@ namespace game.ui {
 				}
 
 				ButtonStyle.normal.background = UI_Tow; ButtonStyle.hover.background = UI_TowH; ButtonStyle.active.background = UI_TowC;
-				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Purifier));
 					} catch (Exception e) {
@@ -254,7 +254,7 @@ namespace game.ui {
 				}
 
 				ButtonStyle.normal.background = UI_Gate; ButtonStyle.hover.background = UI_GateH; ButtonStyle.active.background = UI_GateC;
-				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.WarpGate));
 					} catch (Exception e) {
