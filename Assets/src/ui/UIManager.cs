@@ -282,9 +282,36 @@ namespace game.ui {
 				GUILayout.EndHorizontal ();
 				GUILayout.EndArea ();
 			}
-		}
 
-		class HighlightModel : MonoBehaviour {
+            // Right side mini-toolbar.
+            GUILayout.BeginArea(new Rect(Screen.width * .5f, Screen.height * .7f, Screen.width / 2, Screen.height * .9f));
+            GUILayout.BeginHorizontal();
+
+            if (h_target != null &&
+                h_target.building != null &&
+                h_target.building.GetType() == typeof(WarpGate)) {
+                var wg = (WarpGate)h_target.building;
+
+                // TODO: need new button.
+                ButtonStyle.normal.background = Resources.Load<Texture2D>("Textures/T_Helper");
+                ButtonStyle.hover.background = Resources.Load<Texture2D>("Textures/T_Helper");
+                ButtonStyle.active.background = Resources.Load<Texture2D>("Textures/T_Helper");
+                if (GUILayout.Button(wg.unitQueue.ToString(), ButtonStyle, GUILayout.Width(Screen.width * 0.035f), GUILayout.Height(Screen.height * 0.08f))) {
+                    try {
+                        p.AddCommand(new WarpUnitCommand(p, wg));
+                    } catch (Exception e) {
+                        print(e);
+                    }
+                }
+
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndArea();
+
+        }
+
+        class HighlightModel : MonoBehaviour {
 			SpriteRenderer sp;
 			UIManager m;
 
