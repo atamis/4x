@@ -158,10 +158,13 @@ namespace game.ui {
 			GUILayout.BeginArea(new Rect (Screen.width*.3f, Screen.height*.8f, Screen.width/2, Screen.height*.9f));
 			GUILayout.BeginHorizontal ();
 
-			ButtonStyle = new GUIStyle(GUI.skin.label);
+            var width = GUILayout.Width(Screen.width * .08f);
+            var height = GUILayout.Height(Screen.height * .13f);
+
+            ButtonStyle = new GUIStyle(GUI.skin.label);
 
 			ButtonStyle.normal.background = UI_Move; ButtonStyle.hover.background = UI_MoveH; ButtonStyle.active.background = UI_MoveC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))) {
+			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						u_target = h_target.unit;
@@ -174,7 +177,7 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_Build; ButtonStyle.hover.background = UI_BuildH; ButtonStyle.active.background = UI_BuildC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))){
+			if (GUILayout.Button("", ButtonStyle, width, height)){
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						u_target = h_target.unit;
@@ -186,7 +189,7 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_Scan; ButtonStyle.hover.background = UI_ScanH; ButtonStyle.active.background = UI_ScanC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))) {
+			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						try {
@@ -200,7 +203,7 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_Purify; ButtonStyle.hover.background = UI_PurifyH; ButtonStyle.active.background = UI_PurifyC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))) {
+			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						try {
@@ -215,7 +218,7 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_End; ButtonStyle.hover.background = UI_EndH; ButtonStyle.active.background = UI_EndC;
-			if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * .12f), GUILayout.Height (Screen.height * .13f))) {
+			if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * .12f), height)) {
 				p.AddCommand(new EndTurnCommand(p));
 				Debug.Log ("Added End Turn Command");
 
