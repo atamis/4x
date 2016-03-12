@@ -26,9 +26,9 @@ namespace game.actor.commands {
 
             u.actions--;
 
-			target.scanned = true;
+			target.scan ();
 			foreach (Hex h in target.Neighbors()) {
-				h.scanned = true;
+				h.scan ();
 			}
 
             u.au.PlayOneShot(scanSound);

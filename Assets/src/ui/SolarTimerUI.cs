@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace game.effects {
+namespace game.ui {
 	class SolarClock {
 		SolarModel s_model;
 		LunarModel m_model;

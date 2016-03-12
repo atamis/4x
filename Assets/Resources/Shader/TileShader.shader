@@ -6,7 +6,6 @@ Shader "Custom/TileShader" {
 
 	SubShader {
         Pass {
-            //Tags { "RenderType"="Transparent", "RenderQueue"="Transparent" }
 			LOD 200
 
 			CGPROGRAM

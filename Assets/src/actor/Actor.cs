@@ -16,6 +16,10 @@ namespace game.actor {
 		public virtual Command GetNextCommand() {
 			return null;
 		}
+
+		public string GetName() {
+			return name;
+		}
 	}
 
 	class PassTurnActor : Actor {

@@ -126,6 +126,7 @@ namespace game.world.buildings {
 		public class BuildingModel : MonoBehaviour {
 			public SpriteRenderer sp;
 			Building b;
+			Material mat;
 
 			public virtual void init(Building b) {
 				this.b = b;
@@ -134,8 +135,20 @@ namespace game.world.buildings {
 				transform.localPosition = new Vector3 (0, 0, Layer.Buildings);
 
 				sp = gameObject.AddComponent<SpriteRenderer> ();
+
+				//mat = new Material (Shader.Find ("Custom/CRTShader"));
+				//sp.material = mat;
+
 				sp.sprite = Resources.Load<Sprite> ("Textures/T_" + b.GetName ());
             }
+
+			void Update() {
+				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
+					//mat.SetFloat ("_bwBlend", 0.7f);
+				} else {
+					//mat.SetFloat ("_bwBlend", 0f);
+				}
+			}
         }
     }
 }

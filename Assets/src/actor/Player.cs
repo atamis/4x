@@ -16,6 +16,14 @@ namespace game.actor {
 			commands.Enqueue (c);
 		}
 
+        public void AddAllCommands<T>(List<T> lst) where T : Command {
+            if (lst != null) {
+                foreach (Command c in lst) {
+                    AddCommand(c);
+                }
+            }
+        }
+
 		public override Command GetNextCommand () {
 			if (commands.Count > 0) {
 				return commands.Dequeue ();

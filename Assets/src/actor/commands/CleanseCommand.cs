@@ -32,9 +32,7 @@ namespace game.actor.commands {
 
         public override void Apply(WorldMap w) {
 			u.actions -= 2;
-
             purify(u.h);
-
             foreach (Hex h in u.h.Neighbors()) {
                 purify(h);
             }

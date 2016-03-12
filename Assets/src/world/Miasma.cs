@@ -105,5 +105,5 @@ namespace game.world {
                 sr.sprite = texs[c.level];
             }
         }
-    }
+	}
 }

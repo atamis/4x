@@ -8,84 +8,6 @@ using game.world.units;
 using game.effects;
 
 namespace game.world {
-	public enum Biome {
-        Highlands, Plains, Forest, Desert, Jungle,
-
-        // MUST BE LAST ASK NICK
-        Ocean,
-    }
-
-    public static class BiomeExtensions {
-        private static Sprite hexagon = Resources.Load<Sprite>("Textures/Hexagon");
-        private static Sprite desert = Resources.Load<Sprite>("Textures/T_Hex_Desert");
-        private static Sprite forest = Resources.Load<Sprite>("Textures/T_Hex_Forest");
-        private static Sprite highlands = Resources.Load<Sprite>("Textures/T_Hex_Highlands");
-        private static Sprite jungle = Resources.Load<Sprite>("Textures/T_Hex_Jungle");
-        private static Sprite ocean = Resources.Load<Sprite>("Textures/T_Hex_Ocean");
-        private static Sprite plains = Resources.Load<Sprite>("Textures/T_Hex_Plains");
-
-        public static Sprite GetSprite(this Biome b) {
-            switch (b) {
-                case Biome.Highlands:
-                    return highlands;
-                case Biome.Plains:
-                    return plains;
-                case Biome.Forest:
-                    return forest;
-                case Biome.Ocean:
-                    return ocean;
-                case Biome.Desert:
-                    return desert;
-                case Biome.Jungle:
-                    return jungle;
-                default:
-                    return hexagon;
-            }
-        }
-
-        public static float Dropoff(this Biome b) {
-            switch (b) {
-                case Biome.Highlands:
-                    return 0.5f;
-                case Biome.Plains:
-                    return 0.3f;
-                case Biome.Forest:
-                    return 0.25f;
-                case Biome.Ocean:
-                    return 1f;
-                case Biome.Desert:
-                    return 0.3f;
-                case Biome.Jungle:
-                    return 0.25f;
-                default:
-                    return 0f;
-            }
-
-        }
-
-        public static bool Passable(this Biome b) {
-            return b.PassCost() != -1;
-        }
-
-        public static int PassCost(this Biome b) {
-            switch(b) {
-                case Biome.Highlands:
-                    return 1;
-                case Biome.Plains:
-                    return 1;
-                case Biome.Forest:
-                    return 1;
-                case Biome.Ocean:
-                    return -1;
-                case Biome.Desert:
-                    return 1;
-                case Biome.Jungle:
-                    return 1;
-                default:
-                    return -1;
-            }
-        }
-    }
 
     class Hex : MonoBehaviour {
         private HexModel model;
@@ -101,8 +23,9 @@ namespace game.world {
 		public bool selected = false;
 		public PowerNetwork pn;
         public bool revealed;
+        internal WorldPathfinding.PathfindingInfo pathfind;
 
-		public bool powered {
+        public bool powered {
 			get {
 				return pn != null;
 			}
@@ -120,10 +43,15 @@ namespace game.world {
             transform.localPosition = wm.l.HexPixel(loc);
 
 			this.ev = 0;
-            this.scanned = false;
-            this.revealed = false;
+			this.scanned = false;
         }
-        
+
+		public void scan() {
+			this.scanned = true;
+			if (this.node != null) {
+				this.node.setVisible ();
+			}
+		}
 
 		public void reveal() {
             revealed = true;
@@ -178,68 +106,63 @@ namespace game.world {
 		}
 
 		private class HexModel : MonoBehaviour {
-			public Hex h;
-			SpriteRenderer sp;
+			SpriteRenderer sr;
 			CustomMaterial[] mats;
-
-			// TODO
-			private class TileMaterial : CustomMaterial {
-				public TileMaterial(Shader s) : base(s) {
-
-				}
-
-				public override void tick(params float[] list) {
-
-				}
-			}
+			Hex h;
 
 			public void init(Hex h) {
 				this.h = h;
 
-				sp = this.gameObject.AddComponent<SpriteRenderer>();
+				sr = gameObject.AddComponent<SpriteRenderer> ();
+				sr.sprite = Resources.Load<Sprite> ("Textures/T_Fog");
 
-				sp.transform.localScale = new Vector3(1.9f, 1.9f);
-				transform.localPosition = new Vector3(0, 0, Layer.Board);
+				transform.localScale = new Vector3 (1.9f, 1.9f, 1.9f);
+				transform.localPosition = new Vector3 (0, 0, Layer.Board);
 
-				mats = new CustomMaterial[3] {
-					new TileMaterial(Shader.Find("Sprites/Default")),
+				mats = new CustomMaterial[4] {
+					new CustomMaterial(Shader.Find("Sprites/Default")),
+					new CustomMaterial(Shader.Find("Custom/NoirShader")),
 					new CRTMaterial(Shader.Find("Custom/CRTShader")),
 					new GlitchMaterial(Shader.Find("Custom/GlitchShader")),
 				};
-				sp.material = mats[0];
-				sp.sprite = Resources.Load<Sprite> ("Textures/T_Fog");
+				sr.material = mats [0];
+			}
+
+			public void reveal() {
+				sr.sprite = h.b.GetSprite ();
 			}
 
 			void Update() {
                 if (h.revealed) {
-                    sp.sprite = h.b.GetSprite();
+                    sr.sprite = h.b.GetSprite();
                 }
 
 				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
-					if (this.h.scanned) {
-						// set glitch texture
-						if (this.h.miasma != null) { 
-							sp.material = mats [2];
-							mats [2].tick ();
+					if (h.scanned) {
+						// Glitch shader
+						if (h.miasma != null) {
+							sr.color = new Color (1, 1, 1);
+							sr.material = mats [3];
+							mats [3].tick ();
 
-						// set scanned texture
+						// CRT shader
 						} else {
-							sp.material = mats [1];
-							mats [1].tick (1 - this.h.ev);
+							sr.material = mats [2];
+							mats [2].SetFloat ("_EvValue", 1 - this.h.ev);
 						}
+					
+					// BW Shader
 					} else {
-						// TODO Colorize
-						sp.material = mats [0];
-						mats [0].tick ();
+						sr.material = mats [1];
+						mats [1].SetFloat ("_bwBlend", 1f);
 					}
-				// default textures
+				
+				// Default shader
 				} else {
-					sp.material = mats [0];
-					mats [0].tick ();
+					sr.material = mats [0];
+					sr.color = new Color (1, 1, 1);
 				}
 			}
 		}
     }
-
-
 }
