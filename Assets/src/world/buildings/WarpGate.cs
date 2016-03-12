@@ -60,16 +60,18 @@ namespace game.world.buildings {
 		public override void NewTurn(Actor old, Actor cur) {
 			if (a == cur) {
 				if (BuildingUnit()) {
+					model.sp.sprite = Resources.Load<Sprite> ("Textures/T_WarpGateOn");
 					progress++;
 					if (progress == UNIT_COST) {
 						progress = 0;
 						unitQueue--;
 
 						var u = new GameObject("Warped Unit").AddComponent<Unit>();
-						u.init(h.wm, h);
+						u.init(a, h.wm, h);
 
 					}
 				} else {
+					model.sp.sprite = Resources.Load<Sprite> ("Textures/T_WarpGate");
 					pn.power += POWER_GEN;
 				}
 			}

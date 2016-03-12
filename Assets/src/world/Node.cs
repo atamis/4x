@@ -18,11 +18,11 @@ namespace game.world {
             model = obj.AddComponent<NodeModel>();
             model.init(this);
         }
-
+			
         public void setVisible() {
 			this.visible = true;
 		}
-
+			
         void Start() {
         }
 

@@ -60,7 +60,15 @@ namespace game {
 			print ("Executing + " + c.ToString());
 			c.Apply (w);
 
-			if (c.GetType () == typeof(EndTurnCommand)) {
+            if (w.Victory()) {
+                print("Victory");
+            }
+
+            if (w.Defeat(player)) {
+                print("Defeat");
+            }
+
+            if (c.GetType () == typeof(EndTurnCommand)) {
 				print (ca + " ends their turn.");
 				currentActor = (currentActor + 1) % actors.Count;
 

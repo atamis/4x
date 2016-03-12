@@ -9,6 +9,7 @@ namespace game.world.units {
         public AudioSource au;
 		UnitModel model;
 		WorldMap w;
+        public Actor actor;
 		Hex _h;
 
 		public int actions { get; set; }
@@ -30,8 +31,9 @@ namespace game.world.units {
 			}
 		}
 
-		public void init(WorldMap w, Hex h) {
+		public void init(Actor actor, WorldMap w, Hex h) {
 			this.h = h;
+            this.actor = actor;
 
 			var obj = new GameObject ("Unit Model");
 			obj.transform.parent = transform;

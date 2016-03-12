@@ -4,105 +4,106 @@ using System;
 using game.ui;
 
 namespace game.world {
-	class Miasma : MonoBehaviour {
-		MiasmaModel model;
-		WorldMap w;
+    class Miasma : MonoBehaviour {
+        MiasmaModel model;
+        WorldMap w;
         // 0...3
-		public int level { get; set; }
-		public bool saturated;
+        public int level { get; set; }
+        public bool saturated;
 
-		Hex _h;
-		public Hex h {
-			get {
-				return _h;
-			}
-			set {
-				this._h = value;
-				if (_h != null) {
-					transform.parent = _h.gameObject.transform;
-					_h.miasma = this;
-				}
-			}
-		}
+        Hex _h;
+        public Hex h {
+            get {
+                return _h;
+            }
+            set {
+                this._h = value;
+                if (_h != null) {
+                    transform.parent = _h.gameObject.transform;
+                    _h.miasma = this;
+                }
+            }
+        }
 
-		public void init(WorldMap w, Hex h) {
-			this.w = w;
-			this.h = h;
-			saturated = false;
+        public void init(WorldMap w, Hex h) {
+            this.w = w;
+            this.h = h;
+            saturated = false;
 
-			var obj = new GameObject ("Misama Model");
-			obj.transform.parent = transform;
+            var obj = new GameObject("Misama Model");
+            obj.transform.parent = transform;
 
-			model = obj.AddComponent<MiasmaModel> ();
-			model.init (this);
-		}
+            model = obj.AddComponent<MiasmaModel>();
+            model.init(this);
+        }
 
-		public void setVisible() {
-			this.model.sr.enabled = true;
-		}
+        public bool canSpread() {
+            if (saturated) {
+                return false;
+                print("Saturated yo");
+            }
+            switch (level) {
+                case 0:
+                    return false;
+                case 1:
+                    if (w.time == GameTime.Night) {
+                        return true;
+                    }
+                    return false;
+                default:
+                    return true;
+            }
+        }
 
-		public bool canSpread() {
-			if(saturated) {
-				return false;
-			}
-			switch (level) {
-			case 0:
-				return false;
-			case 1:
-				if (w.time == GameTime.Night) {
-					return true;
-				}
-				return false;
-			default:
-				return true;
-			}
-		}
+        void Update() {
+            transform.localPosition = new Vector3(0, 0, 0);
+        }
 
-		void Update() {
-			transform.localPosition = new Vector3 (0, 0, 0);
-		}
+        void Start() {
 
-		void Start() {
-		
-		}
+        }
 
-		public override string ToString () {
-			return String.Format ("Miasma");
-		}
-			
-		public void Die() {
-			model.sr.sprite = null;
-			Destroy(model);
-			h = null;
-			Destroy (gameObject);
-		}
+        public override string ToString() {
+            return String.Format("Miasma");
+        }
 
-		private class MiasmaModel : MonoBehaviour {
-			public SpriteRenderer sr;
-			Miasma c;
-			Sprite[] texs;
+        public void Die() {
+            model.sr.sprite = null;
+            Destroy(model);
+            h = null;
+            Destroy(gameObject);
+        }
 
-			public void init(Miasma c) {
-				this.c = c;
+        private class MiasmaModel : MonoBehaviour {
+            public SpriteRenderer sr;
+            Miasma c;
+            Sprite[] texs;
 
-				sr = gameObject.AddComponent<SpriteRenderer> ();
-				sr.transform.localScale = new Vector3 (1.9f, 1.9f, 1.9f);
-				transform.localPosition = new Vector3(0, 0, Layer.Miasma);
+            public void init(Miasma c) {
+                this.c = c;
 
-				texs = new Sprite[4] {
-					Resources.Load<Sprite> ("Textures/T_Miasma0"),
-					Resources.Load<Sprite> ("Textures/T_Miasma1"),
-					Resources.Load<Sprite> ("Textures/T_Miasma2"),
-					Resources.Load<Sprite> ("Textures/T_Miasma3")
-				};
+                sr = gameObject.AddComponent<SpriteRenderer>();
+                sr.transform.localScale = new Vector3(1.9f, 1.9f, 1.9f);
+                transform.localPosition = new Vector3(0, 0, Layer.Miasma);
 
-				sr.sprite = texs [0];
-				sr.enabled = false;
-			}
+                texs = new Sprite[4] {
+                    Resources.Load<Sprite> ("Textures/T_Miasma0"),
+                    Resources.Load<Sprite> ("Textures/T_Miasma1"),
+                    Resources.Load<Sprite> ("Textures/T_Miasma2"),
+                    Resources.Load<Sprite> ("Textures/T_Miasma3")
+                };
 
-			void Update() {
-				sr.sprite = texs [c.level];
-			}
-		}
+                sr.sprite = texs[0];
+                sr.enabled = false;
+            }
+
+            void Update() {
+                if (c.h.revealed) {
+                    sr.enabled = true;
+                }
+
+                sr.sprite = texs[c.level];
+            }
+        }
 	}
 }

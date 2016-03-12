@@ -18,9 +18,10 @@ namespace game.ui {
             cam = new GameObject("Minimap Camera").AddComponent<Camera>();
             cam.orthographic = true;
             cam.targetTexture = tex;
-            cam.transform.position = new Vector3(55, 48, -20);
+            cam.transform.position = new Vector3(26, 23, -20);
             cam.orthographicSize = 30;
-            cam.gameObject.AddComponent<GlitchEffect>();
+            cam.backgroundColor = new Color(0.4f, 0.4f, 0.4f);
+            //cam.gameObject.AddComponent<GlitchEffect>();
         }
 
         void Update() {

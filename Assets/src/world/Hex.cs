@@ -22,6 +22,7 @@ namespace game.world {
         public bool scanned { get; set; }
 		public bool selected = false;
 		public PowerNetwork pn;
+        public bool revealed;
 
 		public bool powered {
 			get {
@@ -52,10 +53,7 @@ namespace game.world {
 		}
 
 		public void reveal() {
-			this.model.reveal ();
-			if (this.miasma != null) {
-				this.miasma.setVisible ();
-			}
+            revealed = true;
 		}
 
         void Start() {
@@ -134,6 +132,10 @@ namespace game.world {
 			}
 
 			void Update() {
+                if (h.revealed) {
+                    sr.sprite = h.b.GetSprite();
+                }
+
 				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
 					if (h.scanned) {
 						// Glitch shader

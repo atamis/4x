@@ -99,7 +99,7 @@ namespace game.world {
 				HexLoc loc = new HexLoc((int)spawn.x + Random.Range(-1, 1), (int)spawn.y+Random.Range(-1, 1));
 				if (w.map[loc].unit == null) {
 					Unit u = new GameObject("Unit" + c).AddComponent<Unit>();
-					u.init(w, w.map[loc]);
+					u.init(player, w, w.map[loc]);
 					c++;
 				}
 			}
