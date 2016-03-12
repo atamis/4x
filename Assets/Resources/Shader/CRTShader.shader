@@ -43,7 +43,7 @@
 
             half4 frag(v2f i): COLOR
             {
-                half4 color = tex2D(_MainTex, i.uv);
+                half4 color = half4(1, 1, 1, 1);
 
                 float2 ps = i.scr_pos.xy *_ScreenParams.xy / i.scr_pos.w;
                 int pp = (int)ps.x % 3; 

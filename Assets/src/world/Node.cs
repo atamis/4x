@@ -6,6 +6,7 @@ namespace game.world {
     class Node : MonoBehaviour {
         private NodeModel model;
 		public Hex h;
+		public bool visible = false;
 
         public void init(Hex parent) {
 			this.h = parent;
@@ -19,7 +20,7 @@ namespace game.world {
         }
 
         public void setVisible() {
-			this.model.sp.enabled = true;
+			this.visible = true;
 		}
 
         void Start() {
@@ -29,15 +30,15 @@ namespace game.world {
         }
 
 		private class NodeModel : MonoBehaviour {
-			Node n;
 			public SpriteRenderer sp;
 			private float clock;
+			Node n;
 
 			public void init(Node n) {
 				this.n = n;
 				sp = this.gameObject.AddComponent<SpriteRenderer>();
-                sp.sprite = Resources.Load<Sprite>("Textures/Node");
-				sp.color = new Color(1.0f, 1.0f, 0.0f, 0.3f);
+                sp.sprite = Resources.Load<Sprite>("Textures/node");
+				sp.color = new Color (0.5f, 1, 1);
 				this.transform.localPosition = new Vector3 (0, 0, Layer.Buildings);
 
 				sp.enabled = false;
@@ -45,9 +46,16 @@ namespace game.world {
 			}
 
 			void Update() {
-				clock += 0.05f;
-				transform.localScale = new Vector3(2+Mathf.Sin(clock)/3, 2+Mathf.Sin(clock)/3,1);
-				transform.eulerAngles = new Vector3(0,0,7*clock);
+				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
+					if (this.n.visible) {
+						sp.enabled = true;
+					}
+					clock += 0.05f;
+					transform.localScale = new Vector3 (2 + Mathf.Sin (clock) / 3, 2 + Mathf.Sin (clock) / 3, 1);
+					transform.eulerAngles = new Vector3 (0, 0, 7 * clock);
+				} else {
+					sp.enabled = false;
+				}
 			}
 		}
 

@@ -29,6 +29,8 @@ namespace game.world {
 			}
 		}
 
+		public Color[] colors = new Color[] { new Color(1, 1, 1), new Color(0.5f, 0.5f, 0.5f) };
+
 		public void init(Layout l) {
 			this.l = l;
 			turn = 0;
@@ -54,9 +56,12 @@ namespace game.world {
 			var obj = new GameObject ("Node");
 			obj.transform.parent = nFolder.transform;
 
+			HexLoc loc = new HexLoc (x, y);
+
 			Node n = obj.AddComponent<Node>();
-			Hex h = map [new HexLoc(x, y)];
-			n.init(h);
+			n.init(map [loc]);
+			map [loc].node = n;
+
 			nodes.Add (n);
 
 			//UnityEngine.Debug.Log ("Placed node at " + pos);

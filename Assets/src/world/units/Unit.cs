@@ -76,16 +76,24 @@ namespace game.world.units {
 
 		private class UnitModel : MonoBehaviour {
 			SpriteRenderer sp;
+			Material mat;
 
 			public void init(Unit u) {
 				transform.localPosition = new Vector3 (0, 0, Layer.Units);
 
 				sp = gameObject.AddComponent<SpriteRenderer> ();
 				sp.sprite = Resources.Load<Sprite> ("Textures/T_Unit");
+			
+				//mat = new Material (Shader.Find ("Custom/BWShader"));
+				//sp.material = mat;
 			}
 
 			void Update() {
-
+				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
+					//mat.SetFloat ("bwIntensity", 0.7f);
+				} else {
+					//mat.SetFloat ("bwIntensity", 0f);
+				}
 			}
 		}
 	}

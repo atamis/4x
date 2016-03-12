@@ -44,7 +44,6 @@ namespace game.world {
 		public bool canSpread() {
 			if(saturated) {
 				return false;
-				print("Saturated yo");
 			}
 			switch (level) {
 			case 0:
