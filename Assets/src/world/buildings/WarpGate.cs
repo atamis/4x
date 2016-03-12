@@ -60,6 +60,7 @@ namespace game.world.buildings {
 		public override void NewTurn(Actor old, Actor cur) {
 			if (a == cur) {
 				if (BuildingUnit()) {
+					model.sp.sprite = Resources.Load<Sprite> ("Textures/T_WarpGateOn");
 					progress++;
 					if (progress == UNIT_COST) {
 						progress = 0;
@@ -70,6 +71,7 @@ namespace game.world.buildings {
 
 					}
 				} else {
+					model.sp.sprite = Resources.Load<Sprite> ("Textures/T_WarpGate");
 					pn.power += POWER_GEN;
 				}
 			}
