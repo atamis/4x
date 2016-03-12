@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: feb6c66a6796f7b419dc0883a4af1742
-timeCreated: 1457125371
+guid: 186e154a62dd64a4287fea4a3aa249fe
+timeCreated: 1457747788
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName: {}
@@ -50,7 +50,13 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites: []
-    outline: []
+    outline:
+    - - {x: 16, y: 32}
+      - {x: 29.856407, y: 24}
+      - {x: 29.856407, y: 7.999999}
+      - {x: 15.999999, y: 0}
+      - {x: 2.1435928, y: 8.000002}
+      - {x: 2.1435928, y: 23.999998}
   spritePackingTag: 
   userData: 
   assetBundleName: 

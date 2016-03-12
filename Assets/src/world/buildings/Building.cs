@@ -124,7 +124,7 @@ namespace game.world.buildings {
 		}
 
 		public class BuildingModel : MonoBehaviour {
-			SpriteRenderer sp;
+			public SpriteRenderer sp;
 			Building b;
 
 			public virtual void init(Building b) {
