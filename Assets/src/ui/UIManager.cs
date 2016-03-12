@@ -39,6 +39,13 @@ namespace game.ui {
 		private static Texture2D UI_TowH = Resources.Load<Texture2D>("Textures/T_UI_TowH");
 		private static Texture2D UI_TowC = Resources.Load<Texture2D>("Textures/T_UI_TowC");
 
+        // x.split("\n").map { |l| l.split(" ")[3] }.join(", ")
+        private static Texture2D[] texes = new Texture2D[] {
+            UI_Move, UI_Scan, UI_Build, UI_Purify, UI_MoveH,
+            UI_ScanH, UI_BuildH, UI_PurifyH, UI_MoveC, UI_ScanC, UI_BuildC, UI_PurifyC, UI_End, UI_EndH, UI_EndC,
+            UI_Cond, UI_CondH, UI_CondC, UI_Gate, UI_GateH, UI_GateC, UI_Harv, UI_HarvH, UI_HarvC, UI_Tow, UI_TowH, UI_TowC
+        };
+
 		private GUIStyle ButtonStyle;
 
 		WorldMap w;
@@ -63,7 +70,10 @@ namespace game.ui {
 			Building,
 		};
 
-		public void init(Player player, WorldMap w) {
+        public void init(Player player, WorldMap w) {
+            foreach (Texture2D tex in texes) {
+                tex.filterMode = FilterMode.Point;
+            }
 			this.p = player;
 			this.w = w;
 
