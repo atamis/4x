@@ -24,6 +24,7 @@ namespace game.world {
 		public PowerNetwork pn;
         public bool revealed;
         internal WorldPathfinding.PathfindingInfo pathfind;
+        internal bool annihilated;
 
         public bool powered {
 			get {
