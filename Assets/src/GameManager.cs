@@ -6,6 +6,7 @@ using game.ui;
 using game.math;
 using game.effects;
 using game.world;
+using game.world.buildings;
 
 namespace game {
 	class GameManager : MonoBehaviour {
@@ -13,6 +14,7 @@ namespace game {
         private Layout l;
 		WorldMap w;
 		Player player;
+        AnnihilationManager am;
 
 		private List<Actor> actors;
 		private int currentActor;
@@ -40,6 +42,9 @@ namespace game {
 			w.PreTurn(null, actors[currentActor]);
 			w.NewTurn(null, actors[currentActor]);
 			w.PostTurn(null, actors[currentActor]);
+
+            am = gameObject.AddComponent<AnnihilationManager>();
+            am.init(w, player);
 
 			gameObject.AddComponent<UIManager> ().init (player, w);
 
