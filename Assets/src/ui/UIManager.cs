@@ -311,6 +311,23 @@ namespace game.ui {
 
             }
 
+            if (h_target != null &&
+                h_target.building != null) {
+
+                // TODO: need new button.
+                ButtonStyle.normal.background = Resources.Load<Texture2D>("Textures/T_Helper");
+                ButtonStyle.hover.background = Resources.Load<Texture2D>("Textures/T_Helper");
+                ButtonStyle.active.background = Resources.Load<Texture2D>("Textures/T_Helper");
+                if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * 0.035f), GUILayout.Height(Screen.height * 0.08f))) {
+                    try {
+                        p.AddCommand(new DeleteBuildingCommand(p, h_target));
+                    } catch (Exception e) {
+                        print(e);
+                    }
+                }
+
+            }
+
             GUILayout.EndHorizontal();
             GUILayout.EndArea();
 
