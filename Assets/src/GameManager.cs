@@ -37,7 +37,8 @@ namespace game {
 			int seed = Random.Range (1000000000, int.MaxValue);
 			WorldMaker maker = new WorldMaker (w, player, seed, false);
 			maker.genWorld();
-			pc.setLocation (maker.spawn.x, maker.spawn.y);
+            var lookat = w.l.HexPixel(new HexLoc((int) maker.spawn.x, (int) maker.spawn.y));
+			pc.setLocation (lookat.x, lookat.y);
 
 			w.PreTurn(null, actors[currentActor]);
 			w.NewTurn(null, actors[currentActor]);
