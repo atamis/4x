@@ -10,10 +10,18 @@ namespace game {
 
 	}
 
+	public class MoveEventArgs: System.EventArgs{
+		public int stamina { get; set;}
+	}
+
 	static class EventManager {
 		// game event handler
 		public delegate void GameEvent(GameEventArgs eventArgs);
-		public static event GameEvent StartEvent, ScanEvent, MoveEvent, SpreadEvent;
+		public static event GameEvent StartEvent, ScanEvent, SpreadEvent;
+
+		//Move event handler
+		public delegate void MoveEvent(MoveEventArgs eventArgs);
+		public static event MoveEvent MoveEventBefore, MoveEventAfter;
 
 		// Invalid event handler
 		public delegate void InvalidActionEvent(InvalidActionArgs eventArgs);
@@ -37,9 +45,15 @@ namespace game {
 			}
 		}
 
-		public static void TriggerMoveEvent(GameEventArgs eventArgs = null) {
-			if (MoveEvent != null) {
-				MoveEvent (eventArgs);
+		public static void TriggerMoveEventBefore(MoveEventArgs eventArgs = null) {
+			if (MoveEventBefore != null) {
+				MoveEventBefore (eventArgs);
+			}
+		}
+
+		public static void TriggerMoveEventAfter(MoveEventArgs eventArgs = null) {
+			if (MoveEventAfter != null) {
+				MoveEventAfter (eventArgs);
 			}
 		}
 

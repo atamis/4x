@@ -129,6 +129,7 @@ namespace game.ui {
                             EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
                         }
                         state = State.Default;
+                        EventManager.TriggerMoveEventAfter(new MoveEventArgs {stamina = h_target.unit.actions});
                         Debug.Log("Added Move Command");
                     }
                 } else if (state == State.Building) {
@@ -185,6 +186,7 @@ namespace game.ui {
 			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
+						EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = h_target.unit.actions});
 						u_target = h_target.unit;
 						state = State.Moving;
 					}
@@ -198,6 +200,7 @@ namespace game.ui {
 			if (GUILayout.Button("", ButtonStyle, width, height)){
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
+						EventManager.TriggerScanEvent(new GameEventArgs {});
 						u_target = h_target.unit;
 						state = State.Building;
 					}
