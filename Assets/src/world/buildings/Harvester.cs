@@ -7,9 +7,6 @@ namespace game.world.buildings {
 
     class Harvester : Building {
 
-        private static readonly int POWER_GEN = 5;
-
-
         public override BuildingType? getBuildingType() {
             return BuildingType.Harvester;
         }
@@ -27,8 +24,13 @@ namespace game.world.buildings {
         }
 
         public override void NewTurn(Actor old, Actor cur) {
-            if (a == cur) {
-                pn.power += POWER_GEN;
+            if (pn != null) {
+                if (h.node != null) {
+                    pn.power += getBuildingType().Value.PowerGen();
+                } else {
+                    pn.power += 1;
+                }
+                
             }
         }
 
