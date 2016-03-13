@@ -110,6 +110,7 @@ namespace game.world {
 			SpriteRenderer sr;
 			CustomMaterial[] mats;
 			Hex h;
+            private int lastSpriteUpdate = 0;
 
 			public void init(Hex h) {
 				this.h = h;
@@ -129,13 +130,20 @@ namespace game.world {
 				sr.material = mats [0];
 			}
 
+            void Start() {
+                lastSpriteUpdate = Time.frameCount - 10;
+            }
+
 			public void reveal() {
 				sr.sprite = h.b.GetSprite ();
 			}
 
 			void Update() {
-                if (h.revealed) {
-                    sr.sprite = h.b.GetSprite();
+                if (Time.frameCount > lastSpriteUpdate + 10) {
+                    lastSpriteUpdate = Time.frameCount;
+                    if (h.revealed) {
+                        sr.sprite = h.b.GetSprite();
+                    }
                 }
 
 				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {

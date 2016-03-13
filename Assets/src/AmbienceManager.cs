@@ -25,6 +25,8 @@ namespace game {
         public AudioSource jungleAU;
         public AudioSource plainsAU;
 
+        private int lastUpdate;
+
         PlayerCamera pc;
         WorldMap w;
 
@@ -59,19 +61,38 @@ namespace game {
             oceanAU.Play();
             jungleAU.Play();
             plainsAU.Play();
+            lastUpdate = Time.frameCount - 11;
         }
 
+
+        // Prevent allocs in update.
+        HexLoc look;
+        private int desertC;
+        private int forestC;
+        private int mountainC;
+        private int oceanC;
+        private int jungleC;
+        private int plainsC;
+        private int total;
+        private float ftotal;
+
         void Update() {
-            HexLoc look = w.l.PixelHex(pc.transform.position);
+            if (Time.frameCount < lastUpdate + 10) {
+                return;
+            }
 
-            int desertC = 0;
-            int forestC = 0;
-            int mountainC = 0;
-            int oceanC = 0;
-            int jungleC = 0;
-            int plainsC = 0;
+            lastUpdate = Time.frameCount;
 
-            int total = 0;
+            look = w.l.PixelHex(pc.transform.position);
+
+            desertC = 0;
+            forestC = 0;
+            mountainC = 0;
+            oceanC = 0;
+            jungleC = 0;
+            plainsC = 0;
+
+            total = 0;
 
             foreach (KeyValuePair<HexLoc, Hex> kv in w.map) {
                 if (kv.Key.Distance(look) < 5) {
@@ -109,14 +130,14 @@ namespace game {
 
             //print(String.Format("desert {0}, forerst {1}, mountain {2}, ocean {3}, total {4}", desertC / total, forestC / total, mountainC / total, oceanC / total, total));
 
-            var t = (float) total;
+            ftotal = (float) total;
 
-            desertAU.volume = desertC / t * masterGain * 0.8f;
-            forestAU.volume = forestC / t * masterGain;
-            mountainAU.volume = mountainC / t * masterGain;
-            oceanAU.volume = oceanC / t * masterGain;
-            jungleAU.volume = jungleC / t * masterGain;
-            plainsAU.volume = plainsC / t * masterGain;
+            desertAU.volume = desertC / ftotal * masterGain * 0.8f; // Gain decided by sound designer.
+            forestAU.volume = forestC / ftotal * masterGain;
+            mountainAU.volume = mountainC / ftotal * masterGain;
+            oceanAU.volume = oceanC / ftotal * masterGain;
+            jungleAU.volume = jungleC / ftotal * masterGain;
+            plainsAU.volume = plainsC / ftotal * masterGain;
 
         }
     }
