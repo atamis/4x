@@ -41,22 +41,10 @@ namespace game.ui {
 				}
 
 				if (h.building != null) {
-					StringBuilder b = new StringBuilder("Building: ");
-					if (h.building.GetType() == typeof(WarpingBuilding)) {
-						var w = (WarpingBuilding) h.building;
-						b.Append("warping ");
-						b.Append(w.type.ToString());
-						b.Append(", ");
-						b.Append(w.power);
-						b.Append("/");
-						b.Append(w.required);
-
-					} else {
-						b.Append(h.building.GetName());
-					}
 
 					GUILayout.Box("Building: " + h.building.GetTooltip());
-				}
+
+                }
 
 				if (h.unit != null) {
 					GUILayout.Box("Unit: " + h.unit.ToString());

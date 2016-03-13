@@ -39,6 +39,20 @@ namespace game.ui {
 		private static Texture2D UI_TowH = Resources.Load<Texture2D>("Textures/T_UI_TowH");
 		private static Texture2D UI_TowC = Resources.Load<Texture2D>("Textures/T_UI_TowC");
 
+		private static Texture2D UI_Unit = Resources.Load<Texture2D>("Textures/T_UI_Unit");
+		private static Texture2D UI_UnitH = Resources.Load<Texture2D>("Textures/T_UI_UnitH");
+		private static Texture2D UI_UnitC = Resources.Load<Texture2D>("Textures/T_UI_UnitC");
+		private static Texture2D UI_Delete = Resources.Load<Texture2D>("Textures/T_UI_Delete");
+		private static Texture2D UI_DeleteH = Resources.Load<Texture2D>("Textures/T_UI_DeleteH");
+		private static Texture2D UI_DeleteC = Resources.Load<Texture2D>("Textures/T_UI_DeleteC");
+
+        // x.split("\n").map { |l| l.split(" ")[3] }.join(", ")
+        private static Texture2D[] texes = new Texture2D[] {
+            UI_Move, UI_Scan, UI_Build, UI_Purify, UI_MoveH,
+            UI_ScanH, UI_BuildH, UI_PurifyH, UI_MoveC, UI_ScanC, UI_BuildC, UI_PurifyC, UI_End, UI_EndH, UI_EndC,
+            UI_Cond, UI_CondH, UI_CondC, UI_Gate, UI_GateH, UI_GateC, UI_Harv, UI_HarvH, UI_HarvC, UI_Tow, UI_TowH, UI_TowC
+        };
+
 		private GUIStyle ButtonStyle;
 
 		WorldMap w;
@@ -63,7 +77,10 @@ namespace game.ui {
 			Building,
 		};
 
-		public void init(Player player, WorldMap w) {
+        public void init(Player player, WorldMap w) {
+            foreach (Texture2D tex in texes) {
+                tex.filterMode = FilterMode.Point;
+            }
 			this.p = player;
 			this.w = w;
 
@@ -84,12 +101,18 @@ namespace game.ui {
 			helper.init();
 		}
 
+        private bool inToolbarBoundary(Vector3 v) {
+            // TODO: this seems a tiny bit too high. The bottoms of
+            // buttons pass through clicks, and there's a section on top
+            // with no button which blocks clicks.
+            return v.x > Screen.width * .3f && v.x < Screen.width * .76f
+                    && v.y > Screen.height * .1f && v.y < Screen.height * .28f;
+        }
+
         void Update() {
             if (Input.GetMouseButtonUp(0)) {
-                if (Input.mousePosition.x > Screen.width * .3f && Input.mousePosition.x < Screen.width * .76f
-                    && Input.mousePosition.y > Screen.height * .1f && Input.mousePosition.y < Screen.height * .28f) {
-                    //If the player clicks on a GUI deadzone do not do anything
-                } else if ((state == State.Default) || (state == State.Selected)) {
+                if (!inToolbarBoundary(Input.mousePosition) &&
+                    ((state == State.Default) || (state == State.Selected))) {
                     Hex h = GetHexAtMouse();
                     if (h != null) {
                         this.h_target = h;
@@ -106,6 +129,7 @@ namespace game.ui {
                             EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
                         }
                         state = State.Default;
+                        EventManager.TriggerMoveEventAfter(new MoveEventArgs {stamina = h_target.unit.actions});
                         Debug.Log("Added Move Command");
                     }
                 } else if (state == State.Building) {
@@ -114,9 +138,7 @@ namespace game.ui {
             }
 
             if (Input.GetMouseButtonUp(1)) {
-                if (Input.mousePosition.x > Screen.width * .3f && Input.mousePosition.x < Screen.width * .76f
-                    && Input.mousePosition.y > Screen.height * .1f && Input.mousePosition.y < Screen.height * .28f) {
-                } else {
+                if (!inToolbarBoundary(Input.mousePosition)) {
                     if (state == State.Selected) {
                         Hex h = GetHexAtMouse();
 
@@ -154,12 +176,17 @@ namespace game.ui {
 			GUILayout.BeginArea(new Rect (Screen.width*.3f, Screen.height*.8f, Screen.width/2, Screen.height*.9f));
 			GUILayout.BeginHorizontal ();
 
-			ButtonStyle = new GUIStyle(GUI.skin.label);
+            var width = GUILayout.Width(Screen.width * .08f);
+            var height = GUILayout.Height(Screen.height * .13f);
+
+            ButtonStyle = new GUIStyle(GUI.skin.label);
 
 			ButtonStyle.normal.background = UI_Move; ButtonStyle.hover.background = UI_MoveH; ButtonStyle.active.background = UI_MoveC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))) {
+
+			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
+						EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = h_target.unit.actions});
 						u_target = h_target.unit;
 						state = State.Moving;
 					}
@@ -170,9 +197,10 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_Build; ButtonStyle.hover.background = UI_BuildH; ButtonStyle.active.background = UI_BuildC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))){
+			if (GUILayout.Button("", ButtonStyle, width, height)){
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
+						EventManager.TriggerScanEvent(new GameEventArgs {});
 						u_target = h_target.unit;
 						state = State.Building;
 					}
@@ -182,7 +210,7 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_Scan; ButtonStyle.hover.background = UI_ScanH; ButtonStyle.active.background = UI_ScanC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))) {
+			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						try {
@@ -196,7 +224,7 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_Purify; ButtonStyle.hover.background = UI_PurifyH; ButtonStyle.active.background = UI_PurifyC;
-			if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * .08f), GUILayout.Height(Screen.height * .13f))) {
+			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						try {
@@ -211,7 +239,7 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_End; ButtonStyle.hover.background = UI_EndH; ButtonStyle.active.background = UI_EndC;
-			if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * .12f), GUILayout.Height (Screen.height * .13f))) {
+			if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * .12f), height)) {
 				p.AddCommand(new EndTurnCommand(p));
 				Debug.Log ("Added End Turn Command");
 
@@ -224,7 +252,7 @@ namespace game.ui {
 				GUILayout.BeginHorizontal ();
 
 				ButtonStyle.normal.background = UI_Cond; ButtonStyle.hover.background = UI_CondH; ButtonStyle.active.background = UI_CondC;
-				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Conduit));
 					} catch (Exception e) {
@@ -234,7 +262,7 @@ namespace game.ui {
 				}
 
 				ButtonStyle.normal.background = UI_Harv; ButtonStyle.hover.background = UI_HarvH; ButtonStyle.active.background = UI_HarvC;
-				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Harvester));
 					} catch (Exception e) {
@@ -244,7 +272,7 @@ namespace game.ui {
 				}
 
 				ButtonStyle.normal.background = UI_Tow; ButtonStyle.hover.background = UI_TowH; ButtonStyle.active.background = UI_TowC;
-				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Purifier));
 					} catch (Exception e) {
@@ -254,7 +282,7 @@ namespace game.ui {
 				}
 
 				ButtonStyle.normal.background = UI_Gate; ButtonStyle.hover.background = UI_GateH; ButtonStyle.active.background = UI_GateC;
-				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * 0.035f), GUILayout.Height (Screen.height * 0.08f))) {
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.WarpGate));
 					} catch (Exception e) {
@@ -265,9 +293,51 @@ namespace game.ui {
 				GUILayout.EndHorizontal ();
 				GUILayout.EndArea ();
 			}
-		}
 
-		class HighlightModel : MonoBehaviour {
+            // Right side mini-toolbar.
+            GUILayout.BeginArea(new Rect(Screen.width * .5f, Screen.height * .7f, Screen.width / 2, Screen.height * .9f));
+            GUILayout.BeginHorizontal();
+
+            if (h_target != null &&
+                h_target.building != null &&
+                h_target.building.GetType() == typeof(WarpGate)) {
+                var wg = (WarpGate)h_target.building;
+
+                ButtonStyle.normal.background = UI_Unit;
+                ButtonStyle.hover.background = UI_UnitH;
+                ButtonStyle.active.background = UI_UnitC;
+                if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * 0.08f), GUILayout.Height(Screen.height * 0.08f))) {
+                    try {
+                        p.AddCommand(new WarpUnitCommand(p, wg));
+                    } catch (Exception e) {
+                        print(e);
+                    }
+                }
+
+            }
+
+            if (h_target != null &&
+                h_target.building != null) {
+
+                ButtonStyle.normal.background = UI_Delete;
+                ButtonStyle.hover.background = UI_DeleteH;
+                ButtonStyle.active.background = UI_DeleteC;
+                if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * 0.08f), GUILayout.Height(Screen.height * 0.08f))) {
+                    try {
+                        p.AddCommand(new DeleteBuildingCommand(p, h_target));
+                    } catch (Exception e) {
+                        print(e);
+                    }
+                }
+
+            }
+
+            GUILayout.EndHorizontal();
+            GUILayout.EndArea();
+
+        }
+
+        class HighlightModel : MonoBehaviour {
 			SpriteRenderer sp;
 			UIManager m;
 

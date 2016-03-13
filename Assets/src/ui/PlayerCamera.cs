@@ -18,6 +18,7 @@ namespace game.ui {
         void Start() {
         }
 
+        // Look at x and y;
 		public void setLocation(float x, float y) {
             transform.localPosition = new Vector3(x, y, 0);
         }

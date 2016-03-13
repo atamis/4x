@@ -17,6 +17,9 @@ namespace game.ui {
 			AddMessage("Enjoy the game.");
 
 			EventManager.StartEvent += new EventManager.GameEvent(OnStartEvent);
+			EventManager.ScanEvent += new EventManager.GameEvent(OnScanEvent);
+			EventManager.MoveEventBefore += new EventManager.MoveEvent(OnMoveBeforeEvent);
+			EventManager.MoveEventAfter += new EventManager.MoveEvent(OnMoveAfterEvent);
 			EventManager.InvalidEvent += new EventManager.InvalidActionEvent(OnInvalidAction);
 		}
 
@@ -36,11 +39,18 @@ namespace game.ui {
 			Debug.Log("Recieved Start Event");
 		}
 
-		void OnScanEvent() {
+		void OnScanEvent(GameEventArgs eventArgs) {
+			messages.AddFirst("Your unit has scanned the area.");
 			Debug.Log ("Recieved Scan Event!");
 		}
 
-		void OnMoveEvent() {
+		void OnMoveBeforeEvent(MoveEventArgs eventArgs) {
+			messages.AddFirst("Where would you like to move your unit? \n (Stamina = " + eventArgs.stamina + ")");
+			Debug.Log ("Recieved Move Event");
+		}
+
+		void OnMoveAfterEvent(MoveEventArgs eventArgs) {
+			messages.AddFirst("This unit now has " + eventArgs.stamina + " stamina.");
 			Debug.Log ("Recieved Move Event");
 		}
 

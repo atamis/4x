@@ -19,14 +19,19 @@ namespace game.world.buildings {
 		public void init(Actor a, Hex h, BuildingType type) {
 			base.init(a, h);
 			this.type = type;
+            required = type.BuildTotal();
 		}
 
-		public override string GetName() {
+        public override BuildingType? getBuildingType() {
+            return null;
+        }
+
+        public override string GetName() {
 			return "Warp";
 		}
 
 		public override string GetTooltip() {
-			StringBuilder b = new StringBuilder("Building: ");
+			StringBuilder b = new StringBuilder();
 			var w = (WarpingBuilding)h.building;
 			b.Append("warping ");
 			b.Append(w.type.ToString());
@@ -78,8 +83,9 @@ namespace game.world.buildings {
 				if (pn != null) {
 					if (pn.power > 0 && pn.warpgates > 0) {
 						pn.warpgates--;
-						pn.power -= 1;
-						power += 1;
+                        var drain = Math.Min(type.BuildPerTurn(), pn.power);
+						pn.power -= drain;
+						power += drain;
 					}
 				}
 			}
