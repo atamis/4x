@@ -55,6 +55,7 @@ namespace game.world {
 		}
 
 		public void reveal() {
+            this.model.reveal();
             revealed = true;
 		}
 
@@ -110,6 +111,7 @@ namespace game.world {
 			SpriteRenderer sr;
 			CustomMaterial[] mats;
 			Hex h;
+            private int lastSpriteUpdate = 0;
 
 			public void init(Hex h) {
 				this.h = h;
@@ -129,15 +131,22 @@ namespace game.world {
 				sr.material = mats [0];
 			}
 
+            void Start() {
+                lastSpriteUpdate = Time.frameCount - 10;
+            }
+
 			public void reveal() {
 				sr.sprite = h.b.GetSprite ();
 			}
 
 			void Update() {
-                if (h.revealed) {
-                    sr.sprite = h.b.GetSprite();
+                if (Time.frameCount > lastSpriteUpdate + 10) {
+                    lastSpriteUpdate = Time.frameCount;
+                    if (h.revealed) {
+                        sr.sprite = h.b.GetSprite();
+                    }
                 }
-
+                
 				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
 					if (h.scanned) {
 						// Glitch shader
@@ -151,13 +160,13 @@ namespace game.world {
 							sr.material = mats [2];
 							mats [2].SetFloat ("_EvValue", 1 - this.h.ev);
 						}
-					
+
 					// BW Shader
 					} else {
 						sr.material = mats [1];
 						mats [1].SetFloat ("_bwBlend", 1f);
 					}
-				
+
 				// Default shader
 				} else {
 					sr.material = mats [0];

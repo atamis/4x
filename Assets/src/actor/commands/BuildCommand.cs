@@ -3,6 +3,7 @@ using System.Collections;
 using game.world;
 using game.world.units;
 using game.world.buildings;
+using System;
 
 namespace game.actor.commands {
 	class BuildCommand : Command {
@@ -14,6 +15,10 @@ namespace game.actor.commands {
 			this.u = u;
 			this.h = h;
 			this.t = t;
+
+            if (h.building != null) {
+                throw new Exception("Building already present");
+            }
 		}
 
 		public override void Apply(WorldMap w) {

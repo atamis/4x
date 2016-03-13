@@ -128,7 +128,7 @@ namespace game.ui {
                         } catch (Exception e) {
                             EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
                         }
-                        state = State.Default;
+                        state = State.Selected;
                         EventManager.TriggerMoveEventAfter(new MoveEventArgs {stamina = h_target.unit.actions});
                         Debug.Log("Added Move Command");
                     }
@@ -204,7 +204,7 @@ namespace game.ui {
 						state = State.Building;
 					}
 				} else if (state == State.Building) {
-					state = State.Default;
+					state = State.Selected;
 				}
 			}
 
@@ -258,7 +258,7 @@ namespace game.ui {
 						print (e);
 					}
 					EventManager.TriggerBuildEvent(new BuildEventArgs{name = "Conduit", turns = BuildingType.Conduit.BuildTotal()/BuildingType.Conduit.BuildPerTurn()});
-					state = State.Default;
+					state = State.Selected;
 				}
 
 				ButtonStyle.normal.background = UI_Harv; ButtonStyle.hover.background = UI_HarvH; ButtonStyle.active.background = UI_HarvC;
@@ -269,7 +269,7 @@ namespace game.ui {
 						print (e);
 					}
 					EventManager.TriggerBuildEvent(new BuildEventArgs{name = "Harvester", turns = BuildingType.Harvester.BuildTotal()/BuildingType.Harvester.BuildPerTurn()});
-					state = State.Default;
+					state = State.Selected;
 				}
 
 				ButtonStyle.normal.background = UI_Tow; ButtonStyle.hover.background = UI_TowH; ButtonStyle.active.background = UI_TowC;
@@ -280,7 +280,7 @@ namespace game.ui {
 						print (e);
 					}
 					EventManager.TriggerBuildEvent(new BuildEventArgs{name = "Purifier", turns = BuildingType.Purifier.BuildTotal()/BuildingType.Purifier.BuildPerTurn()});
-					state = State.Default;
+					state = State.Selected;
 				}
 
 				ButtonStyle.normal.background = UI_Gate; ButtonStyle.hover.background = UI_GateH; ButtonStyle.active.background = UI_GateC;
@@ -291,7 +291,7 @@ namespace game.ui {
 						print (e);
 					}
 					EventManager.TriggerBuildEvent(new BuildEventArgs{name = "Warp Gate", turns = BuildingType.WarpGate.BuildTotal()/BuildingType.WarpGate.BuildPerTurn()});
-					state = State.Default;
+					state = State.Selected;
 				}
 				GUILayout.EndHorizontal ();
 				GUILayout.EndArea ();
