@@ -42,6 +42,9 @@ namespace game.ui {
 		private static Texture2D UI_Unit = Resources.Load<Texture2D>("Textures/T_UI_Unit");
 		private static Texture2D UI_UnitH = Resources.Load<Texture2D>("Textures/T_UI_UnitH");
 		private static Texture2D UI_UnitC = Resources.Load<Texture2D>("Textures/T_UI_UnitC");
+		private static Texture2D UI_Delete = Resources.Load<Texture2D>("Textures/T_UI_Delete");
+		private static Texture2D UI_DeleteH = Resources.Load<Texture2D>("Textures/T_UI_DeleteH");
+		private static Texture2D UI_DeleteC = Resources.Load<Texture2D>("Textures/T_UI_DeleteC");
 
         // x.split("\n").map { |l| l.split(" ")[3] }.join(", ")
         private static Texture2D[] texes = new Texture2D[] {
@@ -297,7 +300,6 @@ namespace game.ui {
                 h_target.building.GetType() == typeof(WarpGate)) {
                 var wg = (WarpGate)h_target.building;
 
-                // TODO: need new button.
                 ButtonStyle.normal.background = UI_Unit;
                 ButtonStyle.hover.background = UI_UnitH;
                 ButtonStyle.active.background = UI_UnitC;
@@ -314,11 +316,10 @@ namespace game.ui {
             if (h_target != null &&
                 h_target.building != null) {
 
-                // TODO: need new button.
-                ButtonStyle.normal.background = Resources.Load<Texture2D>("Textures/T_Helper");
-                ButtonStyle.hover.background = Resources.Load<Texture2D>("Textures/T_Helper");
-                ButtonStyle.active.background = Resources.Load<Texture2D>("Textures/T_Helper");
-                if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.width * 0.035f), GUILayout.Height(Screen.height * 0.08f))) {
+                ButtonStyle.normal.background = UI_Delete;
+                ButtonStyle.hover.background = UI_DeleteH;
+                ButtonStyle.active.background = UI_DeleteC;
+                if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * 0.08f), GUILayout.Height(Screen.height * 0.08f))) {
                     try {
                         p.AddCommand(new DeleteBuildingCommand(p, h_target));
                     } catch (Exception e) {
