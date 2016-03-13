@@ -12,11 +12,72 @@ namespace game.world.buildings {
     }
     
 	public enum BuildingType {
-		Conduit, Harvester, WarpGate, Purifier
+        // 5 over 1 turn.
+		Conduit,
+        // 24 over 3 turns
+        Harvester,
+        // 150 over 10 turns.
+        WarpGate,
+        // 40 over 4 turns.
+        Purifier
 	}
 
-    class Building : MonoBehaviour {
-		protected BuildingModel model;
+    public static class BuildingTypeExtensions {
+        public static int BuildPerTurn(this BuildingType b) {
+            switch(b) {
+                case BuildingType.Conduit:
+                    return 5;
+                case BuildingType.Harvester:
+                    return 8;
+                case BuildingType.WarpGate:
+                    return 15;
+                case BuildingType.Purifier:
+                    return 10;
+                default:
+                    return 5;
+            }
+        }
+
+        public static int BuildTotal(this BuildingType b) {
+            switch (b) {
+                case BuildingType.Conduit:
+                    return 5;
+                case BuildingType.Harvester:
+                    return 24;
+                case BuildingType.WarpGate:
+                    return 150;
+                case BuildingType.Purifier:
+                    return 40;
+                default:
+                    return 5;
+            }
+        }
+
+        public static int PowerGen(this BuildingType b) {
+            switch(b) {
+                case BuildingType.Harvester:
+                    return 5;
+                case BuildingType.WarpGate:
+                    return 1;
+                default:
+                    return 0;
+            }
+        }
+
+        public static int PowerDrain(this BuildingType b) {
+            switch (b) {
+                case BuildingType.Purifier:
+                    return 5;
+                default:
+                    return 0;
+            }
+        }
+    }
+
+
+    abstract class Building : MonoBehaviour {
+
+        protected BuildingModel model;
 		public Hex h {
 			get;
 			internal set;
@@ -26,6 +87,7 @@ namespace game.world.buildings {
 
 		public bool disabled { get; set; }
 		public bool grided;
+        private bool powerDrainSuccessful;
 
 		public virtual void init(Actor a, Hex h) {
 			this.a = a;
@@ -45,7 +107,10 @@ namespace game.world.buildings {
 			AddModel ();
 
 			disabled = false;
+            powerDrainSuccessful = false;
 		}
+
+        public abstract BuildingType? getBuildingType();
 
 		internal virtual void AddModel() {
 			model = new GameObject ("Building Model").AddComponent<BuildingModel> ();
@@ -61,7 +126,7 @@ namespace game.world.buildings {
 		}
 
 		public virtual bool Powered() {
-			return h.powered;
+			return h.powered && powerDrainSuccessful;
 		}
 
 		public virtual bool ProjectsPower() {
@@ -116,14 +181,32 @@ namespace game.world.buildings {
 		}
 
 		public virtual void NewTurn(Actor old, Actor cur) {
+            if (pn != null && getBuildingType().HasValue) {
+                pn.power += getBuildingType().Value.PowerGen();
+            }
+        }
 
-		}
+        public virtual void PostTurn(Actor old, Actor cur) {
+            powerDrainSuccessful = false;
 
-		public virtual void PostTurn(Actor old, Actor cur) {
+            if (pn != null) {
+                if (getBuildingType().HasValue) {
+                    var drain = getBuildingType().Value.PowerDrain();
 
-		}
+                    if (drain == 0) {
+                        powerDrainSuccessful = true;
+                        return;
+                    }
 
-		public class BuildingModel : MonoBehaviour {
+                    if (pn.power > drain) {
+                        pn.power -= drain;
+                        powerDrainSuccessful = true;
+                    }
+                }
+            }
+        }
+
+        public class BuildingModel : MonoBehaviour {
 			public SpriteRenderer sp;
 			Building b;
 			Material mat;
