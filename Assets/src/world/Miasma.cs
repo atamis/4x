@@ -7,7 +7,6 @@ namespace game.world {
     class Miasma : MonoBehaviour {
         MiasmaModel model;
         WorldMap w;
-        // 0...3
         public int level { get; set; }
         public bool saturated;
 
@@ -69,9 +68,9 @@ namespace game.world {
 
         public void Die() {
             model.sr.sprite = null;
-            Destroy(model);
-            h = null;
-            Destroy(gameObject);
+            Destroy(this.model);
+            h.miasma = null;
+            Destroy(this.gameObject);
         }
 
         private class MiasmaModel : MonoBehaviour {

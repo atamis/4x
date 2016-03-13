@@ -21,7 +21,7 @@ namespace game.ui {
             cam.transform.position = new Vector3(26, 23, -20);
             cam.orthographicSize = 30;
             cam.backgroundColor = new Color(0.4f, 0.4f, 0.4f);
-            //cam.gameObject.AddComponent<GlitchEffect>();
+			cam.gameObject.AddComponent<BloomEffect> ();
         }
 
         void Update() {

@@ -54,6 +54,7 @@ namespace game.world {
 		}
 
 		public void reveal() {
+            this.model.reveal();
             revealed = true;
 		}
 
@@ -133,10 +134,6 @@ namespace game.world {
 			}
 
 			void Update() {
-                if (h.revealed) {
-                    sr.sprite = h.b.GetSprite();
-                }
-
 				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
 					if (h.scanned) {
 						// Glitch shader
@@ -150,13 +147,13 @@ namespace game.world {
 							sr.material = mats [2];
 							mats [2].SetFloat ("_EvValue", 1 - this.h.ev);
 						}
-					
+
 					// BW Shader
 					} else {
 						sr.material = mats [1];
 						mats [1].SetFloat ("_bwBlend", 1f);
 					}
-				
+
 				// Default shader
 				} else {
 					sr.material = mats [0];

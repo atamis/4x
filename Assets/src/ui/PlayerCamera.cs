@@ -8,7 +8,6 @@ namespace game.ui {
         public Camera cam;
         float speed = 1f;
 		GameManager gm;
-		OverviewEffect filter;
 
         public void init(GameManager gm, Camera cam) {
             this.cam = cam;
