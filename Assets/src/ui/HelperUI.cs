@@ -17,6 +17,8 @@ namespace game.ui {
 			AddMessage("Enjoy the game.");
 
 			EventManager.StartEvent += new EventManager.GameEvent(OnStartEvent);
+			EventManager.BuildMenuEvent += new EventManager.GameEvent(OnBuildMenuEvent);
+			EventManager.BuildEvent += new EventManager.WarpEvent(OnBuildEvent);
 			EventManager.ScanEvent += new EventManager.GameEvent(OnScanEvent);
 			EventManager.MoveEventBefore += new EventManager.MoveEvent(OnMoveBeforeEvent);
 			EventManager.MoveEventAfter += new EventManager.MoveEvent(OnMoveAfterEvent);
@@ -35,6 +37,16 @@ namespace game.ui {
 			messages.AddFirst(evt.msg);
 		}
 
+		void OnBuildMenuEvent(GameEventArgs eventArgs){
+			AddMessage("What structure do you want to warp in?");
+			Debug.Log("Received Build Menu Event");
+		}
+
+		void OnBuildEvent (BuildEventArgs eventArgs){
+			AddMessage("The " + eventArgs.name + " will be warped in " + eventArgs.turns + " turn(s).");
+			Debug.Log("Received Build Event");	
+		}
+
 		void OnStartEvent(GameEventArgs eventArgs) {
 			Debug.Log("Recieved Start Event");
 		}
@@ -45,12 +57,12 @@ namespace game.ui {
 		}
 
 		void OnMoveBeforeEvent(MoveEventArgs eventArgs) {
-			messages.AddFirst("Where would you like to move your unit? \n (Stamina = " + eventArgs.stamina + ")");
+			AddMessage("Where would you like to move your unit? \n (Stamina = " + eventArgs.stamina + ")");
 			Debug.Log ("Recieved Move Event");
 		}
 
 		void OnMoveAfterEvent(MoveEventArgs eventArgs) {
-			messages.AddFirst("This unit now has " + eventArgs.stamina + " stamina.");
+			AddMessage("This unit now has " + eventArgs.stamina + " stamina.");
 			Debug.Log ("Recieved Move Event");
 		}
 

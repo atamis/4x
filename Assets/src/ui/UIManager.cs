@@ -193,14 +193,13 @@ namespace game.ui {
 				} else {
 					state = State.Default;
 				}
-
 			}
 
 			ButtonStyle.normal.background = UI_Build; ButtonStyle.hover.background = UI_BuildH; ButtonStyle.active.background = UI_BuildC;
 			if (GUILayout.Button("", ButtonStyle, width, height)){
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
-						EventManager.TriggerScanEvent(new GameEventArgs {});
+						EventManager.TriggerBuildMenuEvent(new GameEventArgs {});
 						u_target = h_target.unit;
 						state = State.Building;
 					}
@@ -258,6 +257,7 @@ namespace game.ui {
 					} catch (Exception e) {
 						print (e);
 					}
+					EventManager.TriggerBuildEvent(new BuildEventArgs{name = "Conduit", turns = BuildingType.Conduit.BuildTotal()/BuildingType.Conduit.BuildPerTurn()});
 					state = State.Default;
 				}
 
@@ -268,6 +268,7 @@ namespace game.ui {
 					} catch (Exception e) {
 						print (e);
 					}
+					EventManager.TriggerBuildEvent(new BuildEventArgs{name = "Harvester", turns = BuildingType.Harvester.BuildTotal()/BuildingType.Harvester.BuildPerTurn()});
 					state = State.Default;
 				}
 
@@ -278,6 +279,7 @@ namespace game.ui {
 					} catch (Exception e) {
 						print (e);
 					}
+					EventManager.TriggerBuildEvent(new BuildEventArgs{name = "Purifier", turns = BuildingType.Purifier.BuildTotal()/BuildingType.Purifier.BuildPerTurn()});
 					state = State.Default;
 				}
 
@@ -288,6 +290,7 @@ namespace game.ui {
 					} catch (Exception e) {
 						print (e);
 					}
+					EventManager.TriggerBuildEvent(new BuildEventArgs{name = "Warp Gate", turns = BuildingType.WarpGate.BuildTotal()/BuildingType.WarpGate.BuildPerTurn()});
 					state = State.Default;
 				}
 				GUILayout.EndHorizontal ();
