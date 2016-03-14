@@ -4,28 +4,40 @@ using System.Collections;
 namespace game {
 	class AudioManager : MonoBehaviour {
 
+        private static AudioClip[] clips = new AudioClip[] {
+            Resources.Load<AudioClip>("Audio/Music/spacemanSpiff"),
+            Resources.Load<AudioClip>("Audio/Music/Building Better Worlds"),
+            Resources.Load<AudioClip>("Audio/Music/Tin_Can"),
+        };
+
+        private static System.Random rand = new System.Random();
+
+        private static AudioClip randClip() {
+            return clips[rand.Next(clips.Length)];
+        }
+
 		GameManager gm;
-		AudioClip clip;
 		public int ticks = 0;
 		AudioSource source;
 
 		public void init(GameManager gm) {
 			this.gm = gm;
-			this.clip = Resources.Load<AudioClip>("Audio/Music/spacemanSpiff");
 
 			source = gameObject.AddComponent<AudioSource>();
-            source.clip = clip;
-			source.PlayOneShot(clip);
-            source.loop = true;
+            source.loop = false;
         }
 
 		// Use this for initialization
 		void Start () {
-            source.Play();
+            source.PlayOneShot(randClip());
 		}
 
 		// Update is called once per frame
 		void Update () {
+            if (!source.isPlaying) {
+                source.PlayOneShot(randClip());
+            }
+
             float zoom = gm.pc.cam.orthographicSize;
             if (zoom < 4.4) {
                 source.volume = 0;
