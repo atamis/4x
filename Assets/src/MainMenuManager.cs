@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 
 namespace game {
     class MainMenuManager : MonoBehaviour {
+
+        AudioSource au;
+
         private enum MenuState {
             Main, Credits
         }
@@ -16,6 +19,11 @@ namespace game {
         void Start() {
             state = MenuState.Main;
 
+            au = gameObject.AddComponent<AudioSource>();
+            au.clip = Resources.Load<AudioClip>("Audio/Music/spacemanSpiff");
+            au.Play();
+
+            au.volume = 0.7f;
         }
 
         void OnGUI() {
