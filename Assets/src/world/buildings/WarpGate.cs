@@ -78,15 +78,15 @@ namespace game.world.buildings {
 				} else {
 					model.sp.sprite = Resources.Load<Sprite> ("Textures/T_WarpGate");
                     base.NewTurn(old, cur);
-				}
-			}
+                    if (pn != null) {
+                        pn.power += power;
+                        power = 0;
+                    }
+                }
+            }
 		}
 
 		public override void PostTurn(Actor old, Actor cur) {
-			if (pn != null) {
-				pn.power += power;
-				power = 0;
-			}
 		}
 	}
 

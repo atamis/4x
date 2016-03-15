@@ -13,3 +13,5 @@ EditorBuildSettings:
     path: Assets/GameLoad.unity
   - enabled: 1
     path: Assets/Victory.unity
+  - enabled: 1
+    path: Assets/Defeat.unity
