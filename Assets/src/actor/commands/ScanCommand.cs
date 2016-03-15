@@ -33,11 +33,12 @@ namespace game.actor.commands {
 					found = true;
 				}
 			}
-
-
+				
             u.au.PlayOneShot(scanSound);
 
-            EventManager.TriggerScanEvent(new GameEventArgs{});
+			if (found) {
+				EventManager.TriggerScanEvent(new ScanEventArgs { found = true });
+			}
 		}
 	}
 }

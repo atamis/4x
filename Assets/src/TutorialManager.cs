@@ -36,10 +36,14 @@ namespace game {
 
 		public bool[] milestones = new bool[20];
 		AudioSource source;
+		Queue<int> queue;
 
 		public void init() { 
 			source = gameObject.AddComponent<AudioSource>();
 			source.loop = false;
+
+			this.queue = new Queue<int> ();
+			this.milestones [0] = true;
 		}
 
 		void Start() {
@@ -51,7 +55,26 @@ namespace game {
 				source.Stop ();
 			}
 			source.PlayOneShot(clips[code]);
-			Debug.Log ("Played Clip");
+			//Debug.Log ("Played Clip");
+		}
+
+		public void enqueueClip (int code) {
+			this.queue.Enqueue (code);
+		}
+
+		public void playQueue(params int[] clips) {
+			if (source.isPlaying) {
+				source.Stop ();
+			}
+			foreach (int i in clips) {
+				this.queue.Enqueue (i);
+			}
+		}
+
+		void Update() {
+			if (this.queue.Count > 0 && !source.isPlaying) {
+				source.PlayOneShot (clips[queue.Dequeue ()]);
+			}
 		}
     }
 }

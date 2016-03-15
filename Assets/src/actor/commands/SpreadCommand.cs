@@ -53,6 +53,8 @@ namespace game.actor.commands {
 				}
 			}
 
+			EventManager.TriggerSpreadEvent (new GameEventArgs{ turn = w.turn});
+			Debug.Log ("Triggered");
 		}
 
 		public override void Undo(WorldMap w) {

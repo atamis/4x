@@ -21,11 +21,12 @@ namespace game.ui {
 			EventManager.StartEvent += new EventManager.GameEvent(OnStartEvent);
 			EventManager.BuildMenuEvent += new EventManager.GameEvent(OnBuildMenuEvent);
 			EventManager.BuildEvent += new EventManager.WarpEvent(OnBuildEvent);
-			EventManager.ScanEvent += new EventManager.GameEvent(OnScanEvent);
+			EventManager.ScannedEvent += new EventManager.ScanEvent(OnScanEvent);
 			EventManager.MoveEventBefore += new EventManager.MoveEvent(OnMoveBeforeEvent);
 			EventManager.MoveEventAfter += new EventManager.MoveEvent(OnMoveAfterEvent);
 			EventManager.InvalidEvent += new EventManager.InvalidActionEvent(OnInvalidAction);
 			EventManager.TutEvent += new EventManager.TutorialEvent (OnTutorialEvent);
+			EventManager.SpreadEvent += new EventManager.GameEvent (OnSpreadEvent);
 
 			EventManager.TriggerStartEvent(new GameEventArgs{} );
 		}
@@ -60,8 +61,11 @@ namespace game.ui {
 			Debug.Log("Received Build Event");	
 		}
 			
-		void OnScanEvent(GameEventArgs eventArgs) {
+		void OnScanEvent(ScanEventArgs eventArgs) {
 			messages.AddFirst("Your unit has scanned the area.");
+			if (eventArgs.found == true) {
+				um.postEvent (5);
+			}
 			Debug.Log ("Recieved Scan Event!");
 		}
 
@@ -75,7 +79,16 @@ namespace game.ui {
 			Debug.Log ("Recieved Move Event");
 		}
 
-		void OnSpreadEvent() {
+		void OnSpreadEvent(GameEventArgs args) {
+			//Debug.Log (um.tm.milestones.ToString ());
+			//Debug.Log (args.turn);
+			if (!um.tm.milestones [15] && args.turn > 5) {
+				um.tm.enqueueClip (15);
+				um.tm.milestones [15] = true;
+			} else if (!um.tm.milestones [16] && args.turn >= 10) {
+				um.tm.enqueueClip (16);
+				um.tm.milestones [16] = true;
+			}
 			Debug.Log ("Recieved Cleanse Event");
 		}
 

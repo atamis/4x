@@ -135,8 +135,11 @@ namespace game.ui {
 						if (h != null) {
 							this.h_target = h;
 							if (this.tm.milestones [1] == false) {
-								EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 1 });
-								tm.milestones [1] = true;
+								postEvent (1);
+							} else if (!tm.milestones [6] && tm.milestones [5]) {
+								postEvent (6);
+							} else if (!tm.milestones [11] && tm.milestones[10]) {
+								postEvent (11);
 							}
 						}
 						state = State.Selected;
@@ -152,6 +155,7 @@ namespace game.ui {
 								EventManager.PostInvalidAction(new InvalidActionArgs { msg = e.Message });
 							}
 							state = State.Selected;
+							postEvent (3);
 							EventManager.TriggerMoveEventAfter(new MoveEventArgs { stamina = unit.actions });
 							Debug.Log("Added Move Command");
 						}
@@ -171,6 +175,7 @@ namespace game.ui {
 							try {
 								p.AddAllCommands(MoveCommand.pathfind(w, p, u, h));
 								this.h_target = h;
+								postEvent(3);
 							} catch (Exception e) {
 								EventManager.PostInvalidAction(new InvalidActionArgs { msg = e.Message });
 							}
@@ -230,6 +235,22 @@ namespace game.ui {
 			return h_target;
 		}
 
+		public void postEvent(int code) {
+			if (!tm.milestones [code] && tm.milestones[code-1]) {
+				EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = code });
+				tm.milestones [code] = true;
+			}
+		}
+
+		public void postEvents(params int[] codes) {
+			if (!tm.milestones [codes [0]] && tm.milestones [codes [0] - 1]) {
+				foreach (int i in codes) {
+					tm.milestones [i] = true;
+				}
+				tm.playQueue (codes);
+			}
+		}
+
 		private void buildBuilding(BuildingType type) {
 			try {
 				p.AddCommand(new BuildCommand(p, u_target, h_target, type));
@@ -257,10 +278,7 @@ namespace game.ui {
 					if (u_target != null) {
 						EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = u_target.actions});
 						state = State.Moving;
-						if (tm.milestones [2] == false) {
-							EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 2 });
-							tm.milestones [2] = true;
-						}
+						postEvent (2);
 					}
 				} else {
 					state = State.Default;
@@ -273,6 +291,7 @@ namespace game.ui {
 					if (u_target != null) {
 						EventManager.TriggerBuildMenuEvent(new GameEventArgs {});
 						state = State.Building;
+						postEvents (7, 9);
 					}
 				} else if (state == State.Building) {
 					state = State.Selected;
@@ -285,14 +304,7 @@ namespace game.ui {
 					if (u_target != null) {
 						try {
 							p.AddCommand (new ScanCommand (p, u_target, h_target));
-							if (tm.milestones [3] == false) {
-								EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 3 });
-								tm.milestones [3] = true;
-							}
-							if (tm.milestones [4] == false) {
-								EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 4 });
-								tm.milestones [4] = true;
-							}
+							postEvent(4);
 						} catch (Exception e) {
 							EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
 						}
@@ -333,11 +345,13 @@ namespace game.ui {
 				ButtonStyle.normal.background = UI_Cond; ButtonStyle.hover.background = UI_CondH; ButtonStyle.active.background = UI_CondC;
 				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
 					buildBuilding(BuildingType.Conduit);
+					postEvents (10);
 				}
 
 				ButtonStyle.normal.background = UI_Harv; ButtonStyle.hover.background = UI_HarvH; ButtonStyle.active.background = UI_HarvC;
 				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
 					buildBuilding(BuildingType.Harvester);
+					postEvents (8, 9);
 				}
 
 				ButtonStyle.normal.background = UI_Tow; ButtonStyle.hover.background = UI_TowH; ButtonStyle.active.background = UI_TowC;

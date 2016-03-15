@@ -2,14 +2,19 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace game {
+
+	public class GameEventArgs : System.EventArgs {
+		public int turn { get; set; }
+	}
+
 	public class InvalidActionArgs : System.EventArgs {
 		public string msg { get; set; }
 	}
 
-	public class GameEventArgs : System.EventArgs {
-
+	public class ScanEventArgs : System.EventArgs {
+		public bool found { get; set; }
 	}
-
+		
 	public class MoveEventArgs: System.EventArgs{
 		public int stamina { get; set;}
 	}
@@ -26,7 +31,7 @@ namespace game {
 	static class EventManager {
 		// game event handler
 		public delegate void GameEvent(GameEventArgs eventArgs);
-		public static event GameEvent StartEvent, ScanEvent, SpreadEvent, BuildMenuEvent;
+		public static event GameEvent StartEvent, SpreadEvent, BuildMenuEvent;
 
 		//Move event handler
 		public delegate void MoveEvent(MoveEventArgs eventArgs);
@@ -43,6 +48,9 @@ namespace game {
 		// Select Unit Handler
 		public delegate void TutorialEvent(TutorialEventArgs args);
 		public static event TutorialEvent TutEvent;
+
+		public delegate void ScanEvent(ScanEventArgs eventArgs);
+		public static event ScanEvent ScannedEvent;
 
 		public static void PostInvalidAction(InvalidActionArgs args = null) {
 			if (InvalidEvent != null) {
@@ -74,9 +82,9 @@ namespace game {
 			}
 		}
 
-		public static void TriggerScanEvent(GameEventArgs eventArgs = null) {
-			if (ScanEvent != null) { // if the number of subscribers isn't null
-				ScanEvent (eventArgs);
+		public static void TriggerScanEvent(ScanEventArgs eventArgs = null) {
+			if (ScannedEvent != null) { // if the number of subscribers isn't null
+				ScannedEvent (eventArgs);
 			}
 		}
 
