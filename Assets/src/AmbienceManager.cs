@@ -97,29 +97,30 @@ namespace game {
             foreach (KeyValuePair<HexLoc, Hex> kv in w.map) {
                 if (kv.Key.Distance(look) < 5) {
                     total++;
-                    switch (kv.Value.b) {
-                        case Biome.Highlands:
-                            mountainC++;
-                            break;
-                        case Biome.Plains:
-                            plainsC++;
-                            break;
-                        case Biome.Forest:
-                            forestC++;
-                            break;
-                        case Biome.Ocean:
-                            oceanC++;
-                            break;
-                        case Biome.Desert:
-                            desertC++;
-                            break;
-                        case Biome.Jungle:
-                            jungleC++;
-                            break;
-                        default:
-                            break;
+                    if (kv.Value.revealed) {
+                        switch (kv.Value.b) {
+                            case Biome.Highlands:
+                                mountainC++;
+                                break;
+                            case Biome.Plains:
+                                plainsC++;
+                                break;
+                            case Biome.Forest:
+                                forestC++;
+                                break;
+                            case Biome.Ocean:
+                                oceanC++;
+                                break;
+                            case Biome.Desert:
+                                desertC++;
+                                break;
+                            case Biome.Jungle:
+                                jungleC++;
+                                break;
+                            default:
+                                break;
+                        }
                     }
-
                 }
             }
 

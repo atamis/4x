@@ -11,6 +11,7 @@ namespace game.world {
 		WorldMap w;
 		public Vector2 spawn;
 		private int bsize;
+		public int SPAWN_BOUNDS = 10;
 
 		public WorldMaker(WorldMap w, Player player, int seed, bool bigbiome) {
 			this.w = w;
@@ -45,7 +46,7 @@ namespace game.world {
 		}
 
 		bool inSpawnZone(Vector2 pos) {
-			if ((pos.x >= spawn.x - 3 && pos.x <= spawn.x + 3) && (pos.x >= spawn.x - 3 && pos.x <= spawn.x + 3)) {
+			if ((pos.x >= spawn.x - SPAWN_BOUNDS && pos.x <= spawn.x + SPAWN_BOUNDS) && (pos.x >= spawn.x - SPAWN_BOUNDS && pos.x <= spawn.x + SPAWN_BOUNDS)) {
 				return true;
 			}
 			return false;
@@ -59,9 +60,9 @@ namespace game.world {
 
 			genNodes ();
 
-			genRivers (2);
+			genRivers (2, 20);
 
-			genCorruption (2);
+			genCorruption (2, 1);
 		}
 
 		void genBiomes() {
@@ -135,7 +136,7 @@ namespace game.world {
 			}
 		}
 
-		void genRivers(int count) {
+		void genRivers(int count, int length) {
 			int c = 0;
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
@@ -145,7 +146,7 @@ namespace game.world {
 
 				int dir = UnityEngine.Random.Range (0, 5);
 				HexLoc loc = new HexLoc (x, y);
-				for (int i = 0; i < 30; i++) {
+				for (int i = 0; i < length; i++) {
 					int step = (Random.Range (0, 2) + dir) % 6;
 					while (!w.map.ContainsKey(loc.Neighbor(step))) {
 						step += 1;
@@ -158,17 +159,21 @@ namespace game.world {
 			Debug.Log (System.String.Format ("Generated {0} rivers", count));
 		}
 
-		void genCorruption(int count) {
+		void genLake(int x, int y, int size) {
+
+		}
+
+		void genCorruption(int count, int aggression) {
 			int c = 0;
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
 				HexLoc loc = new HexLoc (x, y);
-				if ((w.map [loc].b == Biome.Ocean) && (!inSpawnZone(new Vector2(x, y)))) {
+				if (inSpawnZone(new Vector2(x, y))) {
 					continue;
 				}
 
 				Miasma m = new GameObject ("Miasma").AddComponent<Miasma> ();
-				m.init (w, w.map [loc]);
+				m.init (w, w.map [loc], aggression);
 				c++;
 			}
 
