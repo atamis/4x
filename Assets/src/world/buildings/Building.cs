@@ -45,7 +45,7 @@ namespace game.world.buildings {
                 case BuildingType.Harvester:
                     return 24;
                 case BuildingType.WarpGate:
-                    return 150;
+                    return 120;
                 case BuildingType.Purifier:
                     return 40;
                 default:

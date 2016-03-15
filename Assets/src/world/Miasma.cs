@@ -41,7 +41,7 @@ namespace game.world {
                 case 0:
                     return false;
                 case 1:
-                    return false;
+                    return true;
                 default:
                     return true;
             }

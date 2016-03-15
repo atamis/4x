@@ -11,7 +11,8 @@ namespace game.world {
 		WorldMap w;
 		public Vector2 spawn;
 		private int bsize;
-		public int SPAWN_BOUNDS = 10;
+		public int SPAWN_BOUNDS = 9;
+		public int OUTER_SPAWN_BOUNDS = 7;
 
 		public WorldMaker(WorldMap w, Player player, int seed, bool bigbiome) {
 			this.w = w;
@@ -52,13 +53,25 @@ namespace game.world {
 			return false;
 		}
 
+		bool OutSpawnZone(Vector2 pos) {
+			if ((pos.x >= spawn.x - OUTER_SPAWN_BOUNDS && pos.x <= spawn.x + OUTER_SPAWN_BOUNDS) && (pos.x >= spawn.x - OUTER_SPAWN_BOUNDS && pos.x <= spawn.x + OUTER_SPAWN_BOUNDS)) {
+				return true;
+			}
+			return false;
+		}
+
 		public void genWorld() {
 			// world borders
 			genBiomes ();
 			genPlayer ();
 			genNodes ();
 			genRivers (2, 20);
-			genCorruption (2, 1);
+			SPAWN_BOUNDS = 7;
+			OUTER_SPAWN_BOUNDS = 8;
+			genCorruption(2, 1);
+			SPAWN_BOUNDS = 12;
+			OUTER_SPAWN_BOUNDS = 13;
+			genCorruption (2, 4);
 		}
 
 		void genBiomes() {
@@ -170,7 +183,7 @@ namespace game.world {
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
 				HexLoc loc = new HexLoc (x, y);
-				if ((w.map[loc].b == Biome.Ocean)|| (inSpawnZone(new Vector2(x, y)))) {
+				if ((w.map[loc].b == Biome.Ocean)|| (inSpawnZone(new Vector2(x, y)) && !OutSpawnZone(new Vector2(x, y)))) {
 					continue;
 				}
 
