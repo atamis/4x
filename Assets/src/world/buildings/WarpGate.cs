@@ -71,8 +71,9 @@ namespace game.world.buildings {
 						progress = 0;
 						unitQueue--;
 
-						var u = new GameObject("UnitW").AddComponent<Unit>();
-						u.init(a, h.wm, h);
+						h.wm.makeUnit (a, h.loc);
+						//var u = new GameObject("UnitW").AddComponent<Unit>();
+						//u.init(a, h.wm, h);
 
 					}
 				} else {

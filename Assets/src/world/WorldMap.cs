@@ -1,33 +1,36 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
+using game.actor;
 using game.math;
 using game.world;
+using game.world.units;
 using game.world.buildings;
-using game.actor;
-using System;
 
 namespace game.world {
 	class WorldMap : MonoBehaviour {
-		GameObject hFolder; GameObject nFolder;
 		public Dictionary<HexLoc, Hex> map;
-		public List<Node> nodes;
+
+		GameObject hFolder; GameObject nFolder;
+		public List<Node> nodes; public List<Unit> units;
+
 		public Layout l;
 		public int size = 32;
 		public int turn;
 		public BeamManager bm;
 
-		public Color[] colors = new Color[] { new Color(1, 1, 1), new Color(0.5f, 0.5f, 0.5f) };
+		//public Color[] colors = new Color[] { new Color(1, 1, 1), new Color(0.5f, 0.5f, 0.5f) };
 
 		public void init(Layout l) {
 			this.l = l;
 			turn = 0;
 
 			hFolder = new GameObject ("Hexes"); nFolder = new GameObject ("Nodes");
+			nodes = new List<Node> (); units = new List<Unit> ();
 
 			this.bm = new BeamManager(this);
 
 			map = new Dictionary<HexLoc, Hex> ();
-			nodes = new List<Node> ();
 		}
 
 		public void makeHex(HexLoc l) {
@@ -39,19 +42,35 @@ namespace game.world {
 			map.Add(l, h);
 		}
 
-		public void makeNode(int x, int y) {
+		public void makeNode(HexLoc loc) {
 			var obj = new GameObject ("Node");
 			obj.transform.parent = nFolder.transform;
-
-			HexLoc loc = new HexLoc (x, y);
 
 			Node n = obj.AddComponent<Node>();
 			n.init(map [loc]);
 			map [loc].node = n;
 
 			nodes.Add (n);
+			//UnityEngine.Debug.Log ("Generated node at " + pos);
+		}
 
-			//UnityEngine.Debug.Log ("Placed node at " + pos);
+		public void makeUnit(Actor p, HexLoc loc) {
+			Unit u = new GameObject ("Unit").AddComponent<Unit> ();
+			u.init (p, this, map [loc]);
+
+			units.Add (u);
+			UnityEngine.Debug.Log ("Added Unit at " + loc.ToString ());
+		}
+
+		public void makeMiasma(HexLoc loc, int aggression) {
+			if (map [loc] != null) {
+				return;
+			}
+
+			Miasma m = new GameObject ("Miasma").AddComponent<Miasma> ();
+			m.init (this, map [loc], aggression);
+
+			UnityEngine.Debug.Log ("Added Miasma at " + loc.ToString ());
 		}
 
 		public void PreTurn(Actor old, Actor cur) {

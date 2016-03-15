@@ -2,11 +2,12 @@
 using System.Collections;
 using System;
 using game.ui;
+using game.effects;
 
 namespace game.world {
     class Miasma : MonoBehaviour {
         MiasmaModel model;
-        WorldMap w;
+        //WorldMap w;
         public int level { get; set; }
 		public int aggression { get; set; }
 
@@ -25,9 +26,11 @@ namespace game.world {
         }
 
 		public void init(WorldMap w, Hex h, int aggression) {
-            this.w = w;
+            //this.w = w;
             this.h = h;
 			this.aggression = aggression;
+
+			this.h.miasma = this; // set parent's miasma
 
             var obj = new GameObject("Misama Model");
             obj.transform.parent = transform;
@@ -67,6 +70,7 @@ namespace game.world {
             public SpriteRenderer sr;
             Miasma c;
             Sprite[] texs;
+			CustomMaterial[] mats;
 
             public void init(Miasma c) {
                 this.c = c;
@@ -87,9 +91,11 @@ namespace game.world {
             }
 
             void Update() {
-                if (c.h.revealed) {
-                    sr.enabled = true;
-                }
+				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
+					sr.enabled = false;
+				} else if (c.h.revealed) {
+					sr.enabled = true;
+				}
 
                 sr.sprite = texs[c.level];
             }

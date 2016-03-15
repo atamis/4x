@@ -109,8 +109,9 @@ namespace game.world {
 			while (c < 2) {
 				HexLoc loc = new HexLoc((int)spawn.x + Random.Range(-1, 1), (int)spawn.y+Random.Range(-1, 1));
 				if (w.map[loc].units.Count == 0 && w.map[loc].b.Passable()) {
-					Unit u = new GameObject("Unit" + c).AddComponent<Unit>();
-					u.init(player, w, w.map[loc]);
+					w.makeUnit (player, loc);
+					//Unit u = new GameObject("Unit" + c).AddComponent<Unit>();
+					//u.init(player, w, w.map[loc]);
 					c++;
 				}
 			}
@@ -123,10 +124,9 @@ namespace game.world {
 			for (int x = 0; x < quadrants; x++) {
 				for (int y = 0; y < quadrants; y++) {
 					int i = Random.Range(4*x, 4*(x+1)); int j = Random.Range(4*y, 4*(y+1));
-					w.makeNode (i, j);
+					w.makeNode (new HexLoc(x, y));
 				}
 			}
-
 			foreach (Node n in w.nodes) {
 				setEv (n.h, 1.0f);
 			}
