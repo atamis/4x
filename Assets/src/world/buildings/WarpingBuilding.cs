@@ -83,7 +83,7 @@ namespace game.world.buildings {
 				if (pn != null) {
 					if (pn.power > 0 && pn.warpgates > 0) {
 						pn.warpgates--;
-                        var drain = Math.Min(type.BuildPerTurn(), pn.power);
+                        var drain = Math.Min(required, pn.power);
 						pn.power -= drain;
 						power += drain;
 					}
