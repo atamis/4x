@@ -160,7 +160,11 @@ namespace game.world {
 		}
 
 		void genLake(int x, int y, int size) {
-
+			HexLoc loc = new HexLoc (x, y);
+			w.map [loc].b = Biome.Ocean;
+			foreach (Hex h in w.map[loc].Neighbors()) {
+				h.b = Biome.Ocean;
+			}
 		}
 
 		void genCorruption(int count, int aggression) {
@@ -168,7 +172,7 @@ namespace game.world {
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
 				HexLoc loc = new HexLoc (x, y);
-				if (inSpawnZone(new Vector2(x, y))) {
+				if ((w.map[loc].b == Biome.Ocean)|| (inSpawnZone(new Vector2(x, y)))) {
 					continue;
 				}
 

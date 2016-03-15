@@ -26,7 +26,6 @@ namespace game.ui {
 		}
 
 		void Start() {
-
 		}
 
 		public void AddMessage(string msg) {
