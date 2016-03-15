@@ -53,12 +53,12 @@ namespace game.ui {
 
 		void OnBuildMenuEvent(GameEventArgs eventArgs){
 			AddMessage("What structure do you want to warp in?");
-			Debug.Log("Received Build Menu Event");
+			//Debug.Log("Received Build Menu Event");
 		}
 
 		void OnBuildEvent (BuildEventArgs eventArgs){
 			AddMessage("The " + eventArgs.name + " will be warped in " + eventArgs.turns + " turn(s).");
-			Debug.Log("Received Build Event");	
+			//Debug.Log("Received Build Event");	
 		}
 			
 		void OnScanEvent(ScanEventArgs eventArgs) {
@@ -66,17 +66,17 @@ namespace game.ui {
 			if (eventArgs.found == true) {
 				um.postEvent (5);
 			}
-			Debug.Log ("Recieved Scan Event!");
+			//Debug.Log ("Recieved Scan Event!");
 		}
 
 		void OnMoveBeforeEvent(MoveEventArgs eventArgs) {
 			AddMessage("Where would you like to move your unit?");
-			Debug.Log ("Recieved Move Event");
+			//Debug.Log ("Recieved Move Event");
 		}
 
 		void OnMoveAfterEvent(MoveEventArgs eventArgs) {
 			AddMessage("This unit now has been moved");
-			Debug.Log ("Recieved Move Event");
+			//Debug.Log ("Recieved Move Event");
 		}
 
 		void OnSpreadEvent(GameEventArgs args) {
@@ -89,7 +89,7 @@ namespace game.ui {
 				um.tm.enqueueClip (16);
 				um.tm.milestones [16] = true;
 			}
-			Debug.Log ("Recieved Cleanse Event");
+			//Debug.Log ("Recieved Cleanse Event");
 		}
 
 		void OnGUI() {

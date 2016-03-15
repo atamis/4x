@@ -36,9 +36,6 @@ namespace game {
 			w = new GameObject ("World Map").AddComponent<WorldMap> ();
 			w.init (l);
 
-			//tm = gameObject.AddComponent<TutorialManager>();
-			//tm.init();
-
 			int seed = Random.Range (1000000000, int.MaxValue);
 			WorldMaker maker = new WorldMaker (w, player, seed, false);
 			maker.genWorld();

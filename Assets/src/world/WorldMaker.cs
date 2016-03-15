@@ -55,13 +55,9 @@ namespace game.world {
 		public void genWorld() {
 			// world borders
 			genBiomes ();
-
 			genPlayer ();
-
 			genNodes ();
-
 			genRivers (2, 20);
-
 			genCorruption (2, 1);
 		}
 
@@ -88,7 +84,7 @@ namespace game.world {
 					w.map [loc].b = b;
 				}
 			}
-			Debug.Log("Generated biomes");
+			//Debug.Log("Generated biomes");
 		}
 
 		void genPlayer() {
@@ -105,7 +101,7 @@ namespace game.world {
 					c++;
 				}
 			}
-			Debug.Log (System.String.Format ("Generated Player at {0}", spawn));
+			//Debug.Log (System.String.Format ("Generated Player at {0}", spawn));
 		}
 
 		void genNodes() {
@@ -122,7 +118,7 @@ namespace game.world {
 				setEv (n.h, 1.0f);
 			}
 
-			Debug.Log ("Generated Nodes");
+			//Debug.Log ("Generated Nodes");
 		}
 
 		private void setEv(Hex h, float value) {
@@ -158,7 +154,7 @@ namespace game.world {
 				genLake (x, y, 2);
 				c++;
 			}
-			Debug.Log (System.String.Format ("Generated {0} rivers", count));
+			//Debug.Log (System.String.Format ("Generated {0} rivers", count));
 		}
 
 		void genLake(int x, int y, int size) {
@@ -183,7 +179,7 @@ namespace game.world {
 				c++;
 			}
 
-			Debug.Log (System.String.Format ("Generated {0} corruption seeds", count));
+			//Debug.Log (System.String.Format ("Generated {0} corruption seeds", count));
 		}
 	}
 }

@@ -311,7 +311,7 @@ namespace game.ui {
 
 					}
 				}
-				Debug.Log ("Added Scan Command");
+				//Debug.Log ("Added Scan Command");
 			}
 
 			ButtonStyle.normal.background = UI_Purify; ButtonStyle.hover.background = UI_PurifyH; ButtonStyle.active.background = UI_PurifyC;
@@ -326,15 +326,15 @@ namespace game.ui {
 
 					}
 				}
-				Debug.Log ("Added Cleanse Command");
+				//Debug.Log ("Added Cleanse Command");
 			}
 
 			ButtonStyle.normal.background = UI_End; ButtonStyle.hover.background = UI_EndH; ButtonStyle.active.background = UI_EndC;
 			if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * .12f), height)) {
 				p.AddCommand(new EndTurnCommand(p));
-				Debug.Log ("Added End Turn Command");
-
+				//Debug.Log ("Added End Turn Command");
 			}
+
 			GUILayout.EndHorizontal ();
 			GUILayout.EndArea ();
 

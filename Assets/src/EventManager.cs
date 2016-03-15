@@ -49,6 +49,7 @@ namespace game {
 		public delegate void TutorialEvent(TutorialEventArgs args);
 		public static event TutorialEvent TutEvent;
 
+		// Scan Event Handler
 		public delegate void ScanEvent(ScanEventArgs eventArgs);
 		public static event ScanEvent ScannedEvent;
 
