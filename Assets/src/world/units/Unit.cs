@@ -13,7 +13,7 @@ namespace game.world.units {
 		Hex _h;
 
 		public int actions { get; set; }
-		public int maxActions = 50;
+		public int maxActions = 4;
 
 		public Hex h {
 			get {
