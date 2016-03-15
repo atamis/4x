@@ -23,7 +23,7 @@ namespace game.actor.commands {
 					if (tile.building != null) {
 						tile.building.disabled = true;
 					}
-					if ((tile.units.Count > 0) && (w.time == GameTime.Night)) {
+					if (tile.units.Count > 0) {
                         while (tile.units.Count > 0) {
                             tile.units.First().Die();
                         }
@@ -33,7 +33,7 @@ namespace game.actor.commands {
                     if (tile.building != null) {
                         tile.building.disabled = true;
                     }
-                    if ((tile.units.Count > 0) && (w.time == GameTime.Night)) {
+                    if (tile.units.Count > 0) {
                         while (tile.units.Count > 0) {
                             tile.units.First().Die();
                         }
