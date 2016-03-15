@@ -32,6 +32,7 @@ namespace game {
 		// game event handler
 		public delegate void GameEvent(GameEventArgs eventArgs);
 		public static event GameEvent StartEvent, SpreadEvent, BuildMenuEvent;
+		public static event GameEvent GameOver, GameWon;
 
 		//Move event handler
 		public delegate void MoveEvent(MoveEventArgs eventArgs);
@@ -52,6 +53,8 @@ namespace game {
 		// Scan Event Handler
 		public delegate void ScanEvent(ScanEventArgs eventArgs);
 		public static event ScanEvent ScannedEvent;
+
+
 
 		public static void PostInvalidAction(InvalidActionArgs args = null) {
 			if (InvalidEvent != null) {
@@ -101,6 +104,17 @@ namespace game {
 			}
 		}
 
+		public static void TriggerGameOver(GameEventArgs args = null) {
+			if (GameOver != null) {
+				GameOver (args);
+			}
+		}
+
+		public static void TriggerGameWon(GameEventArgs args = null) {
+			if (GameWon != null) {
+				GameWon (args);
+			}
+		}
 		public static void TriggerSpreadEvent(GameEventArgs eventArgs = null) {
 			if (SpreadEvent != null) {
 				SpreadEvent (eventArgs);

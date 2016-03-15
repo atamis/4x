@@ -85,7 +85,6 @@ namespace game.world {
 			}
 
 			bm.Create();
-
 			foreach (KeyValuePair<HexLoc, Hex> kv in map) {
 				kv.Value.NewTurn(old, cur);
 			}
@@ -100,6 +99,8 @@ namespace game.world {
                     return false;
                 }
             }
+
+			EventManager.TriggerGameOver(new GameEventArgs {});
             return true;
         }
 
@@ -109,6 +110,8 @@ namespace game.world {
                     return false;
                 }
             }
+
+			EventManager.TriggerGameWon(new GameEventArgs {});
             return true;
         }
 
