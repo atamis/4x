@@ -69,8 +69,9 @@ namespace game.ui {
 		Hex h_target;
 		Unit u_target {
             get {
-                if (h_target != null) {
-                    return h_target.unit;
+                if (h_target != null && 
+                    h_target.units.Count > 0) {
+                    return h_target.units[0];
                 } else {
                     return null;
                 }
@@ -156,7 +157,7 @@ namespace game.ui {
                     if (state == State.Selected) {
                         Hex h = GetHexAtMouse();
 
-                        Unit u = getSelected().unit;
+                        Unit u = u_target;
 
                         if (u != null) {
                             try {
@@ -172,13 +173,13 @@ namespace game.ui {
             }
 
             if (state == State.Selected &&
-                h_target.unit != null &&
+                u_target != null &&
                 Input.GetKeyUp(KeyCode.B)) {
                 state = State.Building;
             }
 
             if (state == State.Selected &&
-                h_target.unit != null &&
+                u_target != null &&
                 Input.GetKeyUp(KeyCode.M)) {
                 state = State.Moving;
             }
@@ -246,8 +247,8 @@ namespace game.ui {
 
 			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
-					if (h_target.unit != null) {
-						EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = h_target.unit.actions});
+					if (u_target != null) {
+						EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = u_target.actions});
 						state = State.Moving;
 					}
 				} else {
@@ -258,7 +259,7 @@ namespace game.ui {
 			ButtonStyle.normal.background = UI_Build; ButtonStyle.hover.background = UI_BuildH; ButtonStyle.active.background = UI_BuildC;
 			if (GUILayout.Button("", ButtonStyle, width, height)){
 				if (state == State.Selected) {
-					if (h_target.unit != null) {
+					if (u_target != null) {
 						EventManager.TriggerBuildMenuEvent(new GameEventArgs {});
 						state = State.Building;
 					}
@@ -270,9 +271,9 @@ namespace game.ui {
 			ButtonStyle.normal.background = UI_Scan; ButtonStyle.hover.background = UI_ScanH; ButtonStyle.active.background = UI_ScanC;
 			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
-					if (h_target.unit != null) {
+					if (u_target != null) {
 						try {
-							p.AddCommand (new ScanCommand (p, h_target.unit, h_target));
+							p.AddCommand (new ScanCommand (p, u_target, h_target));
 						} catch (Exception e) {
 							EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
 						}
@@ -284,9 +285,9 @@ namespace game.ui {
 			ButtonStyle.normal.background = UI_Purify; ButtonStyle.hover.background = UI_PurifyH; ButtonStyle.active.background = UI_PurifyC;
 			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
-					if (h_target.unit != null) {
+					if (u_target != null) {
 						try {
-							p.AddCommand (new CleanseCommand (p, h_target.unit));
+							p.AddCommand (new CleanseCommand (p, u_target));
 						} catch (Exception e) {
 							EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
 						}

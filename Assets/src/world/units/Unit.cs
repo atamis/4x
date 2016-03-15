@@ -21,12 +21,12 @@ namespace game.world.units {
 			}
 			set {
 				if (_h != null) {
-					_h.unit = null;
+					_h.units.Remove(this);
 				}
 				this._h = value;
 				if (_h != null) {
 					transform.parent = _h.gameObject.transform;
-					_h.unit = this;
+					_h.units.Add(this);
 				}
 			}
 		}

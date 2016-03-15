@@ -12,6 +12,7 @@ namespace game.world.buildings {
 		public int unitQueue = 0;
 		// In turns.
 		public int progress = 0;
+        
 
         public override BuildingType? getBuildingType() {
             return BuildingType.WarpGate;
@@ -70,7 +71,7 @@ namespace game.world.buildings {
 						progress = 0;
 						unitQueue--;
 
-						var u = new GameObject("Warped Unit").AddComponent<Unit>();
+						var u = new GameObject("UnitW").AddComponent<Unit>();
 						u.init(a, h.wm, h);
 
 					}

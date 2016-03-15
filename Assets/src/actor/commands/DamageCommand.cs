@@ -23,18 +23,22 @@ namespace game.actor.commands {
 					if (tile.building != null) {
 						tile.building.disabled = true;
 					}
-					if ((tile.unit != null) && (w.time == GameTime.Night)) {
-						tile.unit.Die ();
+					if ((tile.units.Count > 0) && (w.time == GameTime.Night)) {
+                        while (tile.units.Count > 0) {
+                            tile.units.First().Die();
+                        }
 					}
 					break;
 				default:
-					if (tile.building != null) {
-						tile.building.Die ();
-					}
-					if ((tile.unit != null) && (w.time == GameTime.Night)) {
-						tile.unit.Die ();
-					}
-					break;
+                    if (tile.building != null) {
+                        tile.building.disabled = true;
+                    }
+                    if ((tile.units.Count > 0) && (w.time == GameTime.Night)) {
+                        while (tile.units.Count > 0) {
+                            tile.units.First().Die();
+                        }
+                    }
+                    break;
 				}
 			}
 		}

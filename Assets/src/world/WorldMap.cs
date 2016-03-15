@@ -108,9 +108,9 @@ namespace game.world {
         internal bool Defeat(Actor a) {
             foreach (KeyValuePair<HexLoc, Hex> kv in map) {
                 var building = kv.Value.building;
-                var unit = kv.Value.unit;
+                var units = kv.Value.units;
                 if ((building != null && building.a == a)
-                    || (unit != null && unit.actor == a)) {
+                    || units.Count > 0) {
                     return false;
                 }
             }
