@@ -23,13 +23,17 @@ namespace game.actor.commands {
 
 		public override void Apply(WorldMap w) {
 			UnityEngine.Debug.Log ("Scanned at " + this.target.ToString ());
-
             u.actions--;
 
+			bool found = false;
 			target.scan ();
 			foreach (Hex h in target.Neighbors()) {
 				h.scan ();
+				if (h.node != null) {
+					found = true;
+				}
 			}
+
 
             u.au.PlayOneShot(scanSound);
 

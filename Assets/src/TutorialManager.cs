@@ -33,13 +33,18 @@ namespace game {
 			Resources.Load<AudioClip>("Audio/Dialogue/Dialogue W"),
 			Resources.Load<AudioClip>("Audio/Dialogue/Dialogue X"),
 		};
+
+		public bool[] milestones = new bool[20];
 		AudioSource source;
 
-        public void init (){
+		public void init() { 
 			source = gameObject.AddComponent<AudioSource>();
 			source.loop = false;
+		}
 
-        }
+		void Start() {
+			
+		}
 
 		public void play(int code) {
 			if (source.isPlaying == true) {

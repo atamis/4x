@@ -5,20 +5,18 @@ using System.Text;
 using UnityEngine;
 
 namespace game.ui {
-	public class HelperUI : MonoBehaviour {
+	class HelperUI : MonoBehaviour {
 		private static Texture2D tex;
 		private LinkedList<string> messages;
-		TutorialManager tm;
+		UIManager um;
 
-		public void init() {
+		public void init(UIManager um) {
+			this.um = um;
 			tex = Resources.Load<Texture2D>("Textures/Helper/T_HelperL1");
 			messages = new LinkedList<string>();
 
 			AddMessage("Team Yog-Sothoth welcomes you.");
 			AddMessage("Enjoy the game.");
-
-			tm = gameObject.AddComponent<TutorialManager> ();
-			tm.init ();
 
 			EventManager.StartEvent += new EventManager.GameEvent(OnStartEvent);
 			EventManager.BuildMenuEvent += new EventManager.GameEvent(OnBuildMenuEvent);
@@ -40,12 +38,12 @@ namespace game.ui {
 		}
 
 		void OnStartEvent(GameEventArgs eventArgs) {
-			tm.play (0);
+			um.tm.play (0);
 			EventManager.StartEvent -= OnStartEvent;
 		}
 
 		void OnTutorialEvent(TutorialEventArgs args) {
-			tm.play (args.tut_id);
+			um.tm.play (args.tut_id);
 		}
 
 		void OnInvalidAction(InvalidActionArgs evt) {

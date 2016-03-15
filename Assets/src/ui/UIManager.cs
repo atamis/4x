@@ -80,9 +80,6 @@ namespace game.ui {
 		State state;
 		//bool building;
 
-		GameManager gm;
-		bool[] milestones = new bool[20];
-
 		public enum State {
 			Default,
 			Selected,
@@ -90,8 +87,9 @@ namespace game.ui {
 			Building,
 		};
 
+		public TutorialManager tm;
+
 		public void init(GameManager gm, Player player, WorldMap w) {
-			this.gm = gm;
 			foreach (Texture2D tex in texes) {
 				tex.filterMode = FilterMode.Point;
 			}
@@ -114,8 +112,11 @@ namespace game.ui {
 		}
 
 		void Start () {
+			tm = new GameObject("Tutorial Manager").AddComponent<TutorialManager>();
+			tm.init ();
+
 			helper = gameObject.AddComponent<HelperUI>();
-			helper.init();
+			helper.init(this);
 		}
 
 		private bool inToolbarBoundary(Vector3 v) {
@@ -133,9 +134,9 @@ namespace game.ui {
 						Hex h = GetHexAtMouse();
 						if (h != null) {
 							this.h_target = h;
-							if (this.milestones [1] == false) {
+							if (this.tm.milestones [1] == false) {
 								EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 1 });
-								milestones [1] = true;
+								tm.milestones [1] = true;
 							}
 						}
 						state = State.Selected;
@@ -256,9 +257,9 @@ namespace game.ui {
 					if (u_target != null) {
 						EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = u_target.actions});
 						state = State.Moving;
-						if (milestones [2] == false) {
+						if (tm.milestones [2] == false) {
 							EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 2 });
-							milestones [2] = true;
+							tm.milestones [2] = true;
 						}
 					}
 				} else {
@@ -284,13 +285,13 @@ namespace game.ui {
 					if (u_target != null) {
 						try {
 							p.AddCommand (new ScanCommand (p, u_target, h_target));
-							if (milestones [3] == false) {
+							if (tm.milestones [3] == false) {
 								EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 3 });
-								milestones [3] = true;
+								tm.milestones [3] = true;
 							}
-							if (milestones [4] == false) {
+							if (tm.milestones [4] == false) {
 								EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 4 });
-								milestones [4] = true;
+								tm.milestones [4] = true;
 							}
 						} catch (Exception e) {
 							EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });

@@ -154,6 +154,8 @@ namespace game.world {
 					w.map[loc].b = Biome.Ocean;
 					loc = loc.Neighbor (step);
 				}
+
+				genLake (x, y, 2);
 				c++;
 			}
 			Debug.Log (System.String.Format ("Generated {0} rivers", count));
