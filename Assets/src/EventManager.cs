@@ -19,6 +19,10 @@ namespace game {
 		public int turns { get; set;}
 	}
 
+	public class TutorialEventArgs : System.EventArgs {
+		public int tut_id { get; set; }
+	}
+
 	static class EventManager {
 		// game event handler
 		public delegate void GameEvent(GameEventArgs eventArgs);
@@ -36,6 +40,10 @@ namespace game {
 		public delegate void WarpEvent(BuildEventArgs eventArgs);
 		public static event WarpEvent BuildEvent;
 
+		// Select Unit Handler
+		public delegate void TutorialEvent(TutorialEventArgs args);
+		public static event TutorialEvent TutEvent;
+
 		public static void PostInvalidAction(InvalidActionArgs args = null) {
 			if (InvalidEvent != null) {
 				InvalidEvent(args);
@@ -45,6 +53,12 @@ namespace game {
 		public static void TriggerStartEvent(GameEventArgs eventArgs = null) {
 			if (StartEvent != null) {
 				StartEvent(eventArgs);
+			}
+		}
+
+		public static void TriggerTutorialEvent(TutorialEventArgs args = null) {
+			if (TutEvent != null) {
+				TutEvent(args);
 			}
 		}
 

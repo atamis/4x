@@ -55,6 +55,7 @@ namespace game.ui {
 
 		private GUIStyle ButtonStyle;
 
+		GameManager gm;
 		WorldMap w;
 		Player p;
 
@@ -70,6 +71,8 @@ namespace game.ui {
 		State state;
 		//bool building;
 
+		private bool[] milestones = new bool[20];
+
 		public enum State {
 			Default,
 			Selected,
@@ -77,7 +80,8 @@ namespace game.ui {
 			Building,
 		};
 
-        public void init(Player player, WorldMap w) {
+        public void init(GameManager gm, Player player, WorldMap w) {
+			this.gm = gm;
             foreach (Texture2D tex in texes) {
                 tex.filterMode = FilterMode.Point;
             }
@@ -116,6 +120,10 @@ namespace game.ui {
                     Hex h = GetHexAtMouse();
                     if (h != null) {
                         this.h_target = h;
+						if (this.milestones [1] == false) {
+							EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 1 });
+							milestones [1] = true;
+						}
                     }
                     state = State.Selected;
 
@@ -224,6 +232,7 @@ namespace game.ui {
 						EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = h_target.unit.actions});
 						u_target = h_target.unit;
 						state = State.Moving;
+						EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 2 });
 					}
 				} else {
 					state = State.Default;
