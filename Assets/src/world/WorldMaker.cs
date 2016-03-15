@@ -91,8 +91,9 @@ namespace game.world {
 		}
 
 		void genPlayer() {
-			Building b1 =  new GameObject("WarpGate1").AddComponent<WarpGate>();
+			WarpGate b1 =  new GameObject("WarpGate1").AddComponent<WarpGate>();
 			b1.init(player, w.map[new HexLoc((int)spawn.x, (int)spawn.y)]);
+            b1.power = 50;
 
 			int c = 0;
 			while (c < 2) {
