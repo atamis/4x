@@ -138,7 +138,6 @@ namespace game.ui {
                             try {
                                 p.AddAllCommands(MoveCommand.pathfind(w, p, unit, h));
                                 this.h_target = h;
-                                EventManager.TriggerMoveEventAfter(new MoveEventArgs { stamina = unit.actions });
                             } catch (Exception e) {
                                 EventManager.PostInvalidAction(new InvalidActionArgs { msg = e.Message });
                             }
