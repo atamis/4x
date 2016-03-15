@@ -14,10 +14,15 @@ namespace game {
 		public int stamina { get; set;}
 	}
 
+	public class BuildEventArgs: System.EventArgs{
+		public string name { get; set;}
+		public int turns { get; set;}
+	}
+
 	static class EventManager {
 		// game event handler
 		public delegate void GameEvent(GameEventArgs eventArgs);
-		public static event GameEvent StartEvent, ScanEvent, SpreadEvent;
+		public static event GameEvent StartEvent, ScanEvent, SpreadEvent, BuildMenuEvent;
 
 		//Move event handler
 		public delegate void MoveEvent(MoveEventArgs eventArgs);
@@ -26,6 +31,10 @@ namespace game {
 		// Invalid event handler
 		public delegate void InvalidActionEvent(InvalidActionArgs eventArgs);
 		public static event InvalidActionEvent InvalidEvent;
+
+		//Build event handler
+		public delegate void WarpEvent(BuildEventArgs eventArgs);
+		public static event WarpEvent BuildEvent;
 
 		public static void PostInvalidAction(InvalidActionArgs args = null) {
 			if (InvalidEvent != null) {
@@ -36,6 +45,18 @@ namespace game {
 		public static void TriggerStartEvent(GameEventArgs eventArgs = null) {
 			if (StartEvent != null) {
 				StartEvent(eventArgs);
+			}
+		}
+
+		public static void TriggerBuildEvent(BuildEventArgs eventArgs = null) {
+			if (BuildEvent != null) {
+				BuildEvent(eventArgs);
+			}
+		}
+
+		public static void TriggerBuildMenuEvent(GameEventArgs eventArgs = null) {
+			if (BuildMenuEvent != null) {
+				BuildMenuEvent(eventArgs);
 			}
 		}
 

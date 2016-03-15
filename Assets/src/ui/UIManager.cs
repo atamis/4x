@@ -129,8 +129,8 @@ namespace game.ui {
                         } catch (Exception e) {
                             EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
                         }
-                        state = State.Default;
-
+                        state = State.Selected;
+                        EventManager.TriggerMoveEventAfter(new MoveEventArgs {stamina = h_target.unit.actions});
                         Debug.Log("Added Move Command");
                     }
                 } else if (state == State.Building) {
@@ -150,11 +150,35 @@ namespace game.ui {
                                 p.AddAllCommands(MoveCommand.pathfind(w, p, u, h));
                                 this.h_target = h;
                             } catch (Exception e) {
-                                EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
+                                EventManager.PostInvalidAction(new InvalidActionArgs { msg = e.Message });
                             }
                         }
 
                     }
+                }
+            }
+
+            if (state == State.Selected &&
+                h_target.unit != null &&
+                Input.GetKeyUp(KeyCode.B)) {
+                state = State.Building;
+            }
+
+            if (state == State.Building) {
+                if (Input.GetKeyUp(KeyCode.Alpha1)) {
+                    buildBuilding(BuildingType.Conduit);
+                }
+
+                if (Input.GetKeyUp(KeyCode.Alpha2)) {
+                    buildBuilding(BuildingType.Harvester);
+                }
+
+                if (Input.GetKeyUp(KeyCode.Alpha3)) {
+                    buildBuilding(BuildingType.Purifier);
+                }
+
+                if (Input.GetKeyUp(KeyCode.Alpha4)) {
+                    buildBuilding(BuildingType.WarpGate);
                 }
             }
         }
@@ -172,6 +196,16 @@ namespace game.ui {
 		private Hex getSelected() {
 			return h_target;
 		}
+
+        private void buildBuilding(BuildingType type) {
+            try {
+                p.AddCommand(new BuildCommand(p, u_target, h_target, type));
+            } catch (Exception e) {
+                print(e);
+            }
+            EventManager.TriggerBuildEvent(new BuildEventArgs { name = type.ToString(), turns = type.BuildTotal() / type.BuildPerTurn() });
+            state = State.Selected;
+        }
 
 		void OnGUI() {
 			GUILayout.BeginArea(new Rect (Screen.width*.3f, Screen.height*.8f, Screen.width/2, Screen.height*.9f));
@@ -194,19 +228,18 @@ namespace game.ui {
 				} else {
 					state = State.Default;
 				}
-
 			}
 
 			ButtonStyle.normal.background = UI_Build; ButtonStyle.hover.background = UI_BuildH; ButtonStyle.active.background = UI_BuildC;
 			if (GUILayout.Button("", ButtonStyle, width, height)){
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
-						EventManager.TriggerScanEvent(new GameEventArgs {});
+						EventManager.TriggerBuildMenuEvent(new GameEventArgs {});
 						u_target = h_target.unit;
 						state = State.Building;
 					}
 				} else if (state == State.Building) {
-					state = State.Default;
+					state = State.Selected;
 				}
 			}
 
@@ -254,43 +287,23 @@ namespace game.ui {
 
 				ButtonStyle.normal.background = UI_Cond; ButtonStyle.hover.background = UI_CondH; ButtonStyle.active.background = UI_CondC;
 				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
-					try {
-						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Conduit));
-					} catch (Exception e) {
-						print (e);
-					}
-					state = State.Default;
-				}
+                    buildBuilding(BuildingType.Conduit);
+                }
 
 				ButtonStyle.normal.background = UI_Harv; ButtonStyle.hover.background = UI_HarvH; ButtonStyle.active.background = UI_HarvC;
 				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
-					try {
-						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Harvester));
-					} catch (Exception e) {
-						print (e);
-					}
-					state = State.Default;
-				}
+                    buildBuilding(BuildingType.Harvester);
+                }
 
 				ButtonStyle.normal.background = UI_Tow; ButtonStyle.hover.background = UI_TowH; ButtonStyle.active.background = UI_TowC;
 				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
-					try {
-						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.Purifier));
-					} catch (Exception e) {
-						print (e);
-					}
-					state = State.Default;
-				}
+                    buildBuilding(BuildingType.Purifier);
+                }
 
 				ButtonStyle.normal.background = UI_Gate; ButtonStyle.hover.background = UI_GateH; ButtonStyle.active.background = UI_GateC;
 				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
-					try {
-						p.AddCommand(new BuildCommand(p, u_target, h_target, BuildingType.WarpGate));
-					} catch (Exception e) {
-						print (e);
-					}
-					state = State.Default;
-				}
+                    buildBuilding(BuildingType.WarpGate);
+                }
 				GUILayout.EndHorizontal ();
 				GUILayout.EndArea ();
 			}
