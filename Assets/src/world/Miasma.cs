@@ -8,7 +8,6 @@ namespace game.world {
         MiasmaModel model;
         WorldMap w;
         public int level { get; set; }
-        public bool saturated;
 		public int aggression { get; set; }
 
         Hex _h;
@@ -29,7 +28,6 @@ namespace game.world {
             this.w = w;
             this.h = h;
 			this.aggression = aggression;
-			saturated = false;
 
             var obj = new GameObject("Misama Model");
             obj.transform.parent = transform;
@@ -39,10 +37,6 @@ namespace game.world {
         }
 
         public bool canSpread() {
-            if (saturated) {
-                return false;
-                print("Saturated yo");
-            }
             switch (level) {
                 case 0:
                     return false;
