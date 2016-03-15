@@ -9,6 +9,7 @@ namespace game.world {
         WorldMap w;
         public int level { get; set; }
         public bool saturated;
+		public int aggression { get; set; }
 
         Hex _h;
         public Hex h {
@@ -24,10 +25,11 @@ namespace game.world {
             }
         }
 
-        public void init(WorldMap w, Hex h) {
+		public void init(WorldMap w, Hex h, int aggression) {
             this.w = w;
             this.h = h;
-            saturated = false;
+			this.aggression = aggression;
+			saturated = false;
 
             var obj = new GameObject("Misama Model");
             obj.transform.parent = transform;

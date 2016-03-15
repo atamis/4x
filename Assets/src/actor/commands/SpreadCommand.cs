@@ -55,7 +55,7 @@ namespace game.actor.commands {
 				float rand = UnityEngine.Random.value;
 				if (rand < infectChance() && h.miasma == null) {
 					Miasma m = new GameObject ("Miasma").AddComponent<Miasma>();
-					m.init (w, h);
+					m.init (w, h, aggression);
 					h.miasma = m;
 				}
 			}
