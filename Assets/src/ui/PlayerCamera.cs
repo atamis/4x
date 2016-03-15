@@ -23,6 +23,10 @@ namespace game.ui {
             transform.localPosition = new Vector3(x, y, 0);
         }
 
+        public void setLocation(Vector3 v) {
+            transform.localPosition = v;
+        }
+
         // Update is called once per frame
         void Update() {
             var scroll = Input.GetAxis("Mouse ScrollWheel");
