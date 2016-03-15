@@ -13,7 +13,8 @@ namespace game.world {
         private HexModel model;
 		public WorldMap wm;
         public Building building { get; set; }
-		public Unit unit { get; set; }
+        //public Unit unit { get; set; }
+        public List<Unit> units { get; set; }
         public Node node { get; set; }
         public Biome b { get; set; }
 		public Miasma miasma { get; set; }
@@ -35,6 +36,7 @@ namespace game.world {
         public void init(WorldMap wm, HexLoc loc) {
 			this.wm = wm;
 			this.loc = loc;
+            units = new List<Unit>();
 
             var obj = new GameObject("Hex Model");
             obj.transform.parent = transform;
@@ -84,28 +86,29 @@ namespace game.world {
 			if (building != null) {
 				building.PreTurn(old, cur);
 			}
-			if (unit != null) {
-				unit.PreTurn(old, cur);
-			}
+
+            foreach(Unit unit in units) {
+                unit.PreTurn(old, cur);
+            }
 		}
 
 		public void NewTurn(Actor old, Actor cur) {
 			if (building != null) {
 				building.NewTurn(old, cur);
 			}
-			if (unit != null) {
-				unit.NewTurn (old, cur);
-			}
-		}
+            foreach (Unit unit in units) {
+                unit.NewTurn(old, cur);
+            }
+        }
 
 		internal void PostTurn(Actor old, Actor cur) {
 			if (building != null) {
 				building.PostTurn(old, cur);
 			}
-			if (unit != null) {
-				unit.PostTurn (old, cur);
-			}
-		}
+            foreach (Unit unit in units) {
+                unit.PostTurn(old, cur);
+            }
+        }
 
 		private class HexModel : MonoBehaviour {
 			SpriteRenderer sr;

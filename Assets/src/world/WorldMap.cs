@@ -7,10 +7,6 @@ using game.actor;
 using System;
 
 namespace game.world {
-	public enum GameTime {
-		Day, Dusk, Night, Morning
-	}
-
 	class WorldMap : MonoBehaviour {
 		GameObject hFolder; GameObject nFolder;
 		public Dictionary<HexLoc, Hex> map;
@@ -19,16 +15,6 @@ namespace game.world {
 		public int size = 32;
 		public int turn;
 		public BeamManager bm;
-
-		public GameTime time {
-			get {
-				if (turn % 20 >= 10) {
-					return GameTime.Night;
-				} else {
-					return GameTime.Day;
-				}
-			}
-		}
 
 		public Color[] colors = new Color[] { new Color(1, 1, 1), new Color(0.5f, 0.5f, 0.5f) };
 
@@ -108,9 +94,9 @@ namespace game.world {
         internal bool Defeat(Actor a) {
             foreach (KeyValuePair<HexLoc, Hex> kv in map) {
                 var building = kv.Value.building;
-                var unit = kv.Value.unit;
+                var units = kv.Value.units;
                 if ((building != null && building.a == a)
-                    || (unit != null && unit.actor == a)) {
+                    || units.Count > 0) {
                     return false;
                 }
             }

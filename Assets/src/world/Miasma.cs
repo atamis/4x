@@ -47,9 +47,6 @@ namespace game.world {
                 case 0:
                     return false;
                 case 1:
-                    if (w.time == GameTime.Night) {
-                        return true;
-                    }
                     return false;
                 default:
                     return true;

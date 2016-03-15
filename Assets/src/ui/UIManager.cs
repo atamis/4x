@@ -46,32 +46,42 @@ namespace game.ui {
 		private static Texture2D UI_DeleteH = Resources.Load<Texture2D>("Textures/T_UI_DeleteH");
 		private static Texture2D UI_DeleteC = Resources.Load<Texture2D>("Textures/T_UI_DeleteC");
 
-        // x.split("\n").map { |l| l.split(" ")[3] }.join(", ")
-        private static Texture2D[] texes = new Texture2D[] {
-            UI_Move, UI_Scan, UI_Build, UI_Purify, UI_MoveH,
-            UI_ScanH, UI_BuildH, UI_PurifyH, UI_MoveC, UI_ScanC, UI_BuildC, UI_PurifyC, UI_End, UI_EndH, UI_EndC,
-            UI_Cond, UI_CondH, UI_CondC, UI_Gate, UI_GateH, UI_GateC, UI_Harv, UI_HarvH, UI_HarvC, UI_Tow, UI_TowH, UI_TowC
-        };
+		// x.split("\n").map { |l| l.split(" ")[3] }.join(", ")
+		private static Texture2D[] texes = new Texture2D[] {
+			UI_Move, UI_Scan, UI_Build, UI_Purify, UI_MoveH,
+			UI_ScanH, UI_BuildH, UI_PurifyH, UI_MoveC, UI_ScanC, UI_BuildC, UI_PurifyC, UI_End, UI_EndH, UI_EndC,
+			UI_Cond, UI_CondH, UI_CondC, UI_Gate, UI_GateH, UI_GateC, UI_Harv, UI_HarvH, UI_HarvC, UI_Tow, UI_TowH, UI_TowC
+		};
 
 		private GUIStyle ButtonStyle;
 
-		GameManager gm;
 		WorldMap w;
 		Player p;
 
 		TooltipUI t;
 		public HelperUI helper;
-        MinimapManager mmm;
+		MinimapManager mmm;
 		public bool ev_view = true;
 
 		HighlightModel model;
+		MovementModel movement;
 
 		Hex h_target;
-		Unit u_target;
+		Unit u_target {
+			get {
+				if (h_target != null && 
+					h_target.units.Count > 0) {
+					return h_target.units[0];
+				} else {
+					return null;
+				}
+			}
+		}
 		State state;
 		//bool building;
 
-		private bool[] milestones = new bool[20];
+		GameManager gm;
+		bool[] milestones = new bool[20];
 
 		public enum State {
 			Default,
@@ -80,21 +90,24 @@ namespace game.ui {
 			Building,
 		};
 
-        public void init(GameManager gm, Player player, WorldMap w) {
+		public void init(GameManager gm, Player player, WorldMap w) {
 			this.gm = gm;
-            foreach (Texture2D tex in texes) {
-                tex.filterMode = FilterMode.Point;
-            }
+			foreach (Texture2D tex in texes) {
+				tex.filterMode = FilterMode.Point;
+			}
 			this.p = player;
 			this.w = w;
 
 			t = gameObject.AddComponent<TooltipUI> ();
 			t.init (this);
 
-            mmm = gameObject.AddComponent<MinimapManager>();
+			mmm = gameObject.AddComponent<MinimapManager>();
 
 			model = new GameObject ("Highlight Model").AddComponent<HighlightModel> ();
 			model.init (this);
+
+			movement = new GameObject("Movement Model").AddComponent<MovementModel>();
+			movement.init(this);
 
 			state = State.Default;
 			//building = false;
@@ -105,93 +118,104 @@ namespace game.ui {
 			helper.init();
 		}
 
-        private bool inToolbarBoundary(Vector3 v) {
-            // TODO: this seems a tiny bit too high. The bottoms of
-            // buttons pass through clicks, and there's a section on top
-            // with no button which blocks clicks.
-            return v.x > Screen.width * .3f && v.x < Screen.width * .76f
-                    && v.y > Screen.height * .1f && v.y < Screen.height * .28f;
-        }
+		private bool inToolbarBoundary(Vector3 v) {
+			// TODO: this seems a tiny bit too high. The bottoms of
+			// buttons pass through clicks, and there's a section on top
+			// with no button which blocks clicks.
+			return v.x > Screen.width * .3f && v.x < Screen.width * .76f
+				&& v.y > Screen.height * .1f && v.y < Screen.height * .28f;
+		}
 
-        void Update() {
-            if (Input.GetMouseButtonUp(0)) {
-                if (!inToolbarBoundary(Input.mousePosition) &&
-                    ((state == State.Default) || (state == State.Selected))) {
-                    Hex h = GetHexAtMouse();
-                    if (h != null) {
-                        this.h_target = h;
-						if (this.milestones [1] == false) {
-							EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 1 });
-							milestones [1] = true;
+		void Update() {
+			if (Input.GetMouseButtonUp(0)) {
+				if (!inToolbarBoundary(Input.mousePosition)) {
+					if (((state == State.Default) || (state == State.Selected))) {
+						Hex h = GetHexAtMouse();
+						if (h != null) {
+							this.h_target = h;
+							if (this.milestones [1] == false) {
+								EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 1 });
+								milestones [1] = true;
+							}
 						}
-                    }
-                    state = State.Selected;
+						state = State.Selected;
 
-                } else if (state == State.Moving) {
-                    if (Input.GetMouseButtonUp(0)) {
-                        Hex h = GetHexAtMouse();
-                        try {
-                            p.AddAllCommands(MoveCommand.pathfind(w, p, u_target, h));
-                            this.h_target = h;
-							EventManager.TriggerMoveEventAfter(new MoveEventArgs {stamina = h_target.unit.actions});
-                        } catch (Exception e) {
-                            EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
-                        }
-                        state = State.Selected;
-                        EventManager.TriggerMoveEventAfter(new MoveEventArgs {stamina = h_target.unit.actions});
-                        Debug.Log("Added Move Command");
-                    }
-                } else if (state == State.Building) {
+					} else if (state == State.Moving) {
+						if (Input.GetMouseButtonUp(0)) {
+							Hex h = GetHexAtMouse();
+							var unit = u_target;
+							try {
+								p.AddAllCommands(MoveCommand.pathfind(w, p, unit, h));
+								this.h_target = h;
+							} catch (Exception e) {
+								EventManager.PostInvalidAction(new InvalidActionArgs { msg = e.Message });
+							}
+							state = State.Selected;
+							EventManager.TriggerMoveEventAfter(new MoveEventArgs { stamina = unit.actions });
+							Debug.Log("Added Move Command");
+						}
+					} else if (state == State.Building) {
 
-                }
-            }
+					}
+				}
+			}
 
-            if (Input.GetMouseButtonUp(1)) {
-                if (!inToolbarBoundary(Input.mousePosition)) {
-                    if (state == State.Selected) {
-                        Hex h = GetHexAtMouse();
+			if (Input.GetMouseButtonUp(1)) {
+				if (!inToolbarBoundary(Input.mousePosition)) {
+					if (state == State.Selected) {
+						Hex h = GetHexAtMouse();
+						Unit u = u_target;
 
-                        Unit u = getSelected().unit;
+						if (u != null) {
+							try {
+								p.AddAllCommands(MoveCommand.pathfind(w, p, u, h));
+								this.h_target = h;
+							} catch (Exception e) {
+								EventManager.PostInvalidAction(new InvalidActionArgs { msg = e.Message });
+							}
+						}
 
-                        if (u != null) {
-                            try {
-                                p.AddAllCommands(MoveCommand.pathfind(w, p, u, h));
-                                this.h_target = h;
-                            } catch (Exception e) {
-                                EventManager.PostInvalidAction(new InvalidActionArgs { msg = e.Message });
-                            }
-                        }
+					}
+				}
+			}
 
-                    }
-                }
-            }
+			if (state == State.Selected &&
+				u_target != null &&
+				Input.GetKeyUp(KeyCode.B)) {
+				state = State.Building;
+			}
 
-            if (state == State.Selected &&
-                h_target.unit != null &&
-                Input.GetKeyUp(KeyCode.B)) {
-                state = State.Building;
-            }
+			if (state == State.Selected &&
+				u_target != null &&
+				Input.GetKeyUp(KeyCode.M)) {
+				state = State.Moving;
+			}
 
-            if (state == State.Building) {
-                if (Input.GetKeyUp(KeyCode.Alpha1)) {
-                    buildBuilding(BuildingType.Conduit);
-                }
+			if (state == State.Moving &&
+				h_target != null) {
 
-                if (Input.GetKeyUp(KeyCode.Alpha2)) {
-                    buildBuilding(BuildingType.Harvester);
-                }
+			}
 
-                if (Input.GetKeyUp(KeyCode.Alpha3)) {
-                    buildBuilding(BuildingType.Purifier);
-                }
+			if (state == State.Building) {
+				if (Input.GetKeyUp(KeyCode.Alpha1)) {
+					buildBuilding(BuildingType.Conduit);
+				}
 
-                if (Input.GetKeyUp(KeyCode.Alpha4)) {
-                    buildBuilding(BuildingType.WarpGate);
-                }
-            }
-        }
+				if (Input.GetKeyUp(KeyCode.Alpha2)) {
+					buildBuilding(BuildingType.Harvester);
+				}
 
-        public Hex GetHexAtMouse() {
+				if (Input.GetKeyUp(KeyCode.Alpha3)) {
+					buildBuilding(BuildingType.Purifier);
+				}
+
+				if (Input.GetKeyUp(KeyCode.Alpha4)) {
+					buildBuilding(BuildingType.WarpGate);
+				}
+			}
+		}
+
+		public Hex GetHexAtMouse() {
 			Vector3 worldPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			HexLoc l = w.l.PixelHex (worldPos);
 			if (w.map.ContainsKey (l)) {
@@ -205,34 +229,37 @@ namespace game.ui {
 			return h_target;
 		}
 
-        private void buildBuilding(BuildingType type) {
-            try {
-                p.AddCommand(new BuildCommand(p, u_target, h_target, type));
-            } catch (Exception e) {
-                print(e);
-            }
-            EventManager.TriggerBuildEvent(new BuildEventArgs { name = type.ToString(), turns = type.BuildTotal() / type.BuildPerTurn() });
-            state = State.Selected;
-        }
+		private void buildBuilding(BuildingType type) {
+			try {
+				p.AddCommand(new BuildCommand(p, u_target, h_target, type));
+			} catch (Exception e) {
+				print(e);
+			}
+			EventManager.TriggerBuildEvent(new BuildEventArgs { name = type.ToString(), turns = type.BuildTotal() / type.BuildPerTurn() });
+			state = State.Selected;
+		}
+
 
 		void OnGUI() {
+
 			GUILayout.BeginArea(new Rect (Screen.width*.3f, Screen.height*.8f, Screen.width/2, Screen.height*.9f));
 			GUILayout.BeginHorizontal ();
 
-            var width = GUILayout.Width(Screen.width * .08f);
-            var height = GUILayout.Height(Screen.height * .13f);
+			var width = GUILayout.Width(Screen.width * .08f);
+			var height = GUILayout.Height(Screen.height * .13f);
 
-            ButtonStyle = new GUIStyle(GUI.skin.label);
-
+			ButtonStyle = new GUIStyle(GUI.skin.label);
 			ButtonStyle.normal.background = UI_Move; ButtonStyle.hover.background = UI_MoveH; ButtonStyle.active.background = UI_MoveC;
 
 			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
-					if (h_target.unit != null) {
-						EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = h_target.unit.actions});
-						u_target = h_target.unit;
+					if (u_target != null) {
+						EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = u_target.actions});
 						state = State.Moving;
-						EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 2 });
+						if (milestones [2] == false) {
+							EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 2 });
+							milestones [2] = true;
+						}
 					}
 				} else {
 					state = State.Default;
@@ -242,9 +269,8 @@ namespace game.ui {
 			ButtonStyle.normal.background = UI_Build; ButtonStyle.hover.background = UI_BuildH; ButtonStyle.active.background = UI_BuildC;
 			if (GUILayout.Button("", ButtonStyle, width, height)){
 				if (state == State.Selected) {
-					if (h_target.unit != null) {
+					if (u_target != null) {
 						EventManager.TriggerBuildMenuEvent(new GameEventArgs {});
-						u_target = h_target.unit;
 						state = State.Building;
 					}
 				} else if (state == State.Building) {
@@ -255,12 +281,21 @@ namespace game.ui {
 			ButtonStyle.normal.background = UI_Scan; ButtonStyle.hover.background = UI_ScanH; ButtonStyle.active.background = UI_ScanC;
 			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
-					if (h_target.unit != null) {
+					if (u_target != null) {
 						try {
-							p.AddCommand (new ScanCommand (p, h_target.unit, h_target));
+							p.AddCommand (new ScanCommand (p, u_target, h_target));
+							if (milestones [3] == false) {
+								EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 3 });
+								milestones [3] = true;
+							}
+							if (milestones [4] == false) {
+								EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = 4 });
+								milestones [4] = true;
+							}
 						} catch (Exception e) {
 							EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
 						}
+
 					}
 				}
 				Debug.Log ("Added Scan Command");
@@ -269,9 +304,9 @@ namespace game.ui {
 			ButtonStyle.normal.background = UI_Purify; ButtonStyle.hover.background = UI_PurifyH; ButtonStyle.active.background = UI_PurifyC;
 			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
-					if (h_target.unit != null) {
+					if (u_target != null) {
 						try {
-							p.AddCommand (new CleanseCommand (p, h_target.unit));
+							p.AddCommand (new CleanseCommand (p, u_target));
 						} catch (Exception e) {
 							EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
 						}
@@ -296,71 +331,71 @@ namespace game.ui {
 
 				ButtonStyle.normal.background = UI_Cond; ButtonStyle.hover.background = UI_CondH; ButtonStyle.active.background = UI_CondC;
 				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
-                    buildBuilding(BuildingType.Conduit);
-                }
+					buildBuilding(BuildingType.Conduit);
+				}
 
 				ButtonStyle.normal.background = UI_Harv; ButtonStyle.hover.background = UI_HarvH; ButtonStyle.active.background = UI_HarvC;
 				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
-                    buildBuilding(BuildingType.Harvester);
-                }
+					buildBuilding(BuildingType.Harvester);
+				}
 
 				ButtonStyle.normal.background = UI_Tow; ButtonStyle.hover.background = UI_TowH; ButtonStyle.active.background = UI_TowC;
 				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
-                    buildBuilding(BuildingType.Purifier);
-                }
+					buildBuilding(BuildingType.Purifier);
+				}
 
 				ButtonStyle.normal.background = UI_Gate; ButtonStyle.hover.background = UI_GateH; ButtonStyle.active.background = UI_GateC;
 				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
-                    buildBuilding(BuildingType.WarpGate);
-                }
+					buildBuilding(BuildingType.WarpGate);
+				}
 				GUILayout.EndHorizontal ();
 				GUILayout.EndArea ();
 			}
 
-            // Right side mini-toolbar.
-            GUILayout.BeginArea(new Rect(Screen.width * .5f, Screen.height * .7f, Screen.width / 2, Screen.height * .9f));
-            GUILayout.BeginHorizontal();
+			// Right side mini-toolbar.
+			GUILayout.BeginArea(new Rect(Screen.width * .5f, Screen.height * .7f, Screen.width / 2, Screen.height * .9f));
+			GUILayout.BeginHorizontal();
 
-            if (h_target != null &&
-                h_target.building != null &&
-                h_target.building.GetType() == typeof(WarpGate)) {
-                var wg = (WarpGate)h_target.building;
+			if (h_target != null &&
+				h_target.building != null &&
+				h_target.building.GetType() == typeof(WarpGate)) {
+				var wg = (WarpGate)h_target.building;
 
-                ButtonStyle.normal.background = UI_Unit;
-                ButtonStyle.hover.background = UI_UnitH;
-                ButtonStyle.active.background = UI_UnitC;
-                if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * 0.08f), GUILayout.Height(Screen.height * 0.08f))) {
-                    try {
-                        p.AddCommand(new WarpUnitCommand(p, wg));
-                    } catch (Exception e) {
-                        print(e);
-                    }
-                }
+				ButtonStyle.normal.background = UI_Unit;
+				ButtonStyle.hover.background = UI_UnitH;
+				ButtonStyle.active.background = UI_UnitC;
+				if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * 0.08f), GUILayout.Height(Screen.height * 0.08f))) {
+					try {
+						p.AddCommand(new WarpUnitCommand(p, wg));
+					} catch (Exception e) {
+						print(e);
+					}
+				}
 
-            }
+			}
 
-            if (h_target != null &&
-                h_target.building != null) {
+			if (h_target != null &&
+				h_target.building != null) {
 
-                ButtonStyle.normal.background = UI_Delete;
-                ButtonStyle.hover.background = UI_DeleteH;
-                ButtonStyle.active.background = UI_DeleteC;
-                if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * 0.08f), GUILayout.Height(Screen.height * 0.08f))) {
-                    try {
-                        p.AddCommand(new DeleteBuildingCommand(p, h_target));
-                    } catch (Exception e) {
-                        print(e);
-                    }
-                }
+				ButtonStyle.normal.background = UI_Delete;
+				ButtonStyle.hover.background = UI_DeleteH;
+				ButtonStyle.active.background = UI_DeleteC;
+				if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * 0.08f), GUILayout.Height(Screen.height * 0.08f))) {
+					try {
+						p.AddCommand(new DeleteBuildingCommand(p, h_target));
+					} catch (Exception e) {
+						print(e);
+					}
+				}
 
-            }
+			}
 
-            GUILayout.EndHorizontal();
-            GUILayout.EndArea();
+			GUILayout.EndHorizontal();
+			GUILayout.EndArea();
 
-        }
+		}
 
-        class HighlightModel : MonoBehaviour {
+		class HighlightModel : MonoBehaviour {
 			SpriteRenderer sp;
 			UIManager m;
 
@@ -380,7 +415,7 @@ namespace game.ui {
 					transform.parent = m.h_target.gameObject.transform;
 					// Have to set local position each time because changing
 					// transform parent doesn't move the game object.
-					transform.localPosition = new Vector3(0, 0, 0);
+					transform.localPosition = new Vector3(0, 0, Layer.PseudoUI);
 					transform.localScale = new Vector3(1.9f, 1.9f, 1.9f);
 					sp.enabled = true;
 				} else {
@@ -388,5 +423,35 @@ namespace game.ui {
 				}
 			}
 		}
+
+		class MovementModel : MonoBehaviour {
+			SpriteRenderer sp;
+			UIManager m;
+
+			public void init(UIManager um) {
+				this.m = um;
+			}
+
+			void Start() {
+				sp = gameObject.AddComponent<SpriteRenderer>();
+				sp.sprite = Resources.Load<Sprite>("Textures/T_Selection");
+				sp.color = new Color(0.38f, 1f, 1f, 0.6f);
+				sp.enabled = false;
+			}
+
+			void Update() {
+				if (m.h_target != null && m.state == State.Moving) {
+					transform.parent = m.h_target.gameObject.transform;
+					// Have to set local position each time because changing
+					// transform parent doesn't move the game object.
+					transform.localPosition = new Vector3(0, 0, Layer.PseudoUI);
+					transform.localScale = new Vector3(1.9f, 1.9f, 1.9f) * 2.5f * m.u_target.actions;
+					sp.enabled = true;
+				} else {
+					sp.enabled = false;
+				}
+			}
+		}
+
 	}
 }

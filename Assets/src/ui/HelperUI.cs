@@ -68,12 +68,12 @@ namespace game.ui {
 		}
 
 		void OnMoveBeforeEvent(MoveEventArgs eventArgs) {
-			AddMessage("Where would you like to move your unit? \n (Stamina = " + eventArgs.stamina + ")");
+			AddMessage("Where would you like to move your unit?");
 			Debug.Log ("Recieved Move Event");
 		}
 
 		void OnMoveAfterEvent(MoveEventArgs eventArgs) {
-			AddMessage("This unit now has " + eventArgs.stamina + " stamina.");
+			AddMessage("This unit now has been moved");
 			Debug.Log ("Recieved Move Event");
 		}
 

@@ -46,8 +46,10 @@ namespace game.ui {
 
                 }
 
-				if (h.unit != null) {
-					GUILayout.Box("Unit: " + h.unit.ToString());
+				if (h.units.Count > 0) {
+					GUILayout.Box("Units: " + h.units
+                        .Select(unit => unit.ToString())
+                        .Aggregate<String>((acc, str) => acc + ", " + str));
 				}
 				GUILayout.EndArea ();
 			}
