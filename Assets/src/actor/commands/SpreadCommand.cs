@@ -54,7 +54,7 @@ namespace game.actor.commands {
 			foreach (Hex h in tiles) {
 				float rand = UnityEngine.Random.value;
 				if (rand < infectChance() && h.miasma == null) {
-					Miasma m = new GameObject ("Miasma").AddComponent<Miasma> ();
+					Miasma m = new GameObject ("Miasma").AddComponent<Miasma>();
 					m.init (w, h);
 					h.miasma = m;
 				}
