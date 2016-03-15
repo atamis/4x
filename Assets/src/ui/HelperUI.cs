@@ -8,6 +8,7 @@ namespace game.ui {
 	public class HelperUI : MonoBehaviour {
 		private static Texture2D tex;
 		private LinkedList<string> messages;
+		TutorialManager tm;
 
 		public void init() {
 			tex = Resources.Load<Texture2D>("Textures/Helper/T_HelperL1");
@@ -16,6 +17,9 @@ namespace game.ui {
 			AddMessage("Team Yog-Sothoth welcomes you.");
 			AddMessage("Enjoy the game.");
 
+			tm = gameObject.AddComponent<TutorialManager> ();
+			tm.init ();
+
 			EventManager.StartEvent += new EventManager.GameEvent(OnStartEvent);
 			EventManager.BuildMenuEvent += new EventManager.GameEvent(OnBuildMenuEvent);
 			EventManager.BuildEvent += new EventManager.WarpEvent(OnBuildEvent);
@@ -23,6 +27,9 @@ namespace game.ui {
 			EventManager.MoveEventBefore += new EventManager.MoveEvent(OnMoveBeforeEvent);
 			EventManager.MoveEventAfter += new EventManager.MoveEvent(OnMoveAfterEvent);
 			EventManager.InvalidEvent += new EventManager.InvalidActionEvent(OnInvalidAction);
+			EventManager.TutEvent += new EventManager.TutorialEvent (OnTutorialEvent);
+
+			EventManager.TriggerStartEvent(new GameEventArgs{} );
 		}
 
 		void Start() {
@@ -30,6 +37,15 @@ namespace game.ui {
 
 		public void AddMessage(string msg) {
 			messages.AddFirst(msg);
+		}
+
+		void OnStartEvent(GameEventArgs eventArgs) {
+			tm.play (0);
+			EventManager.StartEvent -= OnStartEvent;
+		}
+
+		void OnTutorialEvent(TutorialEventArgs args) {
+			tm.play (args.tut_id);
 		}
 
 		void OnInvalidAction(InvalidActionArgs evt) {
@@ -45,11 +61,7 @@ namespace game.ui {
 			AddMessage("The " + eventArgs.name + " will be warped in " + eventArgs.turns + " turn(s).");
 			Debug.Log("Received Build Event");	
 		}
-
-		void OnStartEvent(GameEventArgs eventArgs) {
-			Debug.Log("Recieved Start Event");
-		}
-
+			
 		void OnScanEvent(GameEventArgs eventArgs) {
 			messages.AddFirst("Your unit has scanned the area.");
 			Debug.Log ("Recieved Scan Event!");

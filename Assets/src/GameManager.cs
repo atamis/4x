@@ -36,8 +36,8 @@ namespace game {
 			w = new GameObject ("World Map").AddComponent<WorldMap> ();
 			w.init (l);
 
-			tm = gameObject.AddComponent<TutorialManager>();
-			tm.init();
+			//tm = gameObject.AddComponent<TutorialManager>();
+			//tm.init();
 
 			int seed = Random.Range (1000000000, int.MaxValue);
 			WorldMaker maker = new WorldMaker (w, player, seed, false);
@@ -52,12 +52,10 @@ namespace game {
             am = gameObject.AddComponent<AnnihilationManager>();
             am.init(w, player);
 
-			gameObject.AddComponent<UIManager> ().init (player, w);
+			gameObject.AddComponent<UIManager> ().init (this, player, w);
 
 			gameObject.AddComponent<AudioManager> ().init(this);
             gameObject.AddComponent<AmbienceManager>().init(pc, w);
-
-			EventManager.TriggerStartEvent(new GameEventArgs{} );
         }
 
 		void Update() {
