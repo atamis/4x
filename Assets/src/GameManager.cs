@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using game.actor;
 using game.actor.commands;
@@ -66,19 +67,23 @@ namespace game {
 			print ("Executing + " + c.ToString());
 			c.Apply (w);
 
-            if (w.Victory()) {
-                print("Victory");
-            }
-
-            if (w.Defeat(player)) {
-                print("Defeat");
-            }
 
             if (c.GetType () == typeof(EndTurnCommand)) {
 				print (ca + " ends their turn.");
 				currentActor = (currentActor + 1) % actors.Count;
 
-				w.PreTurn (ca, actors [currentActor]);
+
+                if (w.Victory()) {
+                    print("Victory");
+                    SceneManager.LoadScene("Victory");
+                }
+
+                if (w.Defeat(player)) {
+                    print("Defeat");
+                    SceneManager.LoadScene("Defeat");
+                }
+
+                w.PreTurn (ca, actors [currentActor]);
 				w.NewTurn (ca, actors [currentActor]);
 				w.PostTurn (ca, actors [currentActor]);
 
