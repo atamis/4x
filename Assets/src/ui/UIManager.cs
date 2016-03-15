@@ -64,9 +64,18 @@ namespace game.ui {
 		public bool ev_view = true;
 
 		HighlightModel model;
+        MovementModel movement;
 
 		Hex h_target;
-		Unit u_target;
+		Unit u_target {
+            get {
+                if (h_target != null) {
+                    return h_target.unit;
+                } else {
+                    return null;
+                }
+            }
+        }
 		State state;
 		//bool building;
 
@@ -92,7 +101,10 @@ namespace game.ui {
 			model = new GameObject ("Highlight Model").AddComponent<HighlightModel> ();
 			model.init (this);
 
-			state = State.Default;
+            movement = new GameObject("Movement Model").AddComponent<MovementModel>();
+            movement.init(this);
+
+            state = State.Default;
 			//building = false;
 		}
 
@@ -111,33 +123,35 @@ namespace game.ui {
 
         void Update() {
             if (Input.GetMouseButtonUp(0)) {
-                if (!inToolbarBoundary(Input.mousePosition) &&
-                    ((state == State.Default) || (state == State.Selected))) {
-                    Hex h = GetHexAtMouse();
-                    if (h != null) {
-                        this.h_target = h;
-                    }
-                    state = State.Selected;
-
-                } else if (state == State.Moving) {
-                    if (Input.GetMouseButtonUp(0)) {
+                if (!inToolbarBoundary(Input.mousePosition)) {
+                    if (((state == State.Default) || (state == State.Selected))) {
                         Hex h = GetHexAtMouse();
-                        try {
-                            p.AddAllCommands(MoveCommand.pathfind(w, p, u_target, h));
+                        if (h != null) {
                             this.h_target = h;
-							EventManager.TriggerMoveEventAfter(new MoveEventArgs {stamina = h_target.unit.actions});
-                        } catch (Exception e) {
-                            EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
                         }
                         state = State.Selected;
-                        EventManager.TriggerMoveEventAfter(new MoveEventArgs {stamina = h_target.unit.actions});
-                        Debug.Log("Added Move Command");
-                    }
-                } else if (state == State.Building) {
 
+                    } else if (state == State.Moving) {
+                        if (Input.GetMouseButtonUp(0)) {
+                            Hex h = GetHexAtMouse();
+                            var unit = u_target;
+                            try {
+                                p.AddAllCommands(MoveCommand.pathfind(w, p, unit, h));
+                                this.h_target = h;
+                                EventManager.TriggerMoveEventAfter(new MoveEventArgs { stamina = unit.actions });
+                            } catch (Exception e) {
+                                EventManager.PostInvalidAction(new InvalidActionArgs { msg = e.Message });
+                            }
+                            state = State.Selected;
+                            EventManager.TriggerMoveEventAfter(new MoveEventArgs { stamina = unit.actions });
+                            Debug.Log("Added Move Command");
+                        }
+                    } else if (state == State.Building) {
+
+                    }
                 }
             }
-
+        
             if (Input.GetMouseButtonUp(1)) {
                 if (!inToolbarBoundary(Input.mousePosition)) {
                     if (state == State.Selected) {
@@ -162,6 +176,17 @@ namespace game.ui {
                 h_target.unit != null &&
                 Input.GetKeyUp(KeyCode.B)) {
                 state = State.Building;
+            }
+
+            if (state == State.Selected &&
+                h_target.unit != null &&
+                Input.GetKeyUp(KeyCode.M)) {
+                state = State.Moving;
+            }
+
+            if (state == State.Moving &&
+                h_target != null) {
+                
             }
 
             if (state == State.Building) {
@@ -207,8 +232,10 @@ namespace game.ui {
             state = State.Selected;
         }
 
+        
 		void OnGUI() {
-			GUILayout.BeginArea(new Rect (Screen.width*.3f, Screen.height*.8f, Screen.width/2, Screen.height*.9f));
+
+            GUILayout.BeginArea(new Rect (Screen.width*.3f, Screen.height*.8f, Screen.width/2, Screen.height*.9f));
 			GUILayout.BeginHorizontal ();
 
             var width = GUILayout.Width(Screen.width * .08f);
@@ -222,7 +249,6 @@ namespace game.ui {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = h_target.unit.actions});
-						u_target = h_target.unit;
 						state = State.Moving;
 					}
 				} else {
@@ -235,7 +261,6 @@ namespace game.ui {
 				if (state == State.Selected) {
 					if (h_target.unit != null) {
 						EventManager.TriggerBuildMenuEvent(new GameEventArgs {});
-						u_target = h_target.unit;
 						state = State.Building;
 					}
 				} else if (state == State.Building) {
@@ -371,7 +396,7 @@ namespace game.ui {
 					transform.parent = m.h_target.gameObject.transform;
 					// Have to set local position each time because changing
 					// transform parent doesn't move the game object.
-					transform.localPosition = new Vector3(0, 0, 0);
+					transform.localPosition = new Vector3(0, 0, Layer.PseudoUI);
 					transform.localScale = new Vector3(1.9f, 1.9f, 1.9f);
 					sp.enabled = true;
 				} else {
@@ -379,5 +404,35 @@ namespace game.ui {
 				}
 			}
 		}
-	}
+
+        class MovementModel : MonoBehaviour {
+            SpriteRenderer sp;
+            UIManager m;
+
+            public void init(UIManager um) {
+                this.m = um;
+            }
+
+            void Start() {
+                sp = gameObject.AddComponent<SpriteRenderer>();
+                sp.sprite = Resources.Load<Sprite>("Textures/T_Selection");
+                sp.color = new Color(0.38f, 1f, 1f, 0.6f);
+                sp.enabled = false;
+            }
+
+            void Update() {
+                if (m.h_target != null && m.state == State.Moving) {
+                    transform.parent = m.h_target.gameObject.transform;
+                    // Have to set local position each time because changing
+                    // transform parent doesn't move the game object.
+                    transform.localPosition = new Vector3(0, 0, Layer.PseudoUI);
+                    transform.localScale = new Vector3(1.9f, 1.9f, 1.9f) * 2.5f * m.u_target.actions;
+                    sp.enabled = true;
+                } else {
+                    sp.enabled = false;
+                }
+            }
+        }
+
+    }
 }
