@@ -67,9 +67,6 @@ namespace game.world {
         }
 
         public void Die() {
-            model.sr.sprite = null;
-            Destroy(this.model);
-            h.miasma = null;
             Destroy(this.gameObject);
         }
 

@@ -15,14 +15,14 @@ namespace game.actor.commands {
 
 		public float infectChance() {
 			switch (aggression) {
-			case 0:
-				return .015f;
-			case 1:
-				return .03f;
-			case 2:
-				return .08f;
-			case 3:
-				return .2f;
+				case 0:
+					return .015f;
+				case 1:
+					return .03f;
+				case 2:
+					return .08f;
+				case 3:
+					return .2f;
 			}
 			return 0f;
 		}
@@ -51,11 +51,12 @@ namespace game.actor.commands {
 
 				}
 			}
-			foreach (Hex t in tiles) {
+			foreach (Hex h in tiles) {
 				float rand = UnityEngine.Random.value;
-				if (rand < infectChance()) {
+				if (rand < infectChance() && h.miasma == null) {
 					Miasma m = new GameObject ("Miasma").AddComponent<Miasma> ();
-					m.init (w, t);
+					m.init (w, h);
+					h.miasma = m;
 				}
 			}
 

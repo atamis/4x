@@ -125,11 +125,12 @@ namespace game.ui {
                         try {
                             p.AddAllCommands(MoveCommand.pathfind(w, p, u_target, h));
                             this.h_target = h;
+							EventManager.TriggerMoveEventAfter(new MoveEventArgs {stamina = h_target.unit.actions});
                         } catch (Exception e) {
                             EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
                         }
                         state = State.Default;
-                        EventManager.TriggerMoveEventAfter(new MoveEventArgs {stamina = h_target.unit.actions});
+
                         Debug.Log("Added Move Command");
                     }
                 } else if (state == State.Building) {

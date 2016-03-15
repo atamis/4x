@@ -21,7 +21,6 @@ namespace game.actor.commands {
 
         private void purify(Hex h) {
             if (h.miasma != null) {
-				Debug.Log("Cleansed!");
                 h.miasma.level -= 1;
                 if (h.miasma.level < 0) {
                     h.miasma.Die();
@@ -39,7 +38,7 @@ namespace game.actor.commands {
 		}
 
 		public override void Undo(WorldMap w) {
-			throw new NotImplementedException ("You can't undo a Industrial Military Complex!");
+			throw new NotImplementedException ("Whatever");
 		}
 	}
 }

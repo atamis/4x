@@ -142,11 +142,13 @@ namespace game.world {
 			void Update() {
                 if (Time.frameCount > lastSpriteUpdate + 10) {
                     lastSpriteUpdate = Time.frameCount;
+                    /*
                     if (h.revealed) {
                         sr.sprite = h.b.GetSprite();
                     }
+                    */
                 }
-                
+
 				if (Input.GetKey (KeyCode.LeftShift) || Input.GetKey (KeyCode.RightShift)) {
 					if (h.scanned) {
 						// Glitch shader
