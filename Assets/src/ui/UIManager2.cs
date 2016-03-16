@@ -51,6 +51,10 @@ namespace game.ui {
 		private static Texture2D iconBuilding = Resources.Load<Texture2D>("Textures/T_Icon_Building");
 		private static Texture2D iconMiasma = Resources.Load<Texture2D>("Textures/T_Icon_Miasma");
 
+		private static Texture2D iconHelp = Resources.Load<Texture2D>("Textures/T_Icon_Help");
+		private static Texture2D iconGoto = Resources.Load<Texture2D>("Textures/T_Icon_Goto");
+		private static Texture2D iconLines = Resources.Load<Texture2D>("Textures/T_Icon_Lines");
+
 		// x.split("\n").map { |l| l.split(" ")[3] }.join(", ")
 		private static Texture2D[] texes = new Texture2D[] {
 			UI_Move, UI_Scan, UI_Build, UI_Purify, UI_MoveH,
@@ -493,12 +497,14 @@ namespace game.ui {
 
 			// Panel 3
 			// Help Button
-			if (GUI.Button (new Rect(Screen.width * .75f, b1_start, b_height, b_height), iconUnit)) {
+			/*
+			//ButtonStyle.normal.background = iconHelp; ButtonStyle.hover.background = iconHelp; ButtonStyle.active.background = iconHelp;
+			if (GUI.Button (new Rect(Screen.width * .75f, b1_start, b_height, b_height), iconHelp)) {
 				showHelp = !showHelp;
 			}
 
 			// Objectives Button
-			if (GUI.Button (new Rect(Screen.width * .75f, b1_start + b_height, b_height, b_height), iconUnit)) {
+			if (GUI.Button (new Rect(Screen.width * .75f, b1_start + b_height, b_height, b_height), iconLines)) {
 
 			}
 
@@ -506,7 +512,7 @@ namespace game.ui {
 			if (GUI.Button (new Rect(Screen.width * .75f, b1_start + b_height + b_height, b_height, b_height), iconUnit)) {
 
 			}
-
+			*/
 			// TODO
 			// Rest of the panel
 
