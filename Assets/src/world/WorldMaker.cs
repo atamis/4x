@@ -72,6 +72,7 @@ namespace game.world {
 			SPAWN_BOUNDS = 12;
 			OUTER_SPAWN_BOUNDS = 13;
 			genCorruption (2, 4);
+			decorate ();
 		}
 
 		void genBiomes() {
@@ -118,20 +119,39 @@ namespace game.world {
 			//Debug.Log (System.String.Format ("Generated Player at {0}", spawn));
 		}
 
-		void genNodes() {
+		private void genNodes() {
 			int quadrants = w.size / 4;
 
 			for (int x = 0; x < quadrants; x++) {
 				for (int y = 0; y < quadrants; y++) {
 					int i = Random.Range(4*x, 4*(x+1)); int j = Random.Range(4*y, 4*(y+1));
-					w.makeNode (new HexLoc(x, y));
+					w.makeNode (new HexLoc(i, j));
 				}
 			}
-			foreach (Node n in w.nodes) {
-				setEv (n.h, 1.0f);
-			}
-
 			//Debug.Log ("Generated Nodes");
+		}
+
+		private void decorate() {
+			for (int x = 0; x < w.size; x++) {
+				for (int y = 0; y < w.size; y++) {
+					// Set EV value
+					HexLoc loc = new HexLoc (x, y);
+					if (w.map [loc].node != null) {
+						setEv (w.map[loc], 1.0f);
+					}
+
+					// Colorize the World
+					Color c = w.map [loc].b.GetColor () + new Color(.9f, .9f, .9f, 1);
+					foreach (Hex h in w.map[loc].Neighbors()) {
+						c += h.b.GetColor ();
+					}
+					c = (c / 6) * 1.15f;
+					c.a = 1; 
+					w.map [loc].SetColor (c) ;
+					UnityEngine.Debug.Log (c);
+				}
+			}
+			UnityEngine.Debug.Log ("Decorated world");
 		}
 
 		private void setEv(Hex h, float value) {

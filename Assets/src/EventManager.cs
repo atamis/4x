@@ -2,122 +2,114 @@ using UnityEngine;
 using System.Collections.Generic;
 
 namespace game {
-
-	public class GameEventArgs : System.EventArgs {
+	class GameEventArgs : System.EventArgs {
 		public int turn { get; set; }
 	}
 
-	public class InvalidActionArgs : System.EventArgs {
+	class InvalidActionArgs : System.EventArgs {
 		public string msg { get; set; }
 	}
-
-	public class ScanEventArgs : System.EventArgs {
+		
+	class ScanEventArgs : System.EventArgs {
 		public bool found { get; set; }
 	}
 		
-	public class MoveEventArgs: System.EventArgs{
-		public int stamina { get; set;}
+	class MoveEventArgs : System.EventArgs {
+		public int stamina { get; set; }
 	}
 
-	public class BuildEventArgs: System.EventArgs{
-		public string name { get; set;}
-		public int turns { get; set;}
+	class BuildEventArgs : System.EventArgs {
+		public string name { get; set; }
+		public int turns { get; set; }
 	}
 
-	public class TutorialEventArgs : System.EventArgs {
+	class TutorialEventArgs : System.EventArgs {
 		public int tut_id { get; set; }
 	}
 
+	class SpreadEventArgs : GameEventArgs {
+		
+	}
+
+	/*
+	class Event : System.EventArgs {
+
+	}
+	*/
+
 	static class EventManager {
-		// game event handler
-		public delegate void GameEvent(GameEventArgs eventArgs);
-		public static event GameEvent StartEvent, SpreadEvent, BuildMenuEvent;
-		public static event GameEvent GameOver, GameWon;
+		public delegate void GameEventHandler(GameEventArgs args);
+		public static GameEventHandler StartEvent, DefeatEvent, VictoryEvent;
 
-		//Move event handler
-		public delegate void MoveEvent(MoveEventArgs eventArgs);
-		public static event MoveEvent MoveEventBefore, MoveEventAfter;
+		public delegate void InvalidEventHandler(InvalidActionArgs args);
+		public static InvalidEventHandler ErrorEvent;
 
-		// Invalid event handler
-		public delegate void InvalidActionEvent(InvalidActionArgs eventArgs);
-		public static event InvalidActionEvent InvalidEvent;
+		public delegate void TutorialEventHandler(TutorialEventArgs args);
+		public static event TutorialEventHandler TutorialEvent;
 
-		//Build event handler
-		public delegate void WarpEvent(BuildEventArgs eventArgs);
-		public static event WarpEvent BuildEvent;
+		public delegate void ScanEventHandler(ScanEventArgs args);
+		public static ScanEventHandler ScanEvent;
 
-		// Select Unit Handler
-		public delegate void TutorialEvent(TutorialEventArgs args);
-		public static event TutorialEvent TutEvent;
+		public delegate void MoveEventHandler(MoveEventArgs args);
+		public static MoveEventHandler MoveEvent;
 
-		// Scan Event Handler
-		public delegate void ScanEvent(ScanEventArgs eventArgs);
-		public static event ScanEvent ScannedEvent;
+		public delegate void WarpEventHandler(BuildEventArgs eventArgs);
+		public static event WarpEventHandler BuildEvent;
 
-
+		public delegate void SpreadEventHandler(SpreadEventArgs eventArgs);
+		public static event SpreadEventHandler SpreadEvent;
 
 		public static void PostInvalidAction(InvalidActionArgs args = null) {
-			if (InvalidEvent != null) {
-				InvalidEvent(args);
+			if (ErrorEvent != null) {
+				ErrorEvent (args);
 			}
 		}
 
-		public static void TriggerStartEvent(GameEventArgs eventArgs = null) {
+		public static void PostStartEvent(GameEventArgs args = null) {
 			if (StartEvent != null) {
-				StartEvent(eventArgs);
+				StartEvent (args);
 			}
 		}
 
-		public static void TriggerTutorialEvent(TutorialEventArgs args = null) {
-			if (TutEvent != null) {
-				TutEvent(args);
+		public static void PostDefeatEvent(GameEventArgs args = null) {
+			if (DefeatEvent != null) {
+				DefeatEvent (args);
 			}
 		}
 
-		public static void TriggerBuildEvent(BuildEventArgs eventArgs = null) {
+		public static void PostVictoryEvent(GameEventArgs args = null) {
+			if (VictoryEvent != null) {
+				VictoryEvent (args);
+			}
+		}
+
+		public static void PostTutorialEvent(TutorialEventArgs args = null) {
+			if (TutorialEvent != null) {
+				TutorialEvent (args);
+			}
+		}
+
+		public static void PostScanEvent(ScanEventArgs args = null) {
+			if (ScanEvent != null) {
+				ScanEvent (args);
+			}
+		}
+
+		public static void PostMoveEvent(MoveEventArgs args = null) {
+			if (MoveEvent != null) {
+				MoveEvent (args);
+			}
+		}
+
+		public static void PostBuildEvent(BuildEventArgs args = null) {
 			if (BuildEvent != null) {
-				BuildEvent(eventArgs);
+				BuildEvent (args);
 			}
 		}
 
-		public static void TriggerBuildMenuEvent(GameEventArgs eventArgs = null) {
-			if (BuildMenuEvent != null) {
-				BuildMenuEvent(eventArgs);
-			}
-		}
-
-		public static void TriggerScanEvent(ScanEventArgs eventArgs = null) {
-			if (ScannedEvent != null) { // if the number of subscribers isn't null
-				ScannedEvent (eventArgs);
-			}
-		}
-
-		public static void TriggerMoveEventBefore(MoveEventArgs eventArgs = null) {
-			if (MoveEventBefore != null) {
-				MoveEventBefore (eventArgs);
-			}
-		}
-
-		public static void TriggerMoveEventAfter(MoveEventArgs eventArgs = null) {
-			if (MoveEventAfter != null) {
-				MoveEventAfter (eventArgs);
-			}
-		}
-
-		public static void TriggerGameOver(GameEventArgs args = null) {
-			if (GameOver != null) {
-				GameOver (args);
-			}
-		}
-
-		public static void TriggerGameWon(GameEventArgs args = null) {
-			if (GameWon != null) {
-				GameWon (args);
-			}
-		}
-		public static void TriggerSpreadEvent(GameEventArgs eventArgs = null) {
+		public static void PostSpreadEvent(SpreadEventArgs args = null) {
 			if (SpreadEvent != null) {
-				SpreadEvent (eventArgs);
+				SpreadEvent (args);
 			}
 		}
 	}

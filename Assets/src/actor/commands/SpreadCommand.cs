@@ -54,7 +54,7 @@ namespace game.actor.commands {
 				}
 			}
 
-			EventManager.TriggerSpreadEvent (new GameEventArgs{ turn = w.turn});
+			EventManager.PostSpreadEvent (new SpreadEventArgs{ turn = w.turn });
 			Debug.Log ("Triggered");
 		}
 
