@@ -66,7 +66,7 @@ namespace game.ui {
 		HighlightModel model;
 		MovementModel movement;
 
-		Hex h_target;
+		public Hex h_target;
 		Unit u_target {
 			get {
 				if (h_target != null && 
@@ -88,11 +88,14 @@ namespace game.ui {
 		};
 
 		public TutorialManager tm;
+        private GameManager gm;
 
-		public void init(GameManager gm, Player player, WorldMap w) {
+        public void init(GameManager gm, Player player, WorldMap w) {
 			foreach (Texture2D tex in texes) {
 				tex.filterMode = FilterMode.Point;
 			}
+
+            this.gm = gm;
 			this.p = player;
 			this.w = w;
 
@@ -202,6 +205,20 @@ namespace game.ui {
 
 			}
 
+            if ((state == State.Default || state == State.Selected)
+                && Input.GetKeyUp(KeyCode.Tab)) {
+                var u = u_target;
+
+                foreach (KeyValuePair<HexLoc, Hex> kv in w.map) {
+                    var h = kv.Value;
+                    if (h.units.Count > 0 && h.units[0] != u_target && h.units[0].actions > 0) {
+                        h_target = h;
+                        LookAt(h);
+                        break;
+                    }
+                }
+            }
+
 			if (state == State.Building) {
 				if (Input.GetKeyUp(KeyCode.Alpha1)) {
 					buildBuilding(BuildingType.Conduit);
@@ -220,6 +237,10 @@ namespace game.ui {
 				}
 			}
 		}
+
+        public void LookAt(Hex h) {
+            gm.pc.setLocation(w.l.HexPixel(h.loc));
+        }
 
 		public Hex GetHexAtMouse() {
 			Vector3 worldPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);

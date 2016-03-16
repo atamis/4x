@@ -8,11 +8,13 @@ namespace game.ui {
         public Camera cam;
         float speed = 1f;
 		GameManager gm;
+        private Vector3? goal;
 
         public void init(GameManager gm, Camera cam) {
             this.cam = cam;
 			this.gm = gm;
             cam.transform.parent = transform;
+            goal = null;
         }
 
         void Start() {
@@ -20,11 +22,33 @@ namespace game.ui {
 
         // Look at x and y;
 		public void setLocation(float x, float y) {
-            transform.localPosition = new Vector3(x, y, 0);
+            goal = new Vector3(x, y, 0);
+        }
+
+        public void setLocation(Vector3 v) {
+            goal = v;
+        }
+
+        private bool closeToGoal() {
+            if (goal.HasValue) {
+                var v1p = transform.localPosition - goal.Value;
+                return v1p.sqrMagnitude < 0.3;
+            } else {
+                return true;
+            }
         }
 
         // Update is called once per frame
         void Update() {
+
+            if (goal.HasValue) {
+                if (closeToGoal()) {
+                    goal = null;
+                } else {
+                    transform.localPosition = Vector3.Slerp(transform.localPosition, goal.Value, 0.05f);
+                }
+            }
+
             var scroll = Input.GetAxis("Mouse ScrollWheel");
 
             // Scroll up is a positive change, but increasing size
