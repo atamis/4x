@@ -78,9 +78,18 @@ namespace game.world.buildings {
     abstract class Building : MonoBehaviour {
 
         protected BuildingModel model;
+        private Hex _h;
 		public Hex h {
-			get;
-			internal set;
+			get {
+                return _h;
+            }
+			internal set {
+                if (value != null && value.building != null) {
+                    throw new Exception("There is already a building there");
+                }
+                value.building = this;
+                _h = value;
+            }
 		}
 		public Actor a;
 		public PowerNetwork pn;
@@ -96,9 +105,7 @@ namespace game.world.buildings {
                 // TODO: cleanup may be necessary.
                 throw new Exception("There is already a building there.");
             }
-
-            h.building = this;
-
+            
             this.h = h;
 
 			transform.parent = h.gameObject.transform;
