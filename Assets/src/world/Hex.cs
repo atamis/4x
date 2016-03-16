@@ -148,7 +148,7 @@ namespace game.world {
 			public void reveal() {
 				sr.sprite = h.b.GetSprite ();
 				sr.color = this.color;
-				print (this.color);
+				//print (this.color);
 			}
 
 			public void SetColor(Color c) {

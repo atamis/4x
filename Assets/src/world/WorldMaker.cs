@@ -148,7 +148,7 @@ namespace game.world {
 					c = (c / 6) * 1.15f;
 					c.a = 1; 
 					w.map [loc].SetColor (c) ;
-					UnityEngine.Debug.Log (c);
+					//UnityEngine.Debug.Log (c);
 				}
 			}
 			UnityEngine.Debug.Log ("Decorated world");
