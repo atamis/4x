@@ -55,7 +55,9 @@ namespace game {
             am = gameObject.AddComponent<AnnihilationManager>();
             am.init(w, player);
 
-			gameObject.AddComponent<UIManager> ().init (this, player, w);
+			var obj = new GameObject ("UI Manager");
+			obj.AddComponent<UIManager> ().init (this, player, w);
+			//gameObject.AddComponent<UIManager> ().init (this, player, w);
 
 			gameObject.AddComponent<AudioManager> ().init(this);
             gameObject.AddComponent<AmbienceManager>().init(pc, w);

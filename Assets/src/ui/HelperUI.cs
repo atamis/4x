@@ -6,12 +6,21 @@ using UnityEngine;
 
 namespace game.ui {
 	class HelperUI : MonoBehaviour {
+		private Texture2D[] texes;
+
 		private static Texture2D tex;
 		private LinkedList<string> messages;
 		UIManager um;
 
 		public void init(UIManager um) {
 			this.um = um;
+			texes = new Texture2D[5]; 
+			for (int i = 1; i < 6; i++) {
+				texes [i - 1] = Resources.Load<Texture2D> ("Textures/Helper/T_Helper" + i);
+			}
+
+			transform.parent = um.transform;
+
 			tex = Resources.Load<Texture2D>("Textures/Helper/T_HelperL1");
 			messages = new LinkedList<string>();
 
@@ -97,10 +106,12 @@ namespace game.ui {
 			um.tm.play (20);
 		}
 
+		public float w = 0; public float x = Screen.height * .8f; public float y = Screen.width / 3; public float z = Screen.height * .2f;
 		void OnGUI() {
 			var m = messages.Take(6).Reverse().Aggregate<string>((acc, msg) => acc + "\n" + msg);
-			GUI.Box(new Rect(Screen.width * .3f - 300, Screen.height * .8f - tex.height, tex.width, tex.height), tex);
-			GUI.Box(new Rect(Screen.width * .3f - 300, Screen.height * .8f, 250, 100), m);
+			GUI.Box(new Rect(Screen.width * .90f, tex.height, tex.width , tex.width ), tex);
+
+			GUI.Box(new Rect(w, x, y, z), m);
 		}
 	}
 }

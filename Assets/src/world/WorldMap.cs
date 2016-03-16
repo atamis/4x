@@ -19,8 +19,6 @@ namespace game.world {
 		public int turn;
 		public BeamManager bm;
 
-		//public Color[] colors = new Color[] { new Color(1, 1, 1), new Color(0.5f, 0.5f, 0.5f) };
-
 		public void init(Layout l) {
 			this.l = l;
 			turn = 0;

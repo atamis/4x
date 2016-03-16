@@ -53,8 +53,17 @@ namespace game.ui {
 			UI_Cond, UI_CondH, UI_CondC, UI_Gate, UI_GateH, UI_GateC, UI_Harv, UI_HarvH, UI_HarvC, UI_Tow, UI_TowH, UI_TowC
 		};
 
+		public enum State {
+			Default,
+			Selected,
+			Moving,
+			Building,
+		};
+
 		private GUIStyle ButtonStyle;
 
+		public TutorialManager tm;
+		private GameManager gm;
 		WorldMap w;
 		Player p;
 
@@ -66,7 +75,9 @@ namespace game.ui {
 		HighlightModel model;
 		MovementModel movement;
 
+		State state;
 		public Hex h_target;
+
 		Unit u_target {
 			get {
 				if (h_target != null && 
@@ -77,23 +88,13 @@ namespace game.ui {
 				}
 			}
 		}
-		State state;
-		//bool building;
-
-		public enum State {
-			Default,
-			Selected,
-			Moving,
-			Building,
-		};
-
-		public TutorialManager tm;
-        private GameManager gm;
-
+			
         public void init(GameManager gm, Player player, WorldMap w) {
 			foreach (Texture2D tex in texes) {
 				tex.filterMode = FilterMode.Point;
 			}
+
+			transform.parent = gm.transform;
 
             this.gm = gm;
 			this.p = player;
