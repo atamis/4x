@@ -159,7 +159,7 @@ namespace game.ui {
 							}
 							state = State.Selected;
 							postEvent (3);
-							EventManager.TriggerMoveEventAfter(new MoveEventArgs { stamina = unit.actions });
+							//EventManager.TriggerMoveEventAfter(new MoveEventArgs { stamina = unit.actions });
 							Debug.Log("Added Move Command");
 						}
 					} else if (state == State.Building) {
@@ -258,7 +258,7 @@ namespace game.ui {
 
 		public void postEvent(int code) {
 			if (!tm.milestones [code] && tm.milestones[code-1]) {
-				EventManager.TriggerTutorialEvent (new TutorialEventArgs { tut_id = code });
+				EventManager.PostTutorialEvent (new TutorialEventArgs { tut_id = code });
 				tm.milestones [code] = true;
 			}
 		}
@@ -278,7 +278,7 @@ namespace game.ui {
 			} catch (Exception e) {
 				print(e);
 			}
-			EventManager.TriggerBuildEvent(new BuildEventArgs { name = type.ToString(), turns = type.BuildTotal() / type.BuildPerTurn() });
+			EventManager.PostBuildEvent(new BuildEventArgs { name = type.ToString(), turns = type.BuildTotal() / type.BuildPerTurn() });
 			state = State.Selected;
 		}
 
@@ -297,7 +297,7 @@ namespace game.ui {
 			if (GUILayout.Button("", ButtonStyle, width, height)) {
 				if (state == State.Selected) {
 					if (u_target != null) {
-						EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = u_target.actions});
+						//EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = u_target.actions});
 						state = State.Moving;
 						postEvent (2);
 					}
@@ -310,7 +310,6 @@ namespace game.ui {
 			if (GUILayout.Button("", ButtonStyle, width, height)){
 				if (state == State.Selected) {
 					if (u_target != null) {
-						EventManager.TriggerBuildMenuEvent(new GameEventArgs {});
 						state = State.Building;
 						postEvents (7, 9);
 					}

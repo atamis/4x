@@ -18,17 +18,14 @@ namespace game.ui {
 			AddMessage("Team Yog-Sothoth welcomes you.");
 			AddMessage("Enjoy the game.");
 
-			EventManager.StartEvent += new EventManager.GameEvent(OnStartEvent);
-			EventManager.BuildMenuEvent += new EventManager.GameEvent(OnBuildMenuEvent);
-			EventManager.BuildEvent += new EventManager.WarpEvent(OnBuildEvent);
-			EventManager.ScannedEvent += new EventManager.ScanEvent(OnScanEvent);
-			EventManager.MoveEventBefore += new EventManager.MoveEvent(OnMoveBeforeEvent);
-			EventManager.MoveEventAfter += new EventManager.MoveEvent(OnMoveAfterEvent);
-			EventManager.InvalidEvent += new EventManager.InvalidActionEvent(OnInvalidAction);
-			EventManager.TutEvent += new EventManager.TutorialEvent (OnTutorialEvent);
-			EventManager.SpreadEvent += new EventManager.GameEvent (OnSpreadEvent);
+			EventManager.StartEvent += new EventManager.GameEventHandler(OnStartEvent);
+			EventManager.BuildEvent += new EventManager.WarpEventHandler(OnBuildEvent);
+			EventManager.ScanEvent += new EventManager.ScanEventHandler(OnScanEvent);
+			EventManager.ErrorEvent += new EventManager.InvalidEventHandler(OnInvalidAction);
+			EventManager.TutorialEvent += new EventManager.TutorialEventHandler (OnTutorialEvent);
+			EventManager.SpreadEvent += new EventManager.SpreadEventHandler (OnSpreadEvent);
 
-			EventManager.TriggerStartEvent(new GameEventArgs{} );
+			EventManager.PostStartEvent(new GameEventArgs{} ); // start the game
 		}
 
 		void Start() {
@@ -79,7 +76,7 @@ namespace game.ui {
 			//Debug.Log ("Recieved Move Event");
 		}
 
-		void OnSpreadEvent(GameEventArgs args) {
+		void OnSpreadEvent(SpreadEventArgs args) {
 			//Debug.Log (um.tm.milestones.ToString ());
 			//Debug.Log (args.turn);
 			if (!um.tm.milestones [15] && args.turn > 5) {

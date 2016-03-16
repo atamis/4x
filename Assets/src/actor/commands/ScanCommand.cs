@@ -37,7 +37,7 @@ namespace game.actor.commands {
             u.au.PlayOneShot(scanSound);
 
 			if (found) {
-				EventManager.TriggerScanEvent(new ScanEventArgs { found = true });
+				EventManager.PostScanEvent(new ScanEventArgs { found = true });
 			}
 		}
 	}

@@ -63,7 +63,7 @@ namespace game.world {
 		}
 
 		public void makeMiasma(HexLoc loc, int aggression) {
-			if (map [loc] != null) {
+			if (map [loc].miasma != null) {
 				return;
 			}
 
@@ -119,7 +119,7 @@ namespace game.world {
                 }
             }
 
-			EventManager.TriggerGameOver(new GameEventArgs {});
+			EventManager.PostDefeatEvent(new GameEventArgs {});
             return true;
         }
 
@@ -130,7 +130,7 @@ namespace game.world {
                 }
             }
 
-			EventManager.TriggerGameWon(new GameEventArgs {});
+			EventManager.PostVictoryEvent(new GameEventArgs {});
             return true;
         }
 

@@ -10,7 +10,7 @@ using game.effects;
 namespace game.world {
 
     class Hex : MonoBehaviour {
-        private HexModel model;
+		private HexModel model;
 		public WorldMap wm;
         public Building building { get; set; }
         //public Unit unit { get; set; }
@@ -110,17 +110,24 @@ namespace game.world {
             }
         }
 
+		public void SetColor(Color c) {
+			this.model.SetColor (c);
+		} 
+
 		private class HexModel : MonoBehaviour {
 			SpriteRenderer sr;
 			CustomMaterial[] mats;
 			Hex h;
             private int lastSpriteUpdate = 0;
+			Color color;
 
 			public void init(Hex h) {
 				this.h = h;
+				this.color = h.b.GetColor ();
 
 				sr = gameObject.AddComponent<SpriteRenderer> ();
 				sr.sprite = Resources.Load<Sprite> ("Textures/T_Fog");
+				sr.color = new Color (1, 1, 1, 1);
 
 				transform.localScale = new Vector3 (1.9f, 1.9f, 1.9f);
 				transform.localPosition = new Vector3 (0, 0, Layer.Board);
@@ -140,6 +147,12 @@ namespace game.world {
 
 			public void reveal() {
 				sr.sprite = h.b.GetSprite ();
+				sr.color = this.color;
+				print (this.color);
+			}
+
+			public void SetColor(Color c) {
+				this.color = c;
 			}
 
 			void Update() {
@@ -156,7 +169,6 @@ namespace game.world {
 					if (h.scanned) {
 						// Glitch shader
 						if (h.miasma != null) {
-							sr.color = new Color (1, 1, 1);
 							sr.material = mats [3];
 							mats [3].tick ();
 
@@ -175,7 +187,6 @@ namespace game.world {
 				// Default shader
 				} else {
 					sr.material = mats [0];
-					sr.color = new Color (1, 1, 1);
 				}
 			}
 		}

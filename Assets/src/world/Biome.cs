@@ -54,6 +54,25 @@ namespace game.world {
 			default:
 				return 0f;
 			}
+		}
+
+		public static Color GetColor(this Biome b) {
+			switch (b) {
+			case Biome.Highlands:
+				return new Color (.56f, .63f, .51f, 1);
+			case Biome.Plains:
+				return new Color (.72f, .72f, .72f, 1);
+			case Biome.Forest:
+				return new Color (.23f, .52f, .14f, 1);
+			case Biome.Ocean:
+				return new Color (.17f, .35f, .58f, 1);
+			case Biome.Desert:
+				return new Color (.77f, .51f, .25f, 1);
+			case Biome.Jungle:
+				return new Color (.08f, .23f, .11f, 1);
+			default:
+				return new Color(1, 1, 1, 0);
+			}
 
 		}
 
