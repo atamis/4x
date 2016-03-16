@@ -66,7 +66,7 @@ namespace game.ui {
 		HighlightModel model;
 		MovementModel movement;
 
-		Hex h_target;
+		public Hex h_target;
 		Unit u_target {
 			get {
 				if (h_target != null && 

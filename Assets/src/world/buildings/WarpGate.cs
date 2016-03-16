@@ -40,7 +40,7 @@ namespace game.world.buildings {
 
 		public override string GetTooltip() {
 			if (BuildingUnit()) {
-				return GetName() + "(" + unitQueue + " units, " + progress + "/" + UNIT_COST + ")";
+				return GetName() + " (" + unitQueue + " units, " + progress + "/" + UNIT_COST + ")";
 			}
 			return base.GetTooltip();
 		}
