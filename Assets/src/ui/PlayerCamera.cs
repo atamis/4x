@@ -7,12 +7,10 @@ namespace game.ui {
     class PlayerCamera : MonoBehaviour {
         public Camera cam;
         float speed = 1f;
-		GameManager gm;
         private Vector3? goal;
 
         public void init(GameManager gm, Camera cam) {
             this.cam = cam;
-			this.gm = gm;
             cam.transform.parent = transform;
             goal = null;
         }

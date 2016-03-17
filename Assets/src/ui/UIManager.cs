@@ -1,13 +1,14 @@
-﻿/*
-using UnityEngine;
-using System.Collections.Generic;
+﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using game.actor;
 using game.actor.commands;
 using game.math;
 using game.world;
-using game.world.units;
 using game.world.buildings;
+using game.world.units;
 
 namespace game.ui {
 	class UIManager : MonoBehaviour {
@@ -47,6 +48,14 @@ namespace game.ui {
 		private static Texture2D UI_DeleteH = Resources.Load<Texture2D>("Textures/T_UI_DeleteH");
 		private static Texture2D UI_DeleteC = Resources.Load<Texture2D>("Textures/T_UI_DeleteC");
 
+		private static Texture2D iconUnit = Resources.Load<Texture2D>("Textures/T_Icon_Unit");
+		private static Texture2D iconBiome = Resources.Load<Texture2D>("Textures/T_Icon_Biome");
+		private static Texture2D iconBuilding = Resources.Load<Texture2D>("Textures/T_Icon_Building");
+		private static Texture2D iconMiasma = Resources.Load<Texture2D>("Textures/T_Icon_Miasma");
+
+		private static Texture2D iconHelp = Resources.Load<Texture2D>("Textures/T_Icon_Help");
+		private static Texture2D iconLines = Resources.Load<Texture2D>("Textures/T_Icon_Lines");
+
 		// x.split("\n").map { |l| l.split(" ")[3] }.join(", ")
 		private static Texture2D[] texes = new Texture2D[] {
 			UI_Move, UI_Scan, UI_Build, UI_Purify, UI_MoveH,
@@ -58,28 +67,31 @@ namespace game.ui {
 			Default,
 			Selected,
 			Moving,
-			Building,
+			Building
 		};
 
+		// GUI Stuff
 		private GUIStyle ButtonStyle;
+		Rect helpWindow = new Rect(20, 20, 200, 200);
+		Rect dialogWindow = new Rect(20, 20, 200, 200);
+		bool showHelp; bool showDialog;
 
-		public TutorialManager tm;
-		private GameManager gm;
+		private UINotification note;
+		private UIHighlight hl;
+		private UIMovement movement;
+		public State state;
+		HelperUI helper;
+
 		WorldMap w;
-		Player p;
-
-		TooltipUI t;
-		public HelperUI helper;
+		GameManager gm;
+		public TutorialManager tm;
 		MinimapManager mmm;
 		public bool ev_view = true;
+		TooltipUI t;
 
-		HighlightModel model;
-		MovementModel movement;
-
-		State state;
+		Player p;
 		public Hex h_target;
-
-		Unit u_target {
+		protected Unit u_target {
 			get {
 				if (h_target != null && 
 					h_target.units.Count > 0) {
@@ -89,80 +101,135 @@ namespace game.ui {
 				}
 			}
 		}
-			
-        public void init(GameManager gm, Player player, WorldMap w) {
-			foreach (Texture2D tex in texes) {
-				tex.filterMode = FilterMode.Point;
-			}
 
-			transform.parent = gm.transform;
-
-            this.gm = gm;
-			this.p = player;
+		public void init(GameManager gm, Player p, WorldMap w) {
+			this.gm = gm;
+			this.p = p;
 			this.w = w;
 
-			t = gameObject.AddComponent<TooltipUI> ();
-			t.init (this);
-
-			mmm = gameObject.AddComponent<MinimapManager>();
-
-			model = new GameObject ("Highlight Model").AddComponent<HighlightModel> ();
-			model.init (this);
-
-			movement = new GameObject("Movement Model").AddComponent<MovementModel>();
-			movement.init(this);
-
 			state = State.Default;
-			//building = false;
-		}
 
-		void Start () {
+			note = new GameObject ("UI Notification").AddComponent<UINotification> ();
+			note.init ();
+			note.transform.parent = gm.pc.transform;
+
+			hl = new GameObject ("UI Highlight").AddComponent<UIHighlight> ();
+			hl.init (this);
+			hl.transform.parent = transform;
+
 			tm = new GameObject("Tutorial Manager").AddComponent<TutorialManager>();
 			tm.init ();
+			tm.transform.parent = transform;
+
+			mmm = gameObject.AddComponent<MinimapManager>();
+			mmm.transform.parent = transform;
 
 			helper = gameObject.AddComponent<HelperUI>();
 			helper.init(this);
+
+			showHelp = false;
 		}
 
+		void Start() { 
+		}
+
+		private void buildBuilding(BuildingType type) {
+			try {
+				p.AddCommand(new BuildCommand(p, u_target, h_target, type));
+			} catch (Exception e) {
+				Notify (e.Message, Color.red);
+			}
+			EventManager.PostBuildEvent(new BuildEventArgs { name = type.ToString(), turns = type.BuildTotal() / type.BuildPerTurn() });
+			state = State.Selected;
+		}
+
+		// Tutorial
+		public void postEvent(int code) {
+			if (!tm.milestones [code] && tm.milestones[code-1]) {
+				EventManager.PostTutorialEvent (new TutorialEventArgs { tut_id = code });
+				tm.milestones [code] = true;
+			}
+		}
+
+		public void postEvents(params int[] codes) {
+			if (!tm.milestones [codes [0]] && tm.milestones [codes [0] - 1]) {
+				foreach (int i in codes) {
+					tm.milestones [i] = true;
+				}
+				tm.playQueue (codes);
+			}
+		}
+
+		// Notification
+		public void Notify(string msg, Color c) {
+			note.post (msg, c);
+		}
+
+		// GUI
 		private bool inToolbarBoundary(Vector3 v) {
-			// TODO: this seems a tiny bit too high. The bottoms of
-			// buttons pass through clicks, and there's a section on top
-			// with no button which blocks clicks.
 			return v.x > Screen.width * .3f && v.x < Screen.width * .76f
 				&& v.y > Screen.height * .1f && v.y < Screen.height * .28f;
 		}
 
+		void MakeHelpWindow(int id) {
+			if (GUI.Button (new Rect (10, 20, 100, 20), "Quit")) {
+				showHelp = !showHelp;
+			}
+			GUI.DragWindow();
+		}
+
+		void MakeTutorialWindow(int id) {
+			if (GUI.Button (new Rect (10, 20, 100, 20), "Quit")) {
+				showDialog = !showDialog;
+			}
+			GUI.DragWindow();
+		}
+
+		public void LookAt(Hex h) {
+			gm.pc.setLocation(w.l.HexPixel(h.loc));
+		}
+
+		public Hex GetHexAtMouse() {
+			Vector3 worldPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+			HexLoc l = w.l.PixelHex (worldPos);
+			if (w.map.ContainsKey (l)) {
+				Hex h = w.map [l];
+				return h;
+			}
+			return null;
+		}
+
 		void Update() {
-			if (Input.GetMouseButtonUp(0)) {
-				if (!inToolbarBoundary(Input.mousePosition)) {
-					if (((state == State.Default) || (state == State.Selected))) {
-						Hex h = GetHexAtMouse();
+			if (Input.GetMouseButtonUp (0)) {
+				if (!inToolbarBoundary (Input.mousePosition)) {
+
+					if ((state == State.Default) || (state == State.Selected)) {
+						Hex h = GetHexAtMouse ();
 						if (h != null) {
 							this.h_target = h;
 							if (this.tm.milestones [1] == false) {
 								postEvent (1);
 							} else if (!tm.milestones [6] && tm.milestones [5]) {
 								postEvent (6);
-							} else if (!tm.milestones [11] && tm.milestones[10]) {
+							} else if (!tm.milestones [11] && tm.milestones [10]) {
 								postEvent (11);
 							}
 						}
 						state = State.Selected;
-
 					} else if (state == State.Moving) {
-						if (Input.GetMouseButtonUp(0)) {
-							Hex h = GetHexAtMouse();
+						if (Input.GetMouseButtonUp (0)) {
+							Hex h = GetHexAtMouse ();
 							var unit = u_target;
 							try {
-								p.AddAllCommands(MoveCommand.pathfind(w, p, unit, h));
+								p.AddAllCommands (MoveCommand.pathfind (w, p, unit, h));
 								this.h_target = h;
 							} catch (Exception e) {
-								EventManager.PostInvalidAction(new InvalidActionArgs { msg = e.Message });
+								Notify (e.Message, Color.red);
 							}
 							state = State.Selected;
 							postEvent (3);
 							//EventManager.TriggerMoveEventAfter(new MoveEventArgs { stamina = unit.actions });
-							Debug.Log("Added Move Command");
+							Debug.Log ("Added Move Command");
 						}
 					} else if (state == State.Building) {
 
@@ -182,7 +249,7 @@ namespace game.ui {
 								this.h_target = h;
 								postEvent(3);
 							} catch (Exception e) {
-								EventManager.PostInvalidAction(new InvalidActionArgs { msg = e.Message });
+								Notify (e.Message, Color.red);
 							}
 						}
 
@@ -207,19 +274,19 @@ namespace game.ui {
 
 			}
 
-            if ((state == State.Default || state == State.Selected)
-                && Input.GetKeyUp(KeyCode.Tab)) {
-                var u = u_target;
+			if ((state == State.Default || state == State.Selected)
+				&& Input.GetKeyUp(KeyCode.Tab)) {
+				var u = u_target;
 
-                foreach (KeyValuePair<HexLoc, Hex> kv in w.map) {
-                    var h = kv.Value;
-                    if (h.units.Count > 0 && h.units[0] != u_target && h.units[0].actions > 0) {
-                        h_target = h;
-                        LookAt(h);
-                        break;
-                    }
-                }
-            }
+				foreach (KeyValuePair<HexLoc, Hex> kv in w.map) {
+					var h = kv.Value;
+					if (h.units.Count > 0 && h.units[0] != u_target && h.units[0].actions > 0) {
+						h_target = h;
+						LookAt(h);
+						break;
+					}
+				}
+			}
 
 			if (state == State.Building) {
 				if (Input.GetKeyUp(KeyCode.Alpha1)) {
@@ -240,76 +307,36 @@ namespace game.ui {
 			}
 		}
 
-        public void LookAt(Hex h) {
-            gm.pc.setLocation(w.l.HexPixel(h.loc));
-        }
-
-		public Hex GetHexAtMouse() {
-			Vector3 worldPos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			HexLoc l = w.l.PixelHex (worldPos);
-			if (w.map.ContainsKey (l)) {
-				Hex h = w.map [l];
-				return h;
-			}
-			return null;
-		}
-
-		private Hex getSelected() {
-			return h_target;
-		}
-
-		public void postEvent(int code) {
-			if (!tm.milestones [code] && tm.milestones[code-1]) {
-				EventManager.PostTutorialEvent (new TutorialEventArgs { tut_id = code });
-				tm.milestones [code] = true;
-			}
-		}
-
-		public void postEvents(params int[] codes) {
-			if (!tm.milestones [codes [0]] && tm.milestones [codes [0] - 1]) {
-				foreach (int i in codes) {
-					tm.milestones [i] = true;
-				}
-				tm.playQueue (codes);
-			}
-		}
-
-		private void buildBuilding(BuildingType type) {
-			try {
-				p.AddCommand(new BuildCommand(p, u_target, h_target, type));
-			} catch (Exception e) {
-				print(e);
-			}
-			EventManager.PostBuildEvent(new BuildEventArgs { name = type.ToString(), turns = type.BuildTotal() / type.BuildPerTurn() });
-			state = State.Selected;
-		}
-
-
 		void OnGUI() {
-
-			GUILayout.BeginArea(new Rect (Screen.width*.3f, Screen.height*.8f, Screen.width/2, Screen.height*.9f));
-			GUILayout.BeginHorizontal ();
-
-			var width = GUILayout.Width(Screen.width * .08f);
-			var height = GUILayout.Height(Screen.height * .13f);
+			float b_height = (Screen.height * .2f) / 3;
+			float b1_start = (Screen.height * .8f);
+			float my = Screen.height * .8f; // menu_y
+		
+			GUI.Box(new Rect(0, Screen.height * .8f, Screen.width, Screen.height * .2f), "");
 
 			ButtonStyle = new GUIStyle(GUI.skin.label);
 			ButtonStyle.normal.background = UI_Move; ButtonStyle.hover.background = UI_MoveH; ButtonStyle.active.background = UI_MoveC;
 
-			if (GUILayout.Button("", ButtonStyle, width, height)) {
+			float x = Screen.width * .25f;
+			float y = Screen.height * .8f;
+			float b2w = Screen.width * .1f;
+
+			// Move Button
+			if (GUI.Button(new Rect(x, y, b2w, b2w), "", ButtonStyle)) {
 				if (state == State.Selected) {
 					if (u_target != null) {
-						//EventManager.TriggerMoveEventBefore(new MoveEventArgs {stamina = u_target.actions});
 						state = State.Moving;
 						postEvent (2);
 					}
 				} else {
 					state = State.Default;
 				}
+				//Debug.Log ("Added Move Command");
 			}
 
+			// Build Button
 			ButtonStyle.normal.background = UI_Build; ButtonStyle.hover.background = UI_BuildH; ButtonStyle.active.background = UI_BuildC;
-			if (GUILayout.Button("", ButtonStyle, width, height)){
+			if (GUI.Button(new Rect(x + b2w, y, b2w, b2w), "", ButtonStyle)){
 				if (state == State.Selected) {
 					if (u_target != null) {
 						state = State.Building;
@@ -318,17 +345,19 @@ namespace game.ui {
 				} else if (state == State.Building) {
 					state = State.Selected;
 				}
+				//Debug.Log ("Added Build Command");
 			}
 
+			// Scan Button
 			ButtonStyle.normal.background = UI_Scan; ButtonStyle.hover.background = UI_ScanH; ButtonStyle.active.background = UI_ScanC;
-			if (GUILayout.Button("", ButtonStyle, width, height)) {
+			if (GUI.Button(new Rect(x + (b2w * 2), y, b2w, b2w), "", ButtonStyle)) {
 				if (state == State.Selected) {
 					if (u_target != null) {
 						try {
 							p.AddCommand (new ScanCommand (p, u_target, h_target));
 							postEvent(4);
 						} catch (Exception e) {
-							EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
+							Notify (e.Message, Color.red);
 						}
 
 					}
@@ -337,35 +366,34 @@ namespace game.ui {
 			}
 
 			ButtonStyle.normal.background = UI_Purify; ButtonStyle.hover.background = UI_PurifyH; ButtonStyle.active.background = UI_PurifyC;
-			if (GUILayout.Button("", ButtonStyle, width, height)) {
+			if (GUI.Button(new Rect(x + (b2w * 3), y, b2w, b2w), "", ButtonStyle)) {
 				if (state == State.Selected) {
 					if (u_target != null) {
 						try {
 							p.AddCommand (new CleanseCommand (p, u_target));
 						} catch (Exception e) {
-							EventManager.PostInvalidAction (new InvalidActionArgs{ msg = e.Message });
+							Notify (e.Message, Color.red);
 						}
 
 					}
 				}
-				//Debug.Log ("Added Cleanse Command");
+				//Debug.Log ("Added Purify Command");
 			}
 
 			ButtonStyle.normal.background = UI_End; ButtonStyle.hover.background = UI_EndH; ButtonStyle.active.background = UI_EndC;
-			if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.width * .12f), height)) {
+			if (GUI.Button (new Rect(x + (b2w * 4), y, b2w, b2w), "", ButtonStyle)) {
 				p.AddCommand(new EndTurnCommand(p));
-				//Debug.Log ("Added End Turn Command");
 			}
 
-			GUILayout.EndHorizontal ();
-			GUILayout.EndArea ();
+			//GUILayout.EndHorizontal ();
+			//GUILayout.EndArea ();
 
 			if (state == State.Building) {
-				GUILayout.BeginArea (new Rect (Screen.width * .3f, Screen.height * .7f, Screen.width / 2, Screen.height * .9f));
+				GUILayout.BeginArea (new Rect (Screen.width * .5f, Screen.height * .2f, Screen.width / 2, Screen.height * .9f));
 				GUILayout.BeginHorizontal ();
 
 				ButtonStyle.normal.background = UI_Cond; ButtonStyle.hover.background = UI_CondH; ButtonStyle.active.background = UI_CondC;
-				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * 0.08f), GUILayout.Height (Screen.height * 0.08f))) {
+				if (GUILayout.Button ("", ButtonStyle, GUILayout.Width (Screen.height * .08f ), GUILayout.Height (Screen.height * 0.08f))) {
 					buildBuilding(BuildingType.Conduit);
 					postEvents (10);
 				}
@@ -398,41 +426,118 @@ namespace game.ui {
 				h_target.building.GetType() == typeof(WarpGate)) {
 				var wg = (WarpGate)h_target.building;
 
-				ButtonStyle.normal.background = UI_Unit;
-				ButtonStyle.hover.background = UI_UnitH;
-				ButtonStyle.active.background = UI_UnitC;
+				ButtonStyle.normal.background = UI_Unit; ButtonStyle.hover.background = UI_UnitH; ButtonStyle.active.background = UI_UnitC;
 				if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * 0.08f), GUILayout.Height(Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new WarpUnitCommand(p, wg));
 					} catch (Exception e) {
-						print(e);
+						Notify (e.Message, Color.red);
 					}
 				}
 
 			}
 
-			if (h_target != null &&
-				h_target.building != null) {
-
-				ButtonStyle.normal.background = UI_Delete;
-				ButtonStyle.hover.background = UI_DeleteH;
-				ButtonStyle.active.background = UI_DeleteC;
+			if (h_target != null && h_target.building != null) {
+				ButtonStyle.normal.background = UI_Delete; ButtonStyle.hover.background = UI_DeleteH; ButtonStyle.active.background = UI_DeleteC;
 				if (GUILayout.Button("", ButtonStyle, GUILayout.Width(Screen.height * 0.08f), GUILayout.Height(Screen.height * 0.08f))) {
 					try {
 						p.AddCommand(new DeleteBuildingCommand(p, h_target));
 					} catch (Exception e) {
-						print(e);
+						Notify (e.Message, Color.red);
 					}
 				}
 
 			}
-
 			GUILayout.EndHorizontal();
 			GUILayout.EndArea();
 
+
+			// Panel 3
+			// Help Button
+			if (GUI.Button (new Rect(Screen.width * .75f, b1_start, b_height, b_height), iconHelp)) {
+				showHelp = !showHelp;
+			}
+
+			// Objectives Button
+			if (GUI.Button (new Rect(Screen.width * .75f, b1_start + b_height, b_height, b_height), iconLines)) {
+				showDialog = !showDialog;
+			}
+
+			float b2_h = Screen.height * .2f / 2; 
+			float ts = (Screen.width * .75f) + b_height + b2_h; // text start
+
+			GUI.DrawTexture(new Rect(Screen.width * .75f + b_height, my, b2_h , b2_h), iconUnit);
+			GUI.DrawTexture(new Rect(Screen.width * .75f + b_height + (2 * b2_h), Screen.height * .8f, b2_h , b2_h), iconBuilding);
+			GUI.DrawTexture(new Rect(Screen.width * .75f + b_height, my + b2_h, b2_h , b2_h), iconBiome);
+			GUI.DrawTexture(new Rect(Screen.width * .75f + b_height + (2 * b2_h), my + b2_h, b2_h, b2_h), iconMiasma);
+
+			if (h_target != null) {
+				if (h_target.units.Count > 0) {
+					GUI.Label (new Rect (ts, my, b2_h, b2_h), "MP: " + "\n");
+				}
+				if (h_target.revealed) {
+					GUI.Label (new Rect (ts + (2*b2_h), my, b2_h, b2_h), "Biome; " + h_target.b.ToString () + "\nEV: " + (h_target.scanned ? h_target.ev.ToString() : "??"));
+				}
+				if (h_target.building != null) {
+					GUI.Label (new Rect(ts, my + b2_h, b2_h, b2_h), h_target.building.GetTooltip());
+				}
+				if (h_target.miasma != null) {
+					GUI.Label (new Rect(ts + b2_h, my + b2_h, b2_h, b2_h), "Miasma: lvl " + h_target.miasma.level);
+				}
+			}
+
+			// PANELS
+			// help window
+			if (showHelp) {
+				helpWindow = GUI.Window(0, helpWindow, MakeHelpWindow, "Help Window");
+			}
+
+			if (showDialog) {
+				dialogWindow = GUI.Window (1, dialogWindow, MakeTutorialWindow, "Objective Window");
+			}
 		}
 
-		class HighlightModel : MonoBehaviour {
+		private class UINotification : MonoBehaviour {
+			public TextMesh msg;
+			private float clock;
+			//Font font = Resources.Load<Font>("misc/LCDfont");	
+
+			public void init() {
+				msg = gameObject.AddComponent<TextMesh> ();
+				msg.GetComponent<Renderer> ().sortingOrder = 0;
+				msg.text = " ";
+				msg.characterSize = 0.3f;
+				msg.color = new Color (1, 1, 1, 1);
+				msg.alignment = TextAlignment.Center;
+				msg.anchor = TextAnchor.MiddleCenter;
+				transform.localPosition = new Vector3 (-2.5f, -2.5f, -1);
+				clock = 0.0f;
+			}
+
+			public void post(string text, Color c) {
+				msg.text = text;
+				msg.color = c;
+				clock = 0.0f;
+			}
+
+			void Start() {
+			}
+
+			void Update() {
+				if (this.clock < 150) {
+					clock += 1f;
+					if (this.clock > 75) {
+						Color c = msg.color;
+						c.a -= 0.01f;
+						msg.color = c;
+					}
+				} else {
+					msg.color = new Color(0, 0, 0, 0);
+				}
+			}
+		}
+
+		private class UIHighlight : MonoBehaviour {
 			SpriteRenderer sp;
 			UIManager m;
 
@@ -461,7 +566,7 @@ namespace game.ui {
 			}
 		}
 
-		class MovementModel : MonoBehaviour {
+		private class UIMovement : MonoBehaviour {
 			SpriteRenderer sp;
 			UIManager m;
 
@@ -489,7 +594,5 @@ namespace game.ui {
 				}
 			}
 		}
-
 	}
 }
-*/

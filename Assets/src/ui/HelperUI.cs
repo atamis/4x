@@ -24,9 +24,7 @@ namespace game.ui {
 			tex = Resources.Load<Texture2D>("Textures/Helper/T_HelperL1");
 			messages = new LinkedList<string>();
 
-			AddMessage("Team Yog-Sothoth welcomes you.");
-			AddMessage("Enjoy the game.");
-
+			messages.AddFirst ("Welcome!");
 			EventManager.StartEvent += new EventManager.GameEventHandler(OnStartEvent);
 			EventManager.BuildEvent += new EventManager.WarpEventHandler(OnBuildEvent);
 			EventManager.ScanEvent += new EventManager.ScanEventHandler(OnScanEvent);
@@ -106,12 +104,10 @@ namespace game.ui {
 			um.tm.play (20);
 		}
 
-		public float w = 0; public float x = Screen.height * .8f; public float y = Screen.width / 3; public float z = Screen.height * .2f;
 		void OnGUI() {
 			var m = messages.Take(6).Reverse().Aggregate<string>((acc, msg) => acc + "\n" + msg);
-			GUI.Box(new Rect(Screen.width * .90f, tex.height, tex.width , tex.width ), tex);
-
-			GUI.Box(new Rect(w, x, y, z), m);
+			GUI.Box(new Rect(Screen.width - tex.width, 50, tex.width , tex.width ), tex);
+			GUI.Box(new Rect(0, Screen.height * .8f, Screen.width * .25f, Screen.height * .2f), m);
 		}
 	}
 }

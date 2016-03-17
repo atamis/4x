@@ -215,11 +215,9 @@ namespace game.world.buildings {
 
         public class BuildingModel : MonoBehaviour {
 			public SpriteRenderer sp;
-			Building b;
 			Material mat;
 
 			public virtual void init(Building b) {
-				this.b = b;
 
 				transform.parent = b.gameObject.transform;
 				transform.localPosition = new Vector3 (0, 0, Layer.Buildings);

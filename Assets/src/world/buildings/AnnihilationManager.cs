@@ -15,7 +15,7 @@ namespace game.world.buildings {
     }
 
     class AnnihilationManager : MonoBehaviour {
-        private Actor a;
+        //private Actor a;
         private WorldMap w;
         private State state;
         private List<WarpGate> gates;
@@ -37,7 +37,7 @@ namespace game.world.buildings {
 
         public void init(WorldMap w, Actor a) {
             this.w = w;
-            this.a = a;
+            //this.a = a;
             this.state = State.Searching;
             lastSearch = 0;
         }
