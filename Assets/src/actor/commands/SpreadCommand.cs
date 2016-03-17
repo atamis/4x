@@ -16,13 +16,13 @@ namespace game.actor.commands {
 		public float infectChance() {
 			switch (aggression) {
 				case 0:
-					return .015f;
+					return .03f;
 				case 1:
 					return .03f;
 				case 2:
 					return .08f;
 				case 3:
-					return .2f;
+					return .3f;
 			}
 			return 0f;
 		}

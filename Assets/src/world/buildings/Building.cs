@@ -56,9 +56,9 @@ namespace game.world.buildings {
         public static int PowerGen(this BuildingType b) {
             switch(b) {
                 case BuildingType.Harvester:
-                    return 5;
+                    return 8;
                 case BuildingType.WarpGate:
-                    return 1;
+                    return 2;
                 default:
                     return 0;
             }
