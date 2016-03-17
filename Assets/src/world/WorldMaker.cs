@@ -11,8 +11,8 @@ namespace game.world {
 		WorldMap w;
 		public Vector2 spawn;
 		private int bsize;
-		public int SPAWN_BOUNDS = 9;
-		public int OUTER_SPAWN_BOUNDS = 7;
+		public int INNER_SPAWN_BOUNDS = 10;
+		public int OUTER_SPAWN_BOUNDS = 10;
 
 		public WorldMaker(WorldMap w, Player player, int seed, bool bigbiome) {
 			this.w = w;
@@ -46,15 +46,8 @@ namespace game.world {
 			return nearest;
 		}
 
-		bool inSpawnZone(Vector2 pos) {
-			if ((pos.x >= spawn.x - SPAWN_BOUNDS && pos.x <= spawn.x + SPAWN_BOUNDS) && (pos.x >= spawn.x - SPAWN_BOUNDS && pos.x <= spawn.x + SPAWN_BOUNDS)) {
-				return true;
-			}
-			return false;
-		}
-
-		bool OutSpawnZone(Vector2 pos) {
-			if ((pos.x >= spawn.x - OUTER_SPAWN_BOUNDS && pos.x <= spawn.x + OUTER_SPAWN_BOUNDS) && (pos.x >= spawn.x - OUTER_SPAWN_BOUNDS && pos.x <= spawn.x + OUTER_SPAWN_BOUNDS)) {
+		bool inBounds(Vector2 pos, int bounds) {
+			if ((pos.x >= spawn.x - bounds && pos.x <= spawn.x + bounds) && (pos.y >= spawn.y - bounds && pos.y <= spawn.y + bounds)) {
 				return true;
 			}
 			return false;
@@ -65,13 +58,17 @@ namespace game.world {
 			genBiomes ();
 			genPlayer ();
 			genNodes ();
+            genPresents();
 			genRivers (2, 20);
-			SPAWN_BOUNDS = 7;
-			OUTER_SPAWN_BOUNDS = 8;
+
+			INNER_SPAWN_BOUNDS = 6;
+			OUTER_SPAWN_BOUNDS = 7;
 			genCorruption(2, 1);
-			SPAWN_BOUNDS = 12;
-			OUTER_SPAWN_BOUNDS = 13;
+
+			INNER_SPAWN_BOUNDS = 10;
+			OUTER_SPAWN_BOUNDS = 12;
 			genCorruption (2, 4);
+
 			decorate ();
 		}
 
@@ -106,7 +103,8 @@ namespace game.world {
 			b1.init(player, w.map[new HexLoc((int)spawn.x, (int)spawn.y)]);
             b1.power = 50;
 
-			int c = 0;
+
+            int c = 0;
 			while (c < 2) {
 				HexLoc loc = new HexLoc((int)spawn.x + Random.Range(-1, 1), (int)spawn.y+Random.Range(-1, 1));
 				if (w.map[loc].units.Count == 0 && w.map[loc].b.Passable()) {
@@ -131,7 +129,28 @@ namespace game.world {
 			//Debug.Log ("Generated Nodes");
 		}
 
-		private void decorate() {
+        private void genPresents() {
+            int quadrants = w.size / 8; // MAXIMUM OVERPRESENT
+
+            for (int x = 0; x < quadrants; x++) {
+                for (int y = 0; y < quadrants; y++) {
+                    int i = Random.Range(8 * x, 8 * (x + 1)); int j = Random.Range(8 * y, 8 * (y + 1));
+                    if (w.map.ContainsKey(new HexLoc(i, j))) {
+                        Present p;
+                        if (Random.value < 0.5f) {
+                            p = new GameObject("Present").AddComponent<RevealPresent>();
+                        } else {
+                            p = new GameObject("Present").AddComponent<UnitPresent>();
+                        }
+                        p.init(w.map[new HexLoc(i, j)]);
+                    }
+
+                }
+            }
+            //Debug.Log ("Generated Nodes");
+        }
+
+        private void decorate() {
 			for (int x = 0; x < w.size; x++) {
 				for (int y = 0; y < w.size; y++) {
 					// Set EV value
@@ -169,7 +188,7 @@ namespace game.world {
 			int c = 0;
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
-				if (inSpawnZone (new Vector2 (x, y))) {
+				if (inBounds (new Vector2 (x, y), INNER_SPAWN_BOUNDS)) {
 					continue;
 				}
 
@@ -203,7 +222,7 @@ namespace game.world {
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
 				HexLoc loc = new HexLoc (x, y);
-				if ((w.map[loc].b == Biome.Ocean)|| (inSpawnZone(new Vector2(x, y)) && !OutSpawnZone(new Vector2(x, y)))) {
+				if ((w.map[loc].b == Biome.Ocean) || (inBounds(new Vector2(x, y), INNER_SPAWN_BOUNDS)) || (!inBounds(new Vector2(x, y), OUTER_SPAWN_BOUNDS))) {
 					continue;
 				}
 

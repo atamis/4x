@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using game.world;
 using game.world.units;
+using game.math;
 
 namespace game.actor.commands {
 	class MoveCommand : Command {
@@ -31,13 +32,18 @@ namespace game.actor.commands {
             u.h = target;
 
 			target.reveal ();
+
+            if (target.present != null) {
+                target.present.Trigger(a);
+            }
+
 			foreach (Hex h in target.Neighbors()) {
 				h.reveal ();
 			}
 			UnityEngine.Debug.Log ("Moved to " + target + ", distance " + distance);
 		}
 
-		public override void Undo(WorldMap w) {
+        public override void Undo(WorldMap w) {
 			u.h = prev;
 		}
 

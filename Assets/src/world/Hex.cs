@@ -26,6 +26,7 @@ namespace game.world {
         public bool revealed;
         internal WorldPathfinding.PathfindingInfo pathfind;
         internal bool annihilated;
+        public Present present;
 
         public bool powered {
 			get {
@@ -44,7 +45,7 @@ namespace game.world {
             model.init(this);
 
             transform.localPosition = wm.l.HexPixel(loc);
-
+ 
 			this.ev = 0;
 			this.scanned = false;
         }

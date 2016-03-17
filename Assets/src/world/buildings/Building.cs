@@ -56,9 +56,9 @@ namespace game.world.buildings {
         public static int PowerGen(this BuildingType b) {
             switch(b) {
                 case BuildingType.Harvester:
-                    return 5;
+                    return 7;
                 case BuildingType.WarpGate:
-                    return 1;
+                    return 2;
                 default:
                     return 0;
             }
@@ -87,8 +87,15 @@ namespace game.world.buildings {
                 if (value != null && value.building != null) {
                     throw new Exception("There is already a building there");
                 }
-                value.building = this;
-                _h = value;
+
+                if (value == null) {
+                    _h.building = null;
+                    _h = null;
+                } else {
+
+                    value.building = this;
+                    _h = value;
+                }
             }
 		}
 		public Actor a;
@@ -145,7 +152,7 @@ namespace game.world.buildings {
 		}
 
 		public void Die() {
-			Destroy (model);
+			Destroy (model.gameObject);
 			h = null;
 			Destroy (gameObject);
 		}
