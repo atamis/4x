@@ -59,7 +59,7 @@ Buildings:
 	Warp Gate for future use.
 
 Miasma
-	- A quickly spreading unknown alien life form that destroys buildings and
+	- A quickly spreading, unknown alien life form that destroys buildings and
 	  kills units. It can be cleared away by using units' purify action and by
 	  building purifiers. 
 	  
