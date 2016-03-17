@@ -531,7 +531,7 @@ namespace game.ui {
 					GUI.Label (new Rect (ts + (2*b2_h), my, b2_h, b2_h), "Biome; " + h_target.b.ToString () + "\nEV: " + (h_target.scanned ? h_target.ev.ToString() : "??"));
 				}
 				if (h_target.building != null) {
-					GUI.Label (new Rect(ts, my + b2_h, b2_h, b2_h), h_target.building.GetTooltip());
+					GUI.Label (new Rect(ts, my + b2_h, b2_h, b2_h), h_target.building.GetTooltip() + "/n" + (h_target.pn != null ? "Power: " + h_target.pn.power : ""));
 				}
 				if (h_target.miasma != null) {
 					GUI.Label (new Rect(ts + b2_h + b2_h, my + b2_h, b2_h, b2_h), "Miasma: lvl " + h_target.miasma.level);

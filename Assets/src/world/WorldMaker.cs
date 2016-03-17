@@ -189,11 +189,7 @@ namespace game.world {
 			int c = 0;
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
-<<<<<<< HEAD
 				if (inBounds (new Vector2 (x, y), RIVER_SPAWN_BOUNDS)) {
-=======
-				if (inBounds (new Vector2 (x, y), 5)) {
->>>>>>> c2cb5a894716cc9db8cc62bd743927b6c54f474b
 					continue;
 				}
 

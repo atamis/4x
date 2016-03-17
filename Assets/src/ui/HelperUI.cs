@@ -126,7 +126,7 @@ namespace game.ui {
 
 		void OnGUI() {
 			var m = messages.Take(6).Reverse().Aggregate<string>((acc, msg) => acc + "\n" + msg);
-			GUI.Box(new Rect(Screen.width - tex.width, 50, tex.width , tex.width ), tex);
+			GUI.Box(new Rect(Screen.width - tex.width - 50, 50, tex.width , tex.width ), tex);
 			GUI.Box(new Rect(0, Screen.height * .8f, Screen.width * .25f, Screen.height * .2f), m);
 		}
 	}
