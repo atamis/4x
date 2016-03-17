@@ -280,7 +280,7 @@ namespace game.ui {
 							}
 							state = State.Selected;
 							postEvent (3);
-							//EventManager.TriggerMoveEventAfter(new MoveEventArgs { stamina = unit.actions });
+							EventManager.PostMoveEvent(new MoveEventArgs { stamina = unit.actions, state = 1 });
 							Debug.Log ("Added Move Command");
 						}
 					} else if (state == State.Building) {
@@ -379,6 +379,7 @@ namespace game.ui {
 					if (u_target != null) {
 						state = State.Moving;
 						postEvent (2);
+						EventManager.PostMoveEvent (new MoveEventArgs{ state = 0});
 					}
 				} else {
 					state = State.Default;
@@ -436,9 +437,6 @@ namespace game.ui {
 			if (GUI.Button (new Rect(x + (b2w * 4), y, b2w, b2w), "", ButtonStyle)) {
 				p.AddCommand(new EndTurnCommand(p));
 			}
-
-			//GUILayout.EndHorizontal ();
-			//GUILayout.EndArea ();
 
 			if (state == State.Building) {
 				GUILayout.BeginArea (new Rect (Screen.width * .25f, Screen.height * .70f, Screen.height * .4f, Screen.height * .08f));
@@ -503,7 +501,6 @@ namespace game.ui {
 			GUILayout.EndHorizontal();
 			GUILayout.EndArea();
 
-
 			// Panel 3
 			// Help Button
 			if (GUI.Button (new Rect(Screen.width * .75f, b1_start, b_height, b_height), iconHelp)) {
@@ -537,7 +534,7 @@ namespace game.ui {
 					GUI.Label (new Rect(ts, my + b2_h, b2_h, b2_h), h_target.building.GetTooltip());
 				}
 				if (h_target.miasma != null) {
-					GUI.Label (new Rect(ts + b2_h, my + b2_h, b2_h, b2_h), "Miasma: lvl " + h_target.miasma.level);
+					GUI.Label (new Rect(ts + b2_h + b2_h, my + b2_h, b2_h, b2_h), "Miasma: lvl " + h_target.miasma.level);
 				}
 			}
 

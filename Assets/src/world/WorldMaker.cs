@@ -188,7 +188,7 @@ namespace game.world {
 			int c = 0;
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
-				if (inBounds (new Vector2 (x, y), INNER_SPAWN_BOUNDS)) {
+				if (inBounds (new Vector2 (x, y), 5)) {
 					continue;
 				}
 
