@@ -64,7 +64,6 @@ namespace game.ui {
 			UI_Cond, UI_CondH, UI_CondC, UI_Gate, UI_GateH, UI_GateC, UI_Harv, UI_HarvH, UI_HarvC, UI_Tow, UI_TowH, UI_TowC
 		};
 		*/
-
 		public enum State {
 			Default,
 			Selected,
@@ -80,7 +79,7 @@ namespace game.ui {
 
 		private UINotification note;
 		private UIHighlight hl;
-		private UIMovement movement;
+		private UIMovement mv;
 		public State state;
 		HelperUI helper;
 
@@ -118,6 +117,9 @@ namespace game.ui {
 			hl = new GameObject ("UI Highlight").AddComponent<UIHighlight> ();
 			hl.init (this);
 			hl.transform.parent = transform;
+
+			mv = new GameObject ("UI Movement").AddComponent<UIMovement> ();
+			mv.init (this);
 
 			tm = new GameObject("Tutorial Manager").AddComponent<TutorialManager>();
 			tm.init ();
@@ -391,7 +393,7 @@ namespace game.ui {
 			//GUILayout.EndArea ();
 
 			if (state == State.Building) {
-				GUILayout.BeginArea (new Rect (Screen.width * .5f, Screen.height * .2f, Screen.width / 2, Screen.height * .9f));
+				GUILayout.BeginArea (new Rect (Screen.width * .25f, Screen.height * .70f, Screen.height * .4f, Screen.height * .08f));
 				GUILayout.BeginHorizontal ();
 
 				ButtonStyle.normal.background = UI_Cond; ButtonStyle.hover.background = UI_CondH; ButtonStyle.active.background = UI_CondC;
@@ -475,7 +477,10 @@ namespace game.ui {
 
 			if (h_target != null) {
 				if (h_target.units.Count > 0) {
-					GUI.Label (new Rect (ts, my, b2_h, b2_h), "MP: " + "\n");
+					GUI.Label (new Rect (ts, my, b2_h, b2_h), 
+						"Units: " + h_target.units
+						.Select(unit => unit.ToString())
+						.Aggregate<String>((acc, str) => acc + ", " + str));
 				}
 				if (h_target.revealed) {
 					GUI.Label (new Rect (ts + (2*b2_h), my, b2_h, b2_h), "Biome; " + h_target.b.ToString () + "\nEV: " + (h_target.scanned ? h_target.ev.ToString() : "??"));
