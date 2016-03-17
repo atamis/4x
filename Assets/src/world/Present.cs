@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using game.ui;
 
 namespace game.world {
     class UnitPresent : Present {
         protected override void enactNewWorldOrder(Actor a) {
             print(h);
             h.wm.makeUnit(a, h.loc);
+            EventManager.PostPresentEvent(new PresentEventArgs { type = "unit" });
         }
     }
 
@@ -22,6 +24,7 @@ namespace game.world {
                     kv.Value.scan();
                 }
             }
+            EventManager.PostPresentEvent(new PresentEventArgs { type = "scan" });
         }
     }
 
