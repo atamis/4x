@@ -45,7 +45,7 @@ namespace game.world {
             model.init(this);
 
             transform.localPosition = wm.l.HexPixel(loc);
-
+            reveal();
 			this.ev = 0;
 			this.scanned = false;
         }
