@@ -182,7 +182,7 @@ namespace game.ui {
 
 		void MakeTutorialWindow(int id) {
             GUI.Label(new Rect(10, 20, 150, 150), tutorialMessage());
-			if (GUI.Button (new Rect (10, 170, 100, 20), "Quit")) {
+			if (GUI.Button (new Rect (10, 170, 100, 20), "Close")) {
 				showDialog = !showDialog;
 			}
 			GUI.DragWindow();
@@ -200,7 +200,7 @@ namespace game.ui {
                             return "Harvester - Generates 8 energy per turn when built on top of an energy " +
                                 "node and 1 energy per turn otherwise. Connect this to your Warp Gates via Conduits.";
                         case BuildingType.Purifier:
-                            return "Purifier - A defensive structure that clears the Miasma off of one nearby tile" + 
+                            return "Purifier - A defensive structure that clears the Miasma off of one nearby tile" +
                                 " per turn.Must be connected to an energy network to function.Draws 5 power per turn.";
                         case BuildingType.WarpGate:
                             return "Warp Gate - Warps in buildings and units at the expense of energy. Each Warp Gate" +
@@ -218,11 +218,15 @@ namespace game.ui {
                     return "This drop pod might contain units or sensor that scans the surrounding area. Move a unit over one to open it up.";
                 }
 
+                if (h_target.node != null && h_target.scanned == true) {
+                    return "This is an energy node. Harvesters produce much more energy when placed on nodes.";
+                }
+
                 if (h_target.units.Count > 0) {
                     return "Your trusty crewmates. Don't let them get killed. Command them with the big buttons at the bottom of the screen.";
                 }
 
-                if (h_target.miasma != null) {
+                if (h_target.miasma != null && h_target.revealed == true) {
                     return "A quickly spreading, unknown alien life form that destroys buildings and kills units. It can be cleared" +
                         " away by using units' purify action and  building purifiers.";
                 }
