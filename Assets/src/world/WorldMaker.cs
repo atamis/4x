@@ -11,6 +11,7 @@ namespace game.world {
 		WorldMap w;
 		public Vector2 spawn;
 		private int bsize;
+		public int RIVER_SPAWN_BOUNDS = 5;
 		public int INNER_SPAWN_BOUNDS = 10;
 		public int OUTER_SPAWN_BOUNDS = 10;
 
@@ -188,7 +189,7 @@ namespace game.world {
 			int c = 0;
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
-				if (inBounds (new Vector2 (x, y), INNER_SPAWN_BOUNDS)) {
+				if (inBounds (new Vector2 (x, y), RIVER_SPAWN_BOUNDS)) {
 					continue;
 				}
 
