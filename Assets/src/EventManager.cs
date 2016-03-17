@@ -18,6 +18,10 @@ namespace game {
 		public int stamina { get; set; }
 	}
 
+	class PresentEventArgs : System.EventArgs {
+		public string type { get; set; }
+	}
+
 	class BuildEventArgs : System.EventArgs {
 		public string name { get; set; }
 		public int turns { get; set; }
@@ -59,6 +63,9 @@ namespace game {
 		public delegate void SpreadEventHandler(SpreadEventArgs eventArgs);
 		public static event SpreadEventHandler SpreadEvent;
 
+		public delegate void PresentEventHandler(PresentEventArgs eventArgs);
+		public static event PresentEventHandler PresentEvent;
+
 		public static void PostInvalidAction(InvalidActionArgs args = null) {
 			if (ErrorEvent != null) {
 				ErrorEvent (args);
@@ -68,6 +75,12 @@ namespace game {
 		public static void PostStartEvent(GameEventArgs args = null) {
 			if (StartEvent != null) {
 				StartEvent (args);
+			}
+		}
+
+		public static void PostPresentEvent(PresentEventArgs args = null){
+			if (PresentEvent != null) {
+				PresentEvent (args);
 			}
 		}
 

@@ -31,6 +31,7 @@ namespace game.ui {
 			EventManager.ErrorEvent += new EventManager.InvalidEventHandler(OnInvalidAction);
 			EventManager.TutorialEvent += new EventManager.TutorialEventHandler (OnTutorialEvent);
 			EventManager.SpreadEvent += new EventManager.SpreadEventHandler (OnSpreadEvent);
+			EventManager.PresentEvent += new EventManager.PresentEventHandler (OnPresentEvent);
 
 			EventManager.PostStartEvent(new GameEventArgs{} ); // start the game
 		}
@@ -53,6 +54,14 @@ namespace game.ui {
 
 		void OnInvalidAction(InvalidActionArgs evt) {
 			messages.AddFirst(evt.msg);
+		}
+
+		void OnPresentEvent(PresentEventArgs args){
+			if (args.type == "unit"){
+				AddMessage("You found an extra unit!");
+			} else if (args.type == "scan"){
+				AddMessage("A large area of the map has been revealed!");
+			}
 		}
 
 		void OnBuildMenuEvent(GameEventArgs eventArgs){
