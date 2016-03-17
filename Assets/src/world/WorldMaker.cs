@@ -11,8 +11,8 @@ namespace game.world {
 		WorldMap w;
 		public Vector2 spawn;
 		private int bsize;
-		public int SPAWN_BOUNDS = 9;
-		public int OUTER_SPAWN_BOUNDS = 7;
+		public int INNER_SPAWN_BOUNDS = 10;
+		public int OUTER_SPAWN_BOUNDS = 10;
 
 		public WorldMaker(WorldMap w, Player player, int seed, bool bigbiome) {
 			this.w = w;
@@ -46,15 +46,8 @@ namespace game.world {
 			return nearest;
 		}
 
-		bool inSpawnZone(Vector2 pos) {
-			if ((pos.x >= spawn.x - SPAWN_BOUNDS && pos.x <= spawn.x + SPAWN_BOUNDS) && (pos.x >= spawn.x - SPAWN_BOUNDS && pos.x <= spawn.x + SPAWN_BOUNDS)) {
-				return true;
-			}
-			return false;
-		}
-
-		bool OutSpawnZone(Vector2 pos) {
-			if ((pos.x >= spawn.x - OUTER_SPAWN_BOUNDS && pos.x <= spawn.x + OUTER_SPAWN_BOUNDS) && (pos.x >= spawn.x - OUTER_SPAWN_BOUNDS && pos.x <= spawn.x + OUTER_SPAWN_BOUNDS)) {
+		bool inBounds(Vector2 pos, int bounds) {
+			if ((pos.x >= spawn.x - bounds && pos.x <= spawn.x + bounds) && (pos.y >= spawn.y - bounds && pos.y <= spawn.y + bounds)) {
 				return true;
 			}
 			return false;
@@ -66,12 +59,15 @@ namespace game.world {
 			genPlayer ();
 			genNodes ();
 			genRivers (2, 20);
-			SPAWN_BOUNDS = 7;
-			OUTER_SPAWN_BOUNDS = 8;
+
+			INNER_SPAWN_BOUNDS = 6;
+			OUTER_SPAWN_BOUNDS = 7;
 			genCorruption(2, 1);
-			SPAWN_BOUNDS = 12;
-			OUTER_SPAWN_BOUNDS = 13;
+
+			INNER_SPAWN_BOUNDS = 10;
+			OUTER_SPAWN_BOUNDS = 12;
 			genCorruption (2, 4);
+
 			decorate ();
 		}
 
@@ -169,7 +165,7 @@ namespace game.world {
 			int c = 0;
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
-				if (inSpawnZone (new Vector2 (x, y))) {
+				if (inBounds (new Vector2 (x, y), INNER_SPAWN_BOUNDS)) {
 					continue;
 				}
 
@@ -203,7 +199,7 @@ namespace game.world {
 			while (c < count) {
 				int x = Random.Range (0, w.size); int y = Random.Range (0, w.size);
 				HexLoc loc = new HexLoc (x, y);
-				if ((w.map[loc].b == Biome.Ocean)|| (inSpawnZone(new Vector2(x, y)) && !OutSpawnZone(new Vector2(x, y)))) {
+				if ((w.map[loc].b == Biome.Ocean) || (inBounds(new Vector2(x, y), INNER_SPAWN_BOUNDS)) || (!inBounds(new Vector2(x, y), OUTER_SPAWN_BOUNDS))) {
 					continue;
 				}
 
