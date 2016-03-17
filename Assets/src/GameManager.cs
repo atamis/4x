@@ -46,13 +46,13 @@ namespace game {
 			w.NewTurn(null, actors[currentActor]);
 			w.PostTurn(null, actors[currentActor]);
 
-			/*
+			
             if (false) {
                 foreach (KeyValuePair<HexLoc, Hex> kv in w.map) {
                     kv.Value.reveal();
                 }
             }
-            */
+            
 
             am = gameObject.AddComponent<AnnihilationManager>();
             am.init(w, player);
