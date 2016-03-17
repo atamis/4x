@@ -8,11 +8,11 @@ using UnityEngine;
 namespace game.actor.commands {
 	class CleanseCommand : Command {
 		Unit u;
-		Hex h;
+		//Hex h;
 
 		public CleanseCommand(Actor a, Unit u) : base(a) {
 			this.u = u;
-			this.h = u.h;
+			//this.h = u.h;
 
 			if (u.actions < 2) {
 				throw new Exception (u + "doesn't have enough action points!");

@@ -181,11 +181,7 @@ namespace game.world.buildings {
                 startConnecting();
                 return State.Connecting;
             }
-
-
-
-
-                return State.Searching;
+			return State.Searching;
         }
     }
 }
