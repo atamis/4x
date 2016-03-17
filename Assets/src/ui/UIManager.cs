@@ -171,8 +171,7 @@ namespace game.ui {
 
 		// GUI
 		private bool inToolbarBoundary(Vector3 v) {
-			return v.x > Screen.width * .3f && v.x < Screen.width * .76f
-				&& v.y > Screen.height * .1f && v.y < Screen.height * .28f;
+			return v.y < Screen.height * .2f;
 		}
 
 		void MakeHelpWindow(int id) {
