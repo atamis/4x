@@ -4,6 +4,7 @@ using game.effects;
 using game;
 
 namespace game.ui {
+
     class PlayerCamera : MonoBehaviour {
         public Camera cam;
         float speed = 1f;
@@ -14,6 +15,7 @@ namespace game.ui {
             this.cam = cam;
 			this.gm = gm;
             cam.transform.parent = transform;
+            cam.backgroundColor = new Color(0.25f, 0.25f, 0.25f);
             goal = null;
         }
 

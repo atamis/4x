@@ -20,7 +20,7 @@ namespace game.ui {
             cam.targetTexture = tex;
             cam.transform.position = new Vector3(26, 23, -20);
             cam.orthographicSize = 30;
-            cam.backgroundColor = new Color(0.4f, 0.4f, 0.4f);
+            cam.backgroundColor = new Color(0.25f, 0.25f, 0.25f);
 			cam.gameObject.AddComponent<BloomEffect> ();
         }
 
