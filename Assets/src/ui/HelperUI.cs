@@ -26,6 +26,7 @@ namespace game.ui {
 
 			messages.AddFirst ("Welcome!");
 			EventManager.StartEvent += new EventManager.GameEventHandler(OnStartEvent);
+			EventManager.MoveEvent += new EventManager.MoveEventHandler(OnMoveEvent);
 			EventManager.BuildEvent += new EventManager.WarpEventHandler(OnBuildEvent);
 			EventManager.ScanEvent += new EventManager.ScanEventHandler(OnScanEvent);
 			EventManager.ErrorEvent += new EventManager.InvalidEventHandler(OnInvalidAction);
@@ -46,6 +47,16 @@ namespace game.ui {
 		void OnStartEvent(GameEventArgs eventArgs) {
 			um.tm.play (0);
 			EventManager.StartEvent -= OnStartEvent;
+		}
+
+		void OnMoveEvent(MoveEventArgs args) {
+			if (args.state == 0) {
+				AddMessage ("Where would you like to move your unit?");
+			} else if (args.state == 1) {
+				AddMessage ("This unit now has been moved");
+			} else {
+				throw new Exception ("Somone fucked up, probably Nick");
+			}
 		}
 
 		void OnTutorialEvent(TutorialEventArgs args) {

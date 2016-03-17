@@ -16,6 +16,7 @@ namespace game {
 		
 	class MoveEventArgs : System.EventArgs {
 		public int stamina { get; set; }
+		public int state { get; set; }
 	}
 
 	class PresentEventArgs : System.EventArgs {

@@ -21,7 +21,7 @@ namespace game.actor.commands {
 					break;
 				case 1:
 					if (tile.building != null) {
-						tile.building.disabled = true;
+                        tile.building.Die();
 					}
 					if (tile.units.Count > 0) {
                         while (tile.units.Count > 0) {
@@ -31,8 +31,8 @@ namespace game.actor.commands {
 					break;
 				default:
                     if (tile.building != null) {
-                        tile.building.disabled = true;
-                    }
+                            tile.building.Die();
+                        }
                     if (tile.units.Count > 0) {
                         while (tile.units.Count > 0) {
                             tile.units.First().Die();
