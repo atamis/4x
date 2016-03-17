@@ -58,6 +58,7 @@ namespace game.world {
 			genBiomes ();
 			genPlayer ();
 			genNodes ();
+            genPresents();
 			genRivers (2, 20);
 
 			INNER_SPAWN_BOUNDS = 6;
@@ -102,7 +103,8 @@ namespace game.world {
 			b1.init(player, w.map[new HexLoc((int)spawn.x, (int)spawn.y)]);
             b1.power = 50;
 
-			int c = 0;
+
+            int c = 0;
 			while (c < 2) {
 				HexLoc loc = new HexLoc((int)spawn.x + Random.Range(-1, 1), (int)spawn.y+Random.Range(-1, 1));
 				if (w.map[loc].units.Count == 0 && w.map[loc].b.Passable()) {
@@ -127,7 +129,28 @@ namespace game.world {
 			//Debug.Log ("Generated Nodes");
 		}
 
-		private void decorate() {
+        private void genPresents() {
+            int quadrants = w.size / 8; // MAXIMUM OVERPRESENT
+
+            for (int x = 0; x < quadrants; x++) {
+                for (int y = 0; y < quadrants; y++) {
+                    int i = Random.Range(8 * x, 8 * (x + 1)); int j = Random.Range(8 * y, 8 * (y + 1));
+                    if (w.map.ContainsKey(new HexLoc(i, j))) {
+                        Present p;
+                        if (Random.value < 0.5f) {
+                            p = new GameObject("Present").AddComponent<RevealPresent>();
+                        } else {
+                            p = new GameObject("Present").AddComponent<UnitPresent>();
+                        }
+                        p.init(w.map[new HexLoc(i, j)]);
+                    }
+
+                }
+            }
+            //Debug.Log ("Generated Nodes");
+        }
+
+        private void decorate() {
 			for (int x = 0; x < w.size; x++) {
 				for (int y = 0; y < w.size; y++) {
 					// Set EV value

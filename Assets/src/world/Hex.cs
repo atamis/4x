@@ -26,6 +26,7 @@ namespace game.world {
         public bool revealed;
         internal WorldPathfinding.PathfindingInfo pathfind;
         internal bool annihilated;
+        public Present present;
 
         public bool powered {
 			get {
