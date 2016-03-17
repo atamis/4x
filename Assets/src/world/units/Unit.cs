@@ -4,7 +4,6 @@ using game.actor;
 using System;
 
 namespace game.world.units {
-
 	class Unit : MonoBehaviour {
         public AudioSource au;
 		UnitModel model;
@@ -49,9 +48,9 @@ namespace game.world.units {
 				h2.reveal();
 			}
 		}
-
+			
         public override string ToString() {
-            return String.Format("[{0} actions:{1}]", name, actions);
+            return String.Format("{0} MP:{1}", name, actions);
         }
 
 
