@@ -11,7 +11,7 @@ namespace game {
         AudioSource au;
 
         private enum MenuState {
-            Main, Credits, Instructions
+            Main, Credits
         }
 
         private MenuState state;
@@ -45,11 +45,6 @@ namespace game {
                         SceneManager.LoadSceneAsync("GameLoad");
                     }
 
-                    if (GUILayout.Button("Instructions")) {
-                        state = MenuState.Instructions;
-                        return;
-                    }
-
                     if (GUILayout.Button("Credits")) {
                         state = MenuState.Credits;
                         return;
@@ -72,9 +67,6 @@ namespace game {
                     }
 
                     GUILayout.EndArea();
-                    break;
-                case MenuState.Instructions:
-                    print("Instructions clicked");
                     break;
             }
         }
