@@ -39,12 +39,12 @@ namespace game.world.buildings {
 
 		private class BeamModel : MonoBehaviour {
 			LineRenderer lr;
-			BeamManager bm;
+			//BeamManager bm;
 			Layout l;
 			private UnorderedPair<HexLoc> locs;
 
 			public void init(BeamManager bm, UnorderedPair<HexLoc> locs) {
-				this.bm = bm;
+				//this.bm = bm;
 				this.l = bm.wm.l;
 				this.locs = locs;
 

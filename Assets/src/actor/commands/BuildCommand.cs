@@ -7,12 +7,12 @@ using System;
 
 namespace game.actor.commands {
 	class BuildCommand : Command {
-		Unit u;
+		//Unit u;
 		Hex h;
 		BuildingType t;
 
 		public BuildCommand(Actor a, Unit u, Hex h, BuildingType t) : base(a) {
-			this.u = u;
+			//this.u = u;
 			this.h = h;
 			this.t = t;
 

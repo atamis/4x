@@ -57,11 +57,13 @@ namespace game.ui {
 		private static Texture2D iconLines = Resources.Load<Texture2D>("Textures/T_Icon_Lines");
 
 		// x.split("\n").map { |l| l.split(" ")[3] }.join(", ")
+		/*
 		private static Texture2D[] texes = new Texture2D[] {
 			UI_Move, UI_Scan, UI_Build, UI_Purify, UI_MoveH,
 			UI_ScanH, UI_BuildH, UI_PurifyH, UI_MoveC, UI_ScanC, UI_BuildC, UI_PurifyC, UI_End, UI_EndH, UI_EndC,
 			UI_Cond, UI_CondH, UI_CondC, UI_Gate, UI_GateH, UI_GateC, UI_Harv, UI_HarvH, UI_HarvC, UI_Tow, UI_TowH, UI_TowC
 		};
+		*/
 
 		public enum State {
 			Default,
