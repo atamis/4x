@@ -1,4 +1,6 @@
-﻿Shader "Custom/BloomShader" {
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/BloomShader" {
     Properties {
         _MainTex ("Texture", 2D) = "white" {}
         _intensity ("Intensity", Float) = 0.0075
@@ -32,7 +34,7 @@
 
             v2f vert(appdata_img v) {
                 v2f o;
-                o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+                o.pos = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
                 return o;
             }
@@ -84,7 +86,7 @@
 
             v2f vert(appdata_img v) {
                 v2f o;
-                o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+                o.pos = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.texcoord, _GrabTexture);
                 return o;
             }
@@ -136,7 +138,7 @@
 
             v2f vert (appdata_img v) {
                 v2f o;
-                o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+                o.pos = UnityObjectToClipPos(v.vertex);
                 UNITY_TRANSFER_DEPTH(o.depth);
                 o.uv = TRANSFORM_TEX (v.texcoord, _MainTex);
                 return o;
