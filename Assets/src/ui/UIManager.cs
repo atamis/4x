@@ -12,49 +12,95 @@ using game.world.units;
 
 namespace game.ui {
 	class UIManager : MonoBehaviour {
-		private static Texture2D UI_Move = Resources.Load<Texture2D>("Textures/T_UI_Move");
-		private static Texture2D UI_Scan = Resources.Load<Texture2D>("Textures/T_UI_Scan");
-		private static Texture2D UI_Build = Resources.Load<Texture2D>("Textures/T_UI_Build");
-		private static Texture2D UI_Purify = Resources.Load<Texture2D>("Textures/T_UI_Purify");
-		private static Texture2D UI_MoveH = Resources.Load<Texture2D>("Textures/T_UI_MoveH");
-		private static Texture2D UI_ScanH = Resources.Load<Texture2D>("Textures/T_UI_ScanH");
-		private static Texture2D UI_BuildH = Resources.Load<Texture2D>("Textures/T_UI_BuildH");
-		private static Texture2D UI_PurifyH = Resources.Load<Texture2D>("Textures/T_UI_PurifyH");
-		private static Texture2D UI_MoveC = Resources.Load<Texture2D>("Textures/T_UI_MoveC");
-		private static Texture2D UI_ScanC = Resources.Load<Texture2D>("Textures/T_UI_ScanC");
-		private static Texture2D UI_BuildC = Resources.Load<Texture2D>("Textures/T_UI_BuildC");
-		private static Texture2D UI_PurifyC = Resources.Load<Texture2D>("Textures/T_UI_PurifyC");
-		private static Texture2D UI_End = Resources.Load<Texture2D>("Textures/T_UI_End");
-		private static Texture2D UI_EndH = Resources.Load<Texture2D>("Textures/T_UI_EndH");
-		private static Texture2D UI_EndC = Resources.Load<Texture2D>("Textures/T_UI_EndC");
+        private static Texture2D UI_Move;
+        private static Texture2D UI_Scan;
+        private static Texture2D UI_Build;
+        private static Texture2D UI_Purify;
+        private static Texture2D UI_MoveH;
+        private static Texture2D UI_ScanH;
+        private static Texture2D UI_BuildH;
+        private static Texture2D UI_PurifyH;
+        private static Texture2D UI_MoveC;
+        private static Texture2D UI_ScanC;
+        private static Texture2D UI_BuildC;
+        private static Texture2D UI_PurifyC;
+        private static Texture2D UI_End;
+        private static Texture2D UI_EndH;
+        private static Texture2D UI_EndC;
 
-		private static Texture2D UI_Cond = Resources.Load<Texture2D>("Textures/T_UI_Cond");
-		private static Texture2D UI_CondH = Resources.Load<Texture2D>("Textures/T_UI_CondH");
-		private static Texture2D UI_CondC = Resources.Load<Texture2D>("Textures/T_UI_CondC");
-		private static Texture2D UI_Gate = Resources.Load<Texture2D>("Textures/T_UI_Gate");
-		private static Texture2D UI_GateH = Resources.Load<Texture2D>("Textures/T_UI_GateH");
-		private static Texture2D UI_GateC = Resources.Load<Texture2D>("Textures/T_UI_GateC");
-		private static Texture2D UI_Harv = Resources.Load<Texture2D>("Textures/T_UI_Harv");
-		private static Texture2D UI_HarvH = Resources.Load<Texture2D>("Textures/T_UI_HarvH");
-		private static Texture2D UI_HarvC = Resources.Load<Texture2D>("Textures/T_UI_HarvC");
-		private static Texture2D UI_Tow = Resources.Load<Texture2D>("Textures/T_UI_Tow");
-		private static Texture2D UI_TowH = Resources.Load<Texture2D>("Textures/T_UI_TowH");
-		private static Texture2D UI_TowC = Resources.Load<Texture2D>("Textures/T_UI_TowC");
+        private static Texture2D UI_Cond;
+        private static Texture2D UI_CondH;
+        private static Texture2D UI_CondC;
+        private static Texture2D UI_Gate;
+        private static Texture2D UI_GateH;
+        private static Texture2D UI_GateC;
+        private static Texture2D UI_Harv;
+        private static Texture2D UI_HarvH;
+        private static Texture2D UI_HarvC;
+        private static Texture2D UI_Tow;
+        private static Texture2D UI_TowH;
+        private static Texture2D UI_TowC;
 
-		private static Texture2D UI_Unit = Resources.Load<Texture2D>("Textures/T_UI_Unit");
-		private static Texture2D UI_UnitH = Resources.Load<Texture2D>("Textures/T_UI_UnitH");
-		private static Texture2D UI_UnitC = Resources.Load<Texture2D>("Textures/T_UI_UnitC");
-		private static Texture2D UI_Delete = Resources.Load<Texture2D>("Textures/T_UI_Delete");
-		private static Texture2D UI_DeleteH = Resources.Load<Texture2D>("Textures/T_UI_DeleteH");
-		private static Texture2D UI_DeleteC = Resources.Load<Texture2D>("Textures/T_UI_DeleteC");
+        private static Texture2D UI_Unit;
+        private static Texture2D UI_UnitH;
+        private static Texture2D UI_UnitC;
+        private static Texture2D UI_Delete;
+        private static Texture2D UI_DeleteH;
+        private static Texture2D UI_DeleteC;
 
-		private static Texture2D iconUnit = Resources.Load<Texture2D>("Textures/T_Icon_Unit");
-		private static Texture2D iconBiome = Resources.Load<Texture2D>("Textures/T_Icon_Biome");
-		private static Texture2D iconBuilding = Resources.Load<Texture2D>("Textures/T_Icon_Building");
-		private static Texture2D iconMiasma = Resources.Load<Texture2D>("Textures/T_Icon_Miasma");
+        private static Texture2D iconUnit;
+        private static Texture2D iconBiome;
+        private static Texture2D iconBuilding;
+        private static Texture2D iconMiasma;
 
-		private static Texture2D iconHelp = Resources.Load<Texture2D>("Textures/T_Icon_Help");
-		private static Texture2D iconLines = Resources.Load<Texture2D>("Textures/T_Icon_Lines");
+        private static Texture2D iconHelp;
+        private static Texture2D iconLines;
+
+        private void loadTextures() {
+            UI_Move = Resources.Load<Texture2D>("Textures/T_UI_Move");
+            UI_Scan = Resources.Load<Texture2D>("Textures/T_UI_Scan");
+            UI_Build = Resources.Load<Texture2D>("Textures/T_UI_Build");
+            UI_Purify = Resources.Load<Texture2D>("Textures/T_UI_Purify");
+            UI_MoveH = Resources.Load<Texture2D>("Textures/T_UI_MoveH");
+            UI_ScanH = Resources.Load<Texture2D>("Textures/T_UI_ScanH");
+            UI_BuildH = Resources.Load<Texture2D>("Textures/T_UI_BuildH");
+            UI_PurifyH = Resources.Load<Texture2D>("Textures/T_UI_PurifyH");
+            UI_MoveC = Resources.Load<Texture2D>("Textures/T_UI_MoveC");
+            UI_ScanC = Resources.Load<Texture2D>("Textures/T_UI_ScanC");
+            UI_BuildC = Resources.Load<Texture2D>("Textures/T_UI_BuildC");
+            UI_PurifyC = Resources.Load<Texture2D>("Textures/T_UI_PurifyC");
+            UI_End = Resources.Load<Texture2D>("Textures/T_UI_End");
+            UI_EndH = Resources.Load<Texture2D>("Textures/T_UI_EndH");
+            UI_EndC = Resources.Load<Texture2D>("Textures/T_UI_EndC");
+
+            UI_Cond = Resources.Load<Texture2D>("Textures/T_UI_Cond");
+            UI_CondH = Resources.Load<Texture2D>("Textures/T_UI_CondH");
+            UI_CondC = Resources.Load<Texture2D>("Textures/T_UI_CondC");
+            UI_Gate = Resources.Load<Texture2D>("Textures/T_UI_Gate");
+            UI_GateH = Resources.Load<Texture2D>("Textures/T_UI_GateH");
+            UI_GateC = Resources.Load<Texture2D>("Textures/T_UI_GateC");
+            UI_Harv = Resources.Load<Texture2D>("Textures/T_UI_Harv");
+            UI_HarvH = Resources.Load<Texture2D>("Textures/T_UI_HarvH");
+            UI_HarvC = Resources.Load<Texture2D>("Textures/T_UI_HarvC");
+            UI_Tow = Resources.Load<Texture2D>("Textures/T_UI_Tow");
+            UI_TowH = Resources.Load<Texture2D>("Textures/T_UI_TowH");
+            UI_TowC = Resources.Load<Texture2D>("Textures/T_UI_TowC");
+
+            UI_Unit = Resources.Load<Texture2D>("Textures/T_UI_Unit");
+            UI_UnitH = Resources.Load<Texture2D>("Textures/T_UI_UnitH");
+            UI_UnitC = Resources.Load<Texture2D>("Textures/T_UI_UnitC");
+            UI_Delete = Resources.Load<Texture2D>("Textures/T_UI_Delete");
+            UI_DeleteH = Resources.Load<Texture2D>("Textures/T_UI_DeleteH");
+            UI_DeleteC = Resources.Load<Texture2D>("Textures/T_UI_DeleteC");
+
+            iconUnit = Resources.Load<Texture2D>("Textures/T_Icon_Unit");
+            iconBiome = Resources.Load<Texture2D>("Textures/T_Icon_Biome");
+            iconBuilding = Resources.Load<Texture2D>("Textures/T_Icon_Building");
+            iconMiasma = Resources.Load<Texture2D>("Textures/T_Icon_Miasma");
+
+            iconHelp = Resources.Load<Texture2D>("Textures/T_Icon_Help");
+            iconLines = Resources.Load<Texture2D>("Textures/T_Icon_Lines");
+    }
 
 		// x.split("\n").map { |l| l.split(" ")[3] }.join(", ")
 		/*
@@ -104,7 +150,9 @@ namespace game.ui {
 		}
 
 		public void init(GameManager gm, Player p, WorldMap w) {
-			this.gm = gm;
+            loadTextures();
+
+            this.gm = gm;
 			this.p = p;
 			this.w = w;
 

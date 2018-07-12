@@ -64,13 +64,14 @@ namespace game.world {
         protected abstract void enactNewWorldOrder(Actor a);
 
         private class PresentModel : MonoBehaviour {
-            private static Sprite sprite = Resources.Load<Sprite>("Textures/T_Pod");
+            private static Sprite sprite;
 
             Present p;
             SpriteRenderer sp;
 
             internal void init(Present p) {
                 this.p = p;
+                sprite = Resources.Load<Sprite>("Textures/T_Pod");
 
                 transform.parent = p.transform;
 

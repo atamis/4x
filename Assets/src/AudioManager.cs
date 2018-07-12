@@ -4,11 +4,15 @@ using System.Collections;
 namespace game {
 	class AudioManager : MonoBehaviour {
 
-        private static AudioClip[] clips = new AudioClip[] {
+        private static AudioClip[] clips;
+
+        private void loadClips() {
+            clips = new AudioClip[] {
             Resources.Load<AudioClip>("Audio/Music/spacemanSpiff"),
             Resources.Load<AudioClip>("Audio/Music/Building Better Worlds"),
             Resources.Load<AudioClip>("Audio/Music/Tin_Can"),
         };
+        }
 
         private static System.Random rand = new System.Random();
 
@@ -21,6 +25,7 @@ namespace game {
 		AudioSource source;
 
 		public void init(GameManager gm) {
+            loadClips();
 			this.gm = gm;
 
 			source = gameObject.AddComponent<AudioSource>();

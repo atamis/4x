@@ -9,12 +9,21 @@ using game.ui;
 
 namespace game {
     class AmbienceManager : MonoBehaviour {
-        private static readonly AudioClip desert = Resources.Load<AudioClip>("Audio/Ambiences/Desert Ambience");
-        private static readonly AudioClip forest = Resources.Load<AudioClip>("Audio/Ambiences/Forest Ambience");
-        private static readonly AudioClip mountain = Resources.Load<AudioClip>("Audio/Ambiences/Mountain Ambience");
-        private static readonly AudioClip ocean = Resources.Load<AudioClip>("Audio/Ambiences/Water Ambience");
-        private static readonly AudioClip jungle = Resources.Load<AudioClip>("Audio/Ambiences/Jungle Ambience");
-        private static readonly AudioClip plains = Resources.Load<AudioClip>("Audio/Ambiences/Plains Ambience");
+        private static AudioClip desert;
+        private static AudioClip forest;
+        private static AudioClip mountain;
+        private static AudioClip ocean;
+        private static AudioClip jungle;
+        private static AudioClip plains;
+
+        private void loadClips() {
+            desert = Resources.Load<AudioClip>("Audio/Ambiences/Desert Ambience");
+            forest = Resources.Load<AudioClip>("Audio/Ambiences/Forest Ambience");
+            mountain = Resources.Load<AudioClip>("Audio/Ambiences/Mountain Ambience");
+            ocean = Resources.Load<AudioClip>("Audio/Ambiences/Water Ambience");
+            jungle = Resources.Load<AudioClip>("Audio/Ambiences/Jungle Ambience");
+            plains = Resources.Load<AudioClip>("Audio/Ambiences/Plains Ambience");
+        }
 
         private static readonly float masterGain = 1f;
 
@@ -32,6 +41,7 @@ namespace game {
 
 
         public void init(PlayerCamera pc, WorldMap w) {
+            loadClips();
             this.pc = pc;
             this.w = w;
 
