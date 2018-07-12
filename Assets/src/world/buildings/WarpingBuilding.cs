@@ -98,13 +98,17 @@ namespace game.world.buildings {
 
 
 		private class WarpingBuildingModel : BuildingModel {
-			private static AudioClip clip = Resources.Load<AudioClip>("Audio/Buildings/Warping In 1");
+			private static AudioClip clip ;
+            private void loadClip() {
+                clip = Resources.Load<AudioClip>("Audio/Buildings/Warping In 1");
+            }
 
 			private static System.Random positionRand = new System.Random();
 
 			AudioSource au;
 
 			public override void init(Building b) {
+                loadClip();
 				base.init(b);
 
 				au = gameObject.AddComponent<AudioSource>();
